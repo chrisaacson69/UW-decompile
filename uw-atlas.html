@@ -1,0 +1,263 @@
+<title>The Navigator's Chart — Uncharted Waters</title>
+<style>
+  :root{
+    /* light — aged vellum chart */
+    --paper:#e8d9b6; --paper-2:#e0cfa6; --panel:#ece0c4; --ink:#3a2e20; --ink-soft:#6d5c42;
+    --sea:#d8c8a0; --sea-line:#b9a578; --rule:#c9b78d; --brass:#a5761f; --oxblood:#9c3b2e;
+    --z-euro:#a5761f; --z-amer:#2c6f6b; --z-afr:#a4542f; --z-ind:#455586; --z-east:#6f4763;
+    --shadow:0 1px 0 rgba(255,255,255,.4), 0 10px 30px -18px rgba(58,46,32,.5);
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#0f2129; --paper-2:#0b1a21; --panel:#122a34; --ink:#e8dcc0; --ink-soft:#9db3b8;
+    --sea:#0d2531; --sea-line:#1d3f4d; --rule:#204250; --brass:#d6ac54; --oxblood:#cf6350;
+    --z-euro:#d6ac54; --z-amer:#3ea19a; --z-afr:#d67d54; --z-ind:#7f92c8; --z-east:#b878a2;
+    --shadow:0 1px 0 rgba(255,255,255,.04), 0 18px 40px -20px rgba(0,0,0,.7);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0f2129; --paper-2:#0b1a21; --panel:#122a34; --ink:#e8dcc0; --ink-soft:#9db3b8;
+    --sea:#0d2531; --sea-line:#1d3f4d; --rule:#204250; --brass:#d6ac54; --oxblood:#cf6350;
+    --z-euro:#d6ac54; --z-amer:#3ea19a; --z-afr:#d67d54; --z-ind:#7f92c8; --z-east:#b878a2;
+    --shadow:0 1px 0 rgba(255,255,255,.04), 0 18px 40px -20px rgba(0,0,0,.7);
+  }
+  :root[data-theme="light"]{
+    --paper:#e8d9b6; --paper-2:#e0cfa6; --panel:#ece0c4; --ink:#3a2e20; --ink-soft:#6d5c42;
+    --sea:#d8c8a0; --sea-line:#b9a578; --rule:#c9b78d; --brass:#a5761f; --oxblood:#9c3b2e;
+    --z-euro:#a5761f; --z-amer:#2c6f6b; --z-afr:#a4542f; --z-ind:#455586; --z-east:#6f4763;
+    --shadow:0 1px 0 rgba(255,255,255,.4), 0 10px 30px -18px rgba(58,46,32,.5);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .mono{font-family:"SFMono-Regular",ui-monospace,"Cascadia Code","Roboto Mono",Menlo,Consolas,monospace}
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,5vw,64px) clamp(16px,4vw,40px) 88px}
+  .eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);
+    font-family:var(--mono);font-weight:600}
+  .eyebrow.mono,.label{font-family:"SFMono-Regular",ui-monospace,"Cascadia Code",monospace}
+  h1{font-size:clamp(2.6rem,7vw,4.6rem);line-height:.98;margin:.18em 0 .1em;font-weight:600;
+    letter-spacing:-.01em;text-wrap:balance}
+  h1 em{font-style:italic;color:var(--brass)}
+  .sub{max-width:60ch;color:var(--ink-soft);font-size:1.06rem;margin:.2em 0 0}
+  .rule{height:1px;background:var(--rule);border:0;margin:0}
+  header .meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;font-size:.76rem;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+    font-family:"SFMono-Regular",ui-monospace,monospace}
+  header .meta b{color:var(--ink);font-weight:600}
+  /* map */
+  .chart{margin:34px 0 8px;background:
+      radial-gradient(120% 90% at 30% 20%, color-mix(in srgb,var(--sea) 88%, var(--brass)) 0%, var(--sea) 55%);
+    border:1px solid var(--rule);border-radius:3px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+  .chart svg{display:block;width:100%;height:auto}
+  .port{cursor:default}
+  .port circle{transition:r .12s ease, fill-opacity .12s ease}
+  .port text{font-family:"SFMono-Regular",ui-monospace,monospace;font-size:3.1px;letter-spacing:.02px;
+    fill:var(--ink);opacity:.62;paint-order:stroke;stroke:var(--sea);stroke-width:.7px;
+    stroke-linejoin:round;transition:opacity .12s}
+  .port:hover circle{r:2.4px;fill-opacity:1}
+  .port:hover text{opacity:1;font-weight:700}
+  .rhumb{stroke:var(--sea-line);stroke-width:.18px;opacity:.7}
+  .grat{stroke:var(--sea-line);stroke-width:.12px;opacity:.5}
+  .rose circle{fill:none;stroke:var(--brass);stroke-width:.25px;opacity:.75}
+  .rose path{fill:var(--brass);opacity:.85}
+  .rose .pt{fill:none;stroke:var(--brass);stroke-width:.2px;opacity:.5}
+  .readout{position:absolute;left:14px;bottom:12px;font-family:"SFMono-Regular",ui-monospace,monospace;
+    font-size:.74rem;letter-spacing:.06em;color:var(--ink);background:color-mix(in srgb,var(--sea) 78%, transparent);
+    border:1px solid var(--rule);border-radius:2px;padding:6px 11px;backdrop-filter:blur(2px);min-width:210px}
+  .readout b{color:var(--brass)}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin:14px 2px 0;font-size:.8rem;color:var(--ink-soft)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{width:10px;height:10px;border-radius:50%;display:inline-block;box-shadow:0 0 0 1px var(--rule)}
+  /* sections */
+  section{margin-top:56px}
+  .kicker{display:flex;align-items:baseline;gap:14px;margin-bottom:18px}
+  .kicker h2{font-size:1.7rem;margin:0;font-weight:600;letter-spacing:-.01em}
+  .kicker .n{font-family:"SFMono-Regular",ui-monospace,monospace;font-size:.74rem;color:var(--brass);
+    letter-spacing:.2em}
+  .kicker .rule{flex:1}
+  .zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px}
+  .zone h3{margin:0 0 4px;font-size:1.02rem;display:flex;align-items:center;gap:8px}
+  .zone h3 i{width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 1px var(--rule)}
+  .zone .cnt{font-family:"SFMono-Regular",ui-monospace,monospace;font-size:.7rem;color:var(--ink-soft);
+    margin-left:auto;letter-spacing:.1em}
+  .zone ul{list-style:none;margin:8px 0 0;padding:0;columns:2;column-gap:16px;font-size:.86rem}
+  .zone li{break-inside:avoid;color:var(--ink-soft);padding:1px 0}
+  .zone li b{color:var(--ink);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  .scroll{overflow-x:auto}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule)}
+  th{font-family:"SFMono-Regular",ui-monospace,monospace;font-size:.68rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  td.num,th.num{text-align:right;font-family:"SFMono-Regular",ui-monospace,monospace;
+    font-variant-numeric:tabular-nums}
+  td b{font-weight:600}
+  .bar{height:7px;border-radius:4px;background:color-mix(in srgb,var(--brass) 78%,transparent);
+    box-shadow:inset 0 0 0 1px var(--rule)}
+  .goods{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:18px}
+  .cat{border:1px solid var(--rule);border-radius:3px;padding:14px 16px;background:var(--panel)}
+  .cat h4{margin:0 0 8px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
+    font-family:"SFMono-Regular",ui-monospace,monospace}
+  .cat ul{list-style:none;margin:0;padding:0;font-size:.92rem}
+  .cat li{padding:2px 0;color:var(--ink)}
+  .trinkets{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--rule);border-radius:2px;padding:5px 10px;font-size:.82rem;
+    background:var(--panel);display:inline-flex;gap:8px;align-items:baseline}
+  .chip .v{font-family:"SFMono-Regular",ui-monospace,monospace;font-size:.7rem;color:var(--brass);
+    font-variant-numeric:tabular-nums}
+  footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--rule);color:var(--ink-soft);
+    font-size:.82rem;display:flex;flex-wrap:wrap;gap:6px 22px;justify-content:space-between}
+  footer .mono{font-size:.74rem;letter-spacing:.08em}
+  .toggle{position:fixed;top:14px;right:14px;z-index:9;font-family:"SFMono-Regular",ui-monospace,monospace;
+    font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+    background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:7px 11px;cursor:pointer}
+  .toggle:hover{color:var(--brass)}
+  .toggle:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<button class="toggle" id="tg" aria-label="Toggle light or dark chart">◐ Chart</button>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">KOEI · Nintendo Entertainment System · 1991</div>
+    <h1>The Navigator's <em>Chart</em></h1>
+    <p class="sub">Every port, ship, commodity and trinket of <i>Uncharted Waters</i> — read straight
+      from the 512K cartridge. Seventy ports plotted from the game's own coordinate table, verified
+      against the real Age of Sail. Set your bearing, Cap'n.</p>
+    <div class="meta">
+      <span><b>70</b> ports</span><span><b>6</b> ship classes</span>
+      <span><b>26</b> trade goods</span><span><b>31</b> treasures</span>
+      <span><b>~73 KB</b> world map</span><span><b>Home port</b> · Lisbon</span>
+    </div>
+  </header>
+
+  <figure class="chart" id="chart">
+    <svg id="map" viewBox="0 0 260 136" role="img" aria-label="Chart of 70 ports">
+      <g id="grat"></g><g id="rhumbs"></g><g id="rose"></g><g id="ports"></g>
+    </svg>
+    <div class="readout" id="ro"><b>Hover a port</b><br>to take a bearing.</div>
+  </figure>
+  <div class="legend" id="legend"></div>
+
+  <section id="ports-sec">
+    <div class="kicker"><span class="n">I</span><h2>Ports of Call</h2><hr class="rule"></div>
+    <div class="zones" id="zones"></div>
+  </section>
+
+  <section>
+    <div class="kicker"><span class="n">II</span><h2>The Fleet</h2><hr class="rule"></div>
+    <div class="scroll"><table id="ships">
+      <thead><tr><th>Class</th><th class="num">Cargo</th><th class="num">Crew</th>
+        <th class="num">Durability</th><th style="width:34%">Build</th></tr></thead>
+      <tbody></tbody></table></div>
+    <p class="sub" style="margin-top:12px;font-size:.9rem">You begin in a <b>Latin</b> — a nimble 3-point
+      sail, quickly outgrown. Trade up through the hulls to a <b>Galleon</b> for the deep seas and the guns
+      to face Spanish, Turkish and pirate fleets.</p>
+  </section>
+
+  <section>
+    <div class="kicker"><span class="n">III</span><h2>The Markets</h2><hr class="rule"></div>
+    <div class="goods" id="goods"></div>
+    <p class="sub" style="margin-top:14px;font-size:.9rem">Buy a port's specialty cheap; sell it dear across
+      the sea. Overwork a route and prices soften — the market remembers your deals.</p>
+  </section>
+
+  <section>
+    <div class="kicker"><span class="n">IV</span><h2>Treasures &amp; Trinkets</h2><hr class="rule"></div>
+    <p class="sub" style="margin:0 0 16px;font-size:.9rem">Thirty-one prizes to unearth from map-clues and
+      dig-sites, or lift from a beaten foe — carried to court to win a title. Worth in gold rises left to
+      right, read from the ship's-log table at bank&nbsp;58 <span class="mono">$9604</span>.</p>
+    <div class="trinkets" id="items"></div>
+  </section>
+
+  <footer>
+    <span>Reverse-engineered from <b>Uncharted Waters (USA).nes</b> · ports/ships/treasures bank 58 · goods bank 20 · hull names bank 22</span>
+    <span class="mono">iNES header → King of Portugal · 20 chapters</span>
+  </footer>
+</div>
+
+<script>
+const D={"ports":[{"x":32,"y":8,"n":"Lisbon"},{"x":32,"y":10,"n":"Seville"},{"x":38,"y":9,"n":"Istanbul"},{"x":36,"y":8,"n":"Genoa"},{"x":36,"y":8,"n":"Venice"},{"x":36,"y":9,"n":"Pisa"},{"x":35,"y":9,"n":"Marseille"},{"x":33,"y":10,"n":"Valencia"},{"x":34,"y":11,"n":"Algiers"},{"x":36,"y":10,"n":"Majorca"},{"x":35,"y":10,"n":"Tunis"},{"x":36,"y":9,"n":"Naples"},{"x":38,"y":11,"n":"Alexandria"},{"x":40,"y":9,"n":"Trebizond"},{"x":40,"y":7,"n":"Azov"},{"x":34,"y":5,"n":"London"},{"x":34,"y":7,"n":"Bordeaux"},{"x":35,"y":5,"n":"Oslo"},{"x":35,"y":5,"n":"Hamburg"},{"x":34,"y":6,"n":"Antwerp"},{"x":19,"y":16,"n":"Santo Domingo"},{"x":18,"y":16,"n":"Jamaica"},{"x":16,"y":16,"n":"Guatemala"},{"x":17,"y":17,"n":"Panama"},{"x":14,"y":15,"n":"Veracruz"},{"x":19,"y":17,"n":"Caracas"},{"x":26,"y":22,"n":"Pernambuco"},{"x":32,"y":18,"n":"Argin"},{"x":34,"y":18,"n":"San Jorge"},{"x":42,"y":23,"n":"Sofala"},{"x":42,"y":21,"n":"Mozambique"},{"x":42,"y":20,"n":"Mombasa"},{"x":45,"y":14,"n":"Muscat"},{"x":44,"y":12,"n":"Baghdad"},{"x":42,"y":16,"n":"Aden"},{"x":41,"y":13,"n":"Mecca"},{"x":45,"y":13,"n":"Hormuz"},{"x":48,"y":16,"n":"Goa"},{"x":47,"y":13,"n":"Diu"},{"x":53,"y":18,"n":"Malacca"},{"x":50,"y":18,"n":"Ceylon"},{"x":53,"y":21,"n":"Sumatra"},{"x":55,"y":22,"n":"Java"},{"x":59,"y":21,"n":"Amboina"},{"x":58,"y":22,"n":"Ternate"},{"x":49,"y":17,"n":"Calicut"},{"x":49,"y":18,"n":"Cochin"},{"x":59,"y":12,"n":"Nagasaki"},{"x":56,"y":14,"n":"Macao"},{"x":57,"y":13,"n":"Zeiton"},{"x":17,"y":18,"n":"Nova Granada"},{"x":22,"y":31,"n":"Rio de Janeiro"},{"x":55,"y":16,"n":"Da Nang"},{"x":64,"y":15,"n":"Guam"},{"x":1,"y":16,"n":"Kailua"},{"x":8,"y":8,"n":"Eureka"},{"x":19,"y":9,"n":"Virginia"},{"x":20,"y":27,"n":"Copiapo"},{"x":25,"y":26,"n":"Rio Grande"},{"x":39,"y":27,"n":"Cape Town"},{"x":37,"y":22,"n":"Luanda"},{"x":30,"y":16,"n":"Verde"},{"x":40,"y":4,"n":"Injiga"},{"x":62,"y":22,"n":"Madang"},{"x":57,"y":26,"n":"Leveque"},{"x":64,"y":5,"n":"Tanisk"},{"x":48,"y":4,"n":"Sibir"},{"x":18,"y":24,"n":"Chanchan"},{"x":41,"y":19,"n":"Ruwen"},{"x":12,"y":15,"n":"Acapulco"}],
+"ships":[{"n":"Latin","cargo":20,"crew":10,"dur":70},{"n":"Redonda","cargo":20,"crew":10,"dur":70},{"n":"Bergantin","cargo":25,"crew":20,"dur":105},{"n":"Nao","cargo":60,"crew":30,"dur":310},{"n":"Carrack","cargo":90,"crew":40,"dur":420},{"n":"Galleon","cargo":160,"crew":50,"dur":490}],
+"items":[{"n":"Dagger","v":750},{"n":"Sextant","v":800},{"n":"Silver Rosary","v":800},{"n":"Telescope","v":1000},{"n":"Falcon Icon","v":1200},{"n":"Nymph Amulet","v":1500},{"n":"Sword","v":2000},{"n":"Coral Ring","v":2000},{"n":"Ring","v":2000},{"n":"Pearl Bracelet","v":2600},{"n":"Sun Amulet","v":3000},{"n":"Sabre","v":3500},{"n":"Ivory Box","v":4000},{"n":"Hawk Icon","v":4800},{"n":"Coral Bracelet","v":5000},{"n":"Gold Bracelet","v":7000},{"n":"Angel Amulet","v":7500},{"n":"Chinese Sword","v":8000},{"n":"Candlestick","v":8000},{"n":"Silver Comb","v":8000},{"n":"Jewelled Ladle","v":9000},{"n":"Opal","v":9500},{"n":"Eagle Icon","v":9600},{"n":"Sapphire","v":10000},{"n":"Speculum","v":12000},{"n":"Shining Amulet","v":12000},{"n":"Gold Nugget","v":12000},{"n":"Ruby","v":12000},{"n":"Emerald","v":13000},{"n":"Dragon Icon","v":15000},{"n":"Crown","v":15000}],
+"goods":{"Spice":["Pepper","Cinnamon","Nutmeg","Pimento","Cloves"],"Food":["Olive Oil","Grapes","Sugar","Cheese","Grain"],"Metal":["Gold","Silver","Quartz"],"Gem":["Coral","Ivory","Pearl"],"Textile":["Cotton","Raw Silk","Wool","Cloth","Silk"],"Misc":["Firearms","Wood","Porcelain","Artwork","Carpet"]}};
+
+// sea zones from the game's own X/Y layout (west→east voyage)
+const ZONES=[
+ {k:"euro", name:"Home Waters — Europe & the Mediterranean", v:"--z-euro"},
+ {k:"amer", name:"The New World — the Americas", v:"--z-amer"},
+ {k:"afr",  name:"The African Coast", v:"--z-afr"},
+ {k:"ind",  name:"Arabia & India", v:"--z-ind"},
+ {k:"east", name:"The Far East & the Pacific", v:"--z-east"},
+];
+function zoneOf(p){
+  if(p.x<=20) return "amer";
+  if(p.x>=53) return "east";
+  if(p.x>=42) return "ind";
+  return p.y>=15 ? "afr" : "euro";           // Atlantic band split N (Europe) / S (Africa)
+}
+const SC=4;                                  // world units → svg units
+D.ports.forEach(p=>p.z=zoneOf(p));
+
+// ---- map ----
+const svg=document.getElementById("map"), NS="http://www.w3.org/2000/svg";
+const W=260,H=136, cx=100,cy=86;             // compass rose seat (open Atlantic)
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+// graticule
+const g=document.getElementById("grat");
+for(let x=0;x<=64;x+=8)g.appendChild(el("line",{x1:x*SC,y1:0,x2:x*SC,y2:H,class:"grat"}));
+for(let y=0;y<=34;y+=8)g.appendChild(el("line",{x1:0,y1:y*SC,x2:W,y2:y*SC,class:"grat"}));
+// rhumb lines from the rose (portolan style), 16 bearings
+const rh=document.getElementById("rhumbs");
+for(let i=0;i<16;i++){const a=i*Math.PI/8;rh.appendChild(el("line",{x1:cx,y1:cy,x2:cx+Math.cos(a)*400,y2:cy+Math.sin(a)*400,class:"rhumb"}));}
+// compass rose
+const rose=document.getElementById("rose");
+rose.appendChild(el("circle",{cx,cy,r:11}));rose.appendChild(el("circle",{cx,cy,r:6,class:"pt"}));
+for(let i=0;i<8;i++){const a=i*Math.PI/4,l=(i%2)?5:10,w=(i%2)?1.2:2.1;
+  const x1=cx+Math.cos(a)*1,y1=cy+Math.sin(a)*1,xt=cx+Math.cos(a)*l,yt=cy+Math.sin(a)*l;
+  const xa=cx+Math.cos(a+.14)*2.4,ya=cy+Math.sin(a+.14)*2.4,xb=cx+Math.cos(a-.14)*2.4,yb=cy+Math.sin(a-.14)*2.4;
+  rose.appendChild(el("path",{d:`M${xt} ${yt} L${xa} ${ya} L${xb} ${yb} Z`,opacity:(i%2)?.5:.9}));}
+// ports
+const ge=document.getElementById("ports"), ro=document.getElementById("ro");
+D.ports.forEach(p=>{
+  const px=p.x*SC, py=p.y*SC, col=`var(${ZONES.find(z=>z.k===p.z).v})`;
+  const grp=el("g",{class:"port",tabindex:0});
+  grp.appendChild(el("circle",{cx:px,cy:py,r:1.5,fill:col,"fill-opacity":.85,stroke:"var(--sea)","stroke-width":.35}));
+  const tx=el("text",{x:px+2.2,y:py+1.1});tx.textContent=p.n;grp.appendChild(tx);
+  const show=()=>ro.innerHTML=`<b>${p.n}</b> &nbsp; <span style="color:var(--ink-soft)">${ZONES.find(z=>z.k===p.z).name.split("—").pop().trim()}</span><br>bearing &nbsp; x <b>${p.x}</b> · y <b>${p.y}</b>`;
+  grp.addEventListener("mouseenter",show);grp.addEventListener("focus",show);
+  ge.appendChild(grp);
+});
+// legend
+document.getElementById("legend").innerHTML=ZONES.map(z=>
+  `<span><i style="background:var(${z.v})"></i>${z.name}</span>`).join("");
+
+// ---- ports by zone ----
+document.getElementById("zones").innerHTML=ZONES.map(z=>{
+  const list=D.ports.filter(p=>p.z===z.k).sort((a,b)=>a.x-b.x||a.y-b.y);
+  return `<div class="zone"><h3><i style="background:var(${z.v})"></i>${z.name}<span class="cnt">${list.length}</span></h3>
+    <ul>${list.map(p=>`<li><b>${p.n}</b></li>`).join("")}</ul></div>`;
+}).join("");
+
+// ---- ships ----
+const maxDur=Math.max(...D.ships.map(s=>s.dur));
+document.querySelector("#ships tbody").innerHTML=D.ships.map(s=>{
+  const build=s.n==="Latin"||s.n==="Redonda"?"sail rig":"hull";
+  return `<tr><td><b>${s.n}</b></td><td class="num">${s.cargo}</td><td class="num">${s.crew}</td>
+    <td class="num">${s.dur}</td><td><div class="bar" style="width:${Math.round(s.dur/maxDur*100)}%"></div></td></tr>`;
+}).join("");
+
+// ---- goods ----
+document.getElementById("goods").innerHTML=Object.entries(D.goods).map(([cat,arr])=>
+  `<div class="cat"><h4>${cat}</h4><ul>${arr.map(g=>`<li>${g}</li>`).join("")}</ul></div>`).join("");
+
+// ---- items ----
+document.getElementById("items").innerHTML=D.items.map(it=>
+  `<span class="chip">${it.n}<span class="v">${it.v.toLocaleString()}g</span></span>`).join("");
+
+// theme toggle
+const tg=document.getElementById("tg"), root=document.documentElement;
+tg.addEventListener("click",()=>{
+  const cur=root.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  root.setAttribute("data-theme",cur==="dark"?"light":"dark");
+});
+</script>

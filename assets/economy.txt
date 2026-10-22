@@ -1,0 +1,33 @@
+8 REGIONAL ECONOMIES (bank58; buy at production base, sell where a good is imported):
+
+  [Iberia/Med]  ports: Lisbon, Seville, Istanbul, Genoa, Venice, Pisa...
+     SELLS (buy here): Olive Oil 42g, Grapes 38g, Cloth 60g, Firearms 100g
+     BIDS most for   : Gold 1000g, Artwork 400g, Quartz 320g, Carpet 320g
+
+  [N.Europe]  ports: Azov, London, Bordeaux, Oslo, Hamburg, Antwerp
+     SELLS (buy here): Cheese 35g, Grain 12g, Cloth 62g, Firearms 105g, Porcelain 60g
+     BIDS most for   : Gold 1000g, Artwork 400g, Ivory 350g, Carpet 340g
+
+  [W.Africa]  ports: Argin, San Jorge
+     SELLS (buy here): Gold 750g, Cotton 30g
+     BIDS most for   : Gold 400g, Coral 290g, Quartz 220g, Ivory 200g
+
+  [E.Africa]  ports: Sofala, Mozambique, Mombasa
+     SELLS (buy here): Quartz 180g, Cotton 25g, Wood 28g
+     BIDS most for   : Gold 300g, Silver 280g, Coral 260g, Ivory 195g
+
+  [Caribbean]  ports: Santo Domingo, Jamaica, Guatemala, Panama, Veracruz, Caracas...
+     SELLS (buy here): Gold 400g, Cotton 22g
+     BIDS most for   : Artwork 300g, Coral 270g, Gold 250g, Quartz 230g
+
+  [Arabia/India]  ports: Muscat, Baghdad, Aden, Mecca, Hormuz, Diu
+     SELLS (buy here): Olive Oil 30g, Grain 18g, Cotton 20g, Wool 20g, Carpet 70g
+     BIDS most for   : Gold 890g, Silver 380g, Coral 350g, Quartz 300g
+
+  [Far East]  ports: Nagasaki, Macao, Zeiton
+     SELLS (buy here): Pearl 170g, Silk 45g, Porcelain 25g, Artwork 140g
+     BIDS most for   : Gold 900g, Quartz 320g, Firearms 240g, Silver 200g
+
+  [India/SE-Asia]  ports: Goa, Malacca, Ceylon, Sumatra, Java, Amboina...
+     SELLS (buy here): Grain 10g, Cotton 15g
+     BIDS most for   : Gold 1050g, Quartz 330g, Firearms 205g, Artwork 160g

@@ -1,0 +1,1364 @@
+NesPrgRom:7E003:os_main:OS main entry; itself bytecode (JSR vm_entry $E4BF + inline). $E000=JMP $E003
+NesPrgRom:7E06F:idx_valid_lt21:bounds check: return arg1 < 21 (guards the 21-element record set) (5 callers)
+NesPrgRom:7E08C:idx_over_20:bounds check: return arg1 > 20 (complement of idx_valid_lt21) (21 callers)
+NesPrgRom:7E0C1:audio_param_gated:set_sound_param(arg1) only if os_mode_flags & 4 (audio enabled) (22 callers)
+NesPrgRom:7E0D6:audio_reset_gated:audio_reset() only if os_mode_flags & 4 (audio enabled) (6 callers)
+NesPrgRom:7E0EA:audio_playing_gated:audio_is_playing() only if os_mode_flags & 4 (audio enabled) (2 callers)
+NesPrgRom:7E100:load_vm_args:native-sub prologue: copy Y arg-bytes from the VM operand stack ($02) into the native ZP arg block ($08+). The `ldy #N` before each call = arg-byte count. Called by ~every native helper.
+NesPrgRom:7E146:add_a_to_word_zpx:== LEmp add_a_to_word_zpx ($D352) score 1.00 relocated-identical; 30 callers
+NesPrgRom:7E150:sub_a_from_word_zpx:== LEmp sub_a_from_word_zpx ($D35C) score 1.00 relocated-identical; 5 callers
+NesPrgRom:7E177:alu_mul16:16-bit multiply via MMC5 hardware multiplier ($5205/$5206). VM-operand arithmetic
+NesPrgRom:7E1B4:alu_abs16:absolute value of signed 16-bit VM operand (sign-conditional negate)
+NesPrgRom:7E1D9:alu_div_push_remainder:divide then push remainder ($44/$45) to VM stack
+NesPrgRom:7E1EB:alu_udiv16:unsigned 16-bit divide (SOFTWARE long-division loop -- MMC5 has a HW multiplier but NO divider); push quotient ($40/$41)
+NesPrgRom:7E1FD:div16_unsigned:~ LEmp div16_unsigned ($E26C) score 0.79 diverged (reloc); same function -- verify; 0 callers
+NesPrgRom:7E222:div16_unsigned_e222:== LEmp div16_unsigned ($E26C) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7E226:div16_signed:== LEmp div16_signed ($E270) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7E274:div16_setup:== LEmp div16_setup ($E2BE) score 1.00 relocated-identical; 5 callers
+NesPrgRom:7E299:native_call_trampoline:NATIVE-call convention: build VM frame, JMP($0008) to code after 3 inline bytes; RTS->$E311 teardown. 113 paged native subs use this
+NesPrgRom:7E338:call_vm_from_native:== LEmp call_vm_from_native ($E382) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7E392:vm_push_args_zpx:== LEmp vm_push_args_zpx ($E3DC) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7E395:vm_pop_operand16:pop 16-bit operand off VM stack ($02) into native reg $00,x
+NesPrgRom:7E3BA:vm_push_result16:push 16-bit native result to VM stack (advance $02)
+NesPrgRom:7E3F0:alu_shl16_n:shift-left 16-bit value by Y (asl/rol loop) = multiply by 2^Y
+NesPrgRom:7E401:alu_shr16_n_signed:arithmetic shift-right 16-bit by Y (sign-preserving ror)
+NesPrgRom:7E415:alu_shr16_n:logical shift-right 16-bit by Y (lsr/ror loop) = divide by 2^Y
+NesPrgRom:7E426:vm_load_operand16:load a 16-bit VM-stack operand into native reg $00,x
+NesPrgRom:7E445:inline_add_word:pull return addr, read a 16-bit inline operand after the call, add it to the result $08/$09
+NesPrgRom:7E485:vm_drop_args_inline:pull return addr, read an inline arg-count byte, subtract it from vm_sp ($02) = drop that many VM-stack args
+NesPrgRom:7E4BF:vm_entry:bytecode VM entry: frame-save (PLA->$08/$09,$00/$01; ($02)-9; copy $00-$07)
+NesPrgRom:7E503:vm_dispatch:VM dispatcher = vm_entry+0x44; fetch ($06),Y / index $ECD4/$EDD4 / JMP($0000)
+NesPrgRom:7E51B:vm_op_00_load_offset:== LEmp vm_op_00_load_offset ($E565) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E51F:vm_op_01_loadA_local_neg:== LEmp vm_op_01_loadA_local_neg ($E569) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E523:vm_op_02_loadA_local_neg:== LEmp vm_op_02_loadA_local_neg ($E56D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E527:vm_op_03_loadA_local_neg:== LEmp vm_op_03_loadA_local_neg ($E571) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E52B:vm_op_04_loadA_local_neg:== LEmp vm_op_04_loadA_local_neg ($E575) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E52F:vm_op_05_loadA_local_neg:== LEmp vm_op_05_loadA_local_neg ($E579) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E533:vm_op_06_loadA_local_neg:== LEmp vm_op_06_loadA_local_neg ($E57D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E537:vm_op_07_loadA_local_neg:== LEmp vm_op_07_loadA_local_neg ($E581) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E53B:vm_op_08_loadA_local_neg:== LEmp vm_op_08_loadA_local_neg ($E585) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E53F:vm_op_09_loadA_local_neg:== LEmp vm_op_09_loadA_local_neg ($E589) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E543:vm_op_0A_loadA_local_neg:== LEmp vm_op_0A_loadA_local_neg ($E58D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E547:vm_op_0B_loadA_local_neg:== LEmp vm_op_0B_loadA_local_neg ($E591) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E560:vm_op_0F_loadA_local_pos:== LEmp vm_op_0F_loadA_local_pos ($E5AA) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E564:vm_op_0E_loadA_local_pos:== LEmp vm_op_0E_loadA_local_pos ($E5AE) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E568:vm_op_0D_loadA_local_pos:== LEmp vm_op_0D_loadA_local_pos ($E5B2) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E56C:vm_op_0C_loadA_local_pos:== LEmp vm_op_0C_loadA_local_pos ($E5B6) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E57A:vm_op_10_loadB_local_neg:== LEmp vm_op_10_loadB_local_neg ($E5C4) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E57E:vm_op_11_loadB_local_neg:== LEmp vm_op_11_loadB_local_neg ($E5C8) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E582:vm_op_12_loadB_local_neg:== LEmp vm_op_12_loadB_local_neg ($E5CC) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E586:vm_op_13_loadB_local_neg:== LEmp vm_op_13_loadB_local_neg ($E5D0) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E58A:vm_op_14_loadB_local_neg:== LEmp vm_op_14_loadB_local_neg ($E5D4) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E58E:vm_op_15_loadB_local_neg:== LEmp vm_op_15_loadB_local_neg ($E5D8) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E592:vm_op_16_loadB_local_neg:== LEmp vm_op_16_loadB_local_neg ($E5DC) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E596:vm_op_17_loadB_local_neg:== LEmp vm_op_17_loadB_local_neg ($E5E0) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E59A:vm_op_18_loadB_local_neg:== LEmp vm_op_18_loadB_local_neg ($E5E4) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E59E:vm_op_19_loadB_local_neg:== LEmp vm_op_19_loadB_local_neg ($E5E8) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5A2:vm_op_1A_loadB_local_neg:== LEmp vm_op_1A_loadB_local_neg ($E5EC) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5A6:vm_op_1B_loadB_local_neg:== LEmp vm_op_1B_loadB_local_neg ($E5F0) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5BF:vm_op_1F_loadB_local_pos:== LEmp vm_op_1F_loadB_local_pos ($E609) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5C3:vm_op_1E_loadB_local_pos:== LEmp vm_op_1E_loadB_local_pos ($E60D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5C7:vm_op_1D_loadB_local_pos:== LEmp vm_op_1D_loadB_local_pos ($E611) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5CB:vm_op_1C_loadB_local_pos:== LEmp vm_op_1C_loadB_local_pos ($E615) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5D9:vm_op_20_storeA_local_neg:== LEmp vm_op_20_storeA_local_neg ($E623) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5DD:vm_op_21_storeA_local_neg:== LEmp vm_op_21_storeA_local_neg ($E627) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5E1:vm_op_22_storeA_local_neg:== LEmp vm_op_22_storeA_local_neg ($E62B) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5E5:vm_op_23_storeA_local_neg:== LEmp vm_op_23_storeA_local_neg ($E62F) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5E9:vm_op_24_storeA_local_neg:== LEmp vm_op_24_storeA_local_neg ($E633) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5ED:vm_op_25_storeA_local_neg:== LEmp vm_op_25_storeA_local_neg ($E637) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5F1:vm_op_26_storeA_local_neg:== LEmp vm_op_26_storeA_local_neg ($E63B) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5F5:vm_op_27_storeA_local_neg:== LEmp vm_op_27_storeA_local_neg ($E63F) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5F9:vm_op_28_storeA_local_neg:== LEmp vm_op_28_storeA_local_neg ($E643) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E5FD:vm_op_29_storeA_local_neg:== LEmp vm_op_29_storeA_local_neg ($E647) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E601:vm_op_2A_storeA_local_neg:== LEmp vm_op_2A_storeA_local_neg ($E64B) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E605:vm_op_2B_storeA_local_neg:== LEmp vm_op_2B_storeA_local_neg ($E64F) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E61E:vm_op_2F_storeA_local_pos:== LEmp vm_op_2F_storeA_local_pos ($E668) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E622:vm_op_2E_storeA_local_pos:== LEmp vm_op_2E_storeA_local_pos ($E66C) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E626:vm_op_2D_storeA_local_pos:== LEmp vm_op_2D_storeA_local_pos ($E670) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E62A:vm_op_2C_storeA_local_pos:== LEmp vm_op_2C_storeA_local_pos ($E674) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E638:vm_op_30_storeB_local_neg:== LEmp vm_op_30_storeB_local_neg ($E682) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E63C:vm_op_31_storeB_local_neg:== LEmp vm_op_31_storeB_local_neg ($E686) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E640:vm_op_32_storeB_local_neg:== LEmp vm_op_32_storeB_local_neg ($E68A) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E644:vm_op_33_storeB_local_neg:== LEmp vm_op_33_storeB_local_neg ($E68E) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E648:vm_op_34_storeB_local_neg:== LEmp vm_op_34_storeB_local_neg ($E692) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E64C:vm_op_35_storeB_local_neg:== LEmp vm_op_35_storeB_local_neg ($E696) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E650:vm_op_36_storeB_local_neg:== LEmp vm_op_36_storeB_local_neg ($E69A) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E654:vm_op_37_storeB_local_neg:== LEmp vm_op_37_storeB_local_neg ($E69E) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E658:vm_op_38_storeB_local_neg:== LEmp vm_op_38_storeB_local_neg ($E6A2) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E65C:vm_op_39_storeB_local_neg:== LEmp vm_op_39_storeB_local_neg ($E6A6) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E660:vm_op_3A_storeB_local_neg:== LEmp vm_op_3A_storeB_local_neg ($E6AA) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E664:vm_op_3B_storeB_local_neg:== LEmp vm_op_3B_storeB_local_neg ($E6AE) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E67B:vm_op_3F_storeB_local_pos:== LEmp vm_op_3F_storeB_local_pos ($E6C5) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E67F:vm_op_3E_storeB_local_pos:== LEmp vm_op_3E_storeB_local_pos ($E6C9) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E683:vm_op_3D_storeB_local_pos:== LEmp vm_op_3D_storeB_local_pos ($E6CD) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E687:vm_op_3C_storeB_local_pos:== LEmp vm_op_3C_storeB_local_pos ($E6D1) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E692:vm_op_clearA_shared:== LEmp vm_op_clearA_shared ($E6DC) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E69C:vm_op_40_clearA_40:== LEmp vm_op_40_clearA_40 ($E6E6) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6A3:vm_op_setB_imm4_shared:== LEmp vm_op_setB_imm4_shared ($E6ED) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6AD:vm_op_50_setB_imm4_50:== LEmp vm_op_50_setB_imm4_50 ($E6F7) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6B4:vm_op_push_imm4_shared:== LEmp vm_op_push_imm4_shared ($E6FE) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6BC:vm_op_addA_imm4_shared:== LEmp vm_op_addA_imm4_shared ($E706) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6C8:vm_op_70_nop:== LEmp vm_op_70_nop ($E712) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6CB:vm_op_82_bb:== LEmp vm_op_82_bb ($E715) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6D0:vm_op_81_byte:== LEmp vm_op_81_byte ($E71A) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6DF:vm_op_A4_loadA_mem_word:== LEmp vm_op_A4_loadA_mem_word ($E729) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6E4:vm_op_83_byte:== LEmp vm_op_83_byte ($E72E) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6F3:vm_op_84_bwb:== LEmp vm_op_84_bwb ($E73D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6F8:vm_op_A6_loadB_mem_word:== LEmp vm_op_A6_loadB_mem_word ($E742) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E6FD:vm_op_85_byte:== LEmp vm_op_85_byte ($E747) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E70C:vm_op_86_bwb:== LEmp vm_op_86_bwb ($E756) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E711:vm_op_A8_loadA_mem_word:== LEmp vm_op_A8_loadA_mem_word ($E75B) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E716:vm_op_87_byte:== LEmp vm_op_87_byte ($E760) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E723:vm_op_88_bwb:== LEmp vm_op_88_bwb ($E76D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E728:vm_op_AA:== LEmp vm_op_AA ($E772) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E72D:vm_op_DE_loadA_frameaddr:== LEmp vm_op_DE_loadA_frameaddr ($E777) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E73C:vm_op_DF_loadB_frameaddr:== LEmp vm_op_DF_loadB_frameaddr ($E786) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E74B:vm_op_89_loadA_imm_sbyte:== LEmp vm_op_89_loadA_imm_sbyte ($E795) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E755:vm_op_8A_loadA_imm_word:== LEmp vm_op_8A_loadA_imm_word ($E79F) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E75A:vm_op_8B_loadB_imm_byte:== LEmp vm_op_8B_loadB_imm_byte ($E7A4) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E764:vm_op_8C_loadB_imm_word:== LEmp vm_op_8C_loadB_imm_word ($E7AE) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E769:vm_op_8D_sbyte:== LEmp vm_op_8D_sbyte ($E7B3) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E76F:vm_op_8E_push_imm_word:== LEmp vm_op_8E_push_imm_word ($E7B9) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E775:vm_op_8F_addA_imm_sbyte:== LEmp vm_op_8F_addA_imm_sbyte ($E7BF) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E784:vm_op_90_bb:== LEmp vm_op_90_bb ($E7CE) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E789:vm_op_A0_A3_byte:== LEmp vm_op_A0_A3_byte ($E7D3) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E795:vm_op_A5_loadA_mem_byte:== LEmp vm_op_A5_loadA_mem_byte ($E7DF) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E79A:vm_op_A1_A3_byte:== LEmp vm_op_A1_A3_byte ($E7E4) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7A6:vm_op_A7_loadA_addr_word:== LEmp vm_op_A7_loadA_addr_word ($E7F0) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7AB:vm_op_A2_A3_byte:== LEmp vm_op_A2_A3_byte ($E7F5) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7B5:vm_op_A9_storeA_mem_byte:== LEmp vm_op_A9_storeA_mem_byte ($E7FF) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7BA:vm_op_A3_A3_byte:== LEmp vm_op_A3_A3_byte ($E804) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7C4:vm_op_AB_word:== LEmp vm_op_AB_word ($E80E) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7C9:vm_op_EA_host_call_indirect:== LEmp vm_op_EA_host_call_indirect ($E813) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7D4:vm_op_E9_host_call:== LEmp vm_op_E9_host_call ($E81E) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7DF:vm_op_DD_host_call_indirect_simple:== LEmp vm_op_DD_host_call_indirect_simple ($E829) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7EA:vm_op_AC_host_call_simple:== LEmp vm_op_AC_host_call_simple ($E834) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E7F3:vm_call_native:== LEmp vm_call_native ($E83D) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7E816:indirect_jmp_trampoline:== LEmp indirect_jmp_trampoline ($E860) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7E819:vm_op_AD_byte:== LEmp vm_op_AD_byte ($E863) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E83A:vm_dispatch_with_ptr1_adjust:== LEmp vm_dispatch_with_ptr1_adjust ($E884) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E848:vm_op_AF:== LEmp vm_op_AF ($E892) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E857:vm_op_D6_jump_abs:== LEmp vm_op_D6_jump_abs ($E8A1) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E861:vm_op_D7_branch_nz_abs:== LEmp vm_op_D7_branch_nz_abs ($E8AB) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E86D:vm_op_D8_branch_z_abs:== LEmp vm_op_D8_branch_z_abs ($E8B7) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E875:vm_op_E3:== LEmp vm_op_E3 ($E8BF) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E883:vm_op_E4_branch_nz_rel:== LEmp vm_op_E4_branch_nz_rel ($E8CD) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E88F:vm_op_E5_branch_z_rel:== LEmp vm_op_E5_branch_z_rel ($E8D9) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E897:vm_op_E6_jump_rel_fwd:== LEmp vm_op_E6_jump_rel_fwd ($E8E1) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E8A5:vm_op_E7_branch_nz_rel_fwd:== LEmp vm_op_E7_branch_nz_rel_fwd ($E8EF) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E8B1:vm_op_E8_branch_z_rel_fwd:== LEmp vm_op_E8_branch_z_rel_fwd ($E8FB) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E8B9:vm_op_D9_switch:== LEmp vm_op_D9_switch ($E903) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E901:vm_op_D5_switch:== LEmp vm_op_D5_switch ($E94B) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E93A:vm_op_B0_loadA_ind_word:== LEmp vm_op_B0_loadA_ind_word ($E984) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E947:vm_op_D3_loadA_ind_byte:== LEmp vm_op_D3_loadA_ind_byte ($E991) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E950:vm_op_B1_storeA_ind_word:== LEmp vm_op_B1_storeA_ind_word ($E99A) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E95F:vm_op_D4_storeA_ind_byte:== LEmp vm_op_D4_storeA_ind_byte ($E9A9) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E96A:vm_op_B3_pushA:== LEmp vm_op_B3_pushA ($E9B4) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E971:vm_op_B4_popB:== LEmp vm_op_B4_popB ($E9BB) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E977:vm_pop_operand16:== LEmp vm_pop_operand16 ($E9C1) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7E98C:mul16_hw_08_0c:== LEmp mul16_hw_08_0c ($E9D6) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E9C6:vm_op_B8_div_unsigned:== LEmp vm_op_B8_div_unsigned ($EA10) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E9CC:vm_op_B6_div_signed:== LEmp vm_op_B6_div_signed ($EA16) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7E9DC:udiv16:== LEmp udiv16 ($EA26) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7EA02:vm_op_B9_mod_signed:== LEmp vm_op_B9_mod_signed ($EA4C) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EA1A:vm_op_BA_mod_unsigned:== LEmp vm_op_BA_mod_unsigned ($EA64) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EA28:sdiv16_setup_signs:== LEmp sdiv16_setup_signs ($EA72) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7EA4F:vm_op_BB_add:== LEmp vm_op_BB_add ($EA99) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EA5F:vm_op_BC_sub:== LEmp vm_op_BC_sub ($EAA9) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EA6F:vm_op_BD_shl_by_regB:== LEmp vm_op_BD_shl_by_regB ($EAB9) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EA83:vm_op_BF_ashr_by_regB:== LEmp vm_op_BF_ashr_by_regB ($EACD) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EA9C:vm_op_BE_lshr_by_regB:== LEmp vm_op_BE_lshr_by_regB ($EAE6) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EAB0:vm_op_DA_bitand:== LEmp vm_op_DA_bitand ($EAFA) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EABF:vm_op_DB_bitor:== LEmp vm_op_DB_bitor ($EB09) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EACE:vm_op_DC_bitxor:== LEmp vm_op_DC_bitxor ($EB18) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EADD:vm_op_C0_cmp_eq:== LEmp vm_op_C0_cmp_eq ($EB27) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EAF1:vm_op_C1_cmp_ne:== LEmp vm_op_C1_cmp_ne ($EB3B) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB05:vm_op_C2_cmp_slt:== LEmp vm_op_C2_cmp_slt ($EB4F) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB1C:vm_op_C4_cmp_sgt:== LEmp vm_op_C4_cmp_sgt ($EB66) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB33:vm_op_C3_cmp_sge:== LEmp vm_op_C3_cmp_sge ($EB7D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB4A:vm_op_C5_cmp_sle:== LEmp vm_op_C5_cmp_sle ($EB94) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB61:vm_op_C6_cmp_uge:== LEmp vm_op_C6_cmp_uge ($EBAB) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB73:vm_op_C8_cmp_ugt:== LEmp vm_op_C8_cmp_ugt ($EBBD) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB85:vm_op_C7_cmp_ule:== LEmp vm_op_C7_cmp_ule ($EBCF) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EB97:vm_op_C9_cmp_ult:== LEmp vm_op_C9_cmp_ult ($EBE1) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EBA9:vm_op_CA_is_zero:== LEmp vm_op_CA_is_zero ($EBF3) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EBB7:vm_op_CB:== LEmp vm_op_CB ($EC01) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EBC5:vm_op_CC:== LEmp vm_op_CC ($EC0F) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EBD4:vm_op_CD_swap_AB:== LEmp vm_op_CD_swap_AB ($EC1E) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EBE7:vm_op_D0_incA:== LEmp vm_op_D0_incA ($EC31) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EBF0:vm_op_D1_decA:== LEmp vm_op_D1_decA ($EC3A) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EBFB:vm_op_D2_aslA:== LEmp vm_op_D2_aslA ($EC45) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EC02:vm_op_E0_byte:== LEmp vm_op_E0_byte ($EC4C) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EC0D:vm_op_E1_byte:== LEmp vm_op_E1_byte ($EC57) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EC18:vm_op_E2_byte:== LEmp vm_op_E2_byte ($EC62) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EC23:vm_op_CF_vm_return:== LEmp vm_op_CF_vm_return ($EC6D) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EC40:vm_op_default:default/no-op VM handler (37 of 256 slots)
+NesPrgRom:7EC41:vm_op_FF:== LEmp vm_op_FF ($EC8B) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EC45:vm_fetch_sbyte:== LEmp vm_fetch_sbyte ($EC8F) score 1.00 relocated-identical; 9 callers
+NesPrgRom:7EC54:vm_addr_ptr2_plus_sbyte:== LEmp vm_addr_ptr2_plus_sbyte ($EC9E) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7EC6D:vm_fetch_word:== LEmp vm_fetch_word ($ECB7) score 1.00 relocated-identical; 13 callers
+NesPrgRom:7EC83:vm_read_word_into_ptr0:== LEmp vm_read_word_into_ptr0 ($ECCD) score 1.00 relocated-identical; 14 callers
+NesPrgRom:7EC9A:vm_addr_ptr2_plus_word:== LEmp vm_addr_ptr2_plus_word ($ECE4) score 1.00 relocated-identical; 12 callers
+NesPrgRom:7ECCE:vm_op_call_f339:VM opcode handler (just before the $ECD4 handler table): jsr $F339, return to vm_dispatch ($E503)
+NesPrgRom:7ECD4:vm_handler_lo:256-byte VM opcode-handler LO table
+NesPrgRom:7EDD4:vm_handler_hi:256-byte VM opcode-handler HI table (=lo+0x100)
+NesPrgRom:7EED4:syscall_entry_struct:~ LEmp syscall_entry_struct ($EF1E) score 0.89 diverged (reloc); same function -- verify; 0 callers
+NesPrgRom:7EEE7:syscall_entry_struct:syscall entry: copy param struct, fake-BRK to ($FFDE) [LEmp $EF1E analog]
+NesPrgRom:7EEF4:syscall_entry_simple:== LEmp syscall_entry_simple ($EF3E) score 0.91 relocated-identical; 2 callers
+NesPrgRom:7EF01:syscall_entry_simple:syscall entry (id in A), fake-BRK to ($FFDE) [LEmp $EF3E analog]
+NesPrgRom:7EF06:extop_dispatch:opcode $B7 ext-op (32-bit math) sub-dispatcher; index $EF21 table
+NesPrgRom:7EF21:extop_table:ext-op handler address table (2-byte entries)
+NesPrgRom:7EFB0:sdiv32:== LEmp sdiv32 ($F019) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7EFBE:sdiv32_setup:== LEmp sdiv32_setup ($F027) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7EFDC:udiv32:== LEmp udiv32 ($F045) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F0E7:negate32_operand:== LEmp negate32_operand ($F150) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F0FB:test_nonzero32:== LEmp test_nonzero32 ($F164) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F183:cmp32_a_minus_b:== LEmp cmp32_a_minus_b ($F1EC) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7F196:cmp32_b_minus_a:== LEmp cmp32_b_minus_a ($F1FF) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7F28D:vm_bitfield_read:== LEmp vm_bitfield_read ($F2F6) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7F2C3:vm_bitfield_read_test:== LEmp vm_bitfield_read_test ($F32C) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F2EC:vm_bitfield_write:== LEmp vm_bitfield_write ($F355) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F329:make_bitmask:== LEmp make_bitmask ($F392) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7F33A:copy_from_bank_dc80:== LEmp copy_from_bank_dc80 ($F423) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7F500:reset:RESET: PPU warmup -> init chain ($F5BA.., banking $F53D) -> JMP $E000
+NesPrgRom:7F53D:boot_banking_init:$5116<-$FE(bank62@C000),$5117=bank63,$5114/$5115 boot windows, MMC5 unlock
+NesPrgRom:7F559:boot_init_banking:== LEmp boot_init_banking ($F559) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F597:boot_init_exram:== LEmp boot_init_exram ($F597) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F5AF:boot_init_ppu_regs:== LEmp boot_init_ppu_regs ($F5AF) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F5BA:boot_init_oam:== LEmp boot_init_oam ($F5BA) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F5CF:boot_init_vm_pointers:== LEmp boot_init_vm_pointers ($F5CF) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F5E8:boot_init_flags:== LEmp boot_init_flags ($F5E8) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F5FC:boot_init_nmi_queue:== LEmp boot_init_nmi_queue ($F5FC) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F611:boot_init_sound:== LEmp boot_init_sound ($F611) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F64C:nmi_handler:== LEmp nmi_handler ($F64C) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7F693:check_flush_flag_cc:== LEmp check_flush_flag_cc ($F693) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F69F:nmi_defer_if_low_stack:== LEmp nmi_defer_if_low_stack ($F69F) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F6EB:nmi_map_gfx_bank:== LEmp nmi_map_gfx_bank ($F6EB) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7F6F7:map_prg_bank_b0:== LEmp map_prg_bank_b0 ($F711) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7F6FF:nmi_flush_nametable:== LEmp nmi_flush_nametable ($F719) score 0.95 relocated-identical; 1 callers
+NesPrgRom:7F720:ppu_vram_fill_run:NMI PPU helper: write byte $AC to $2007 (VRAM data) $A8 times = fill a VRAM run. (was mis-named "phantom_overlap_f720" -- a borrowed LEmp name for what is real code in UW; ch.21 read)
+NesPrgRom:7F777:nmi_flush_ppu_read:== LEmp nmi_flush_ppu_read ($F788) score 0.94 relocated-identical; 1 callers
+NesPrgRom:7F7D1:nmi_flush_exram_attr:== LEmp nmi_flush_exram_attr ($F7D9) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F832:nmi_flush_exram_attr2:== LEmp nmi_flush_exram_attr2 ($F83A) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F882:nmi_flush_ppu_fill:== LEmp nmi_flush_ppu_fill ($F88A) score 0.93 relocated-identical; 1 callers
+NesPrgRom:7F8D8:nmi_update_scroll_split:== LEmp nmi_update_scroll_split ($F8D7) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F92E:music_nmi_tick:== LEmp music_nmi_tick ($F92D) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F962:syscall_dispatch:PRIVATE syscall dispatcher=($FFDE). id@$50 asl -> $F98C, jmp($006F); ret $F985
+NesPrgRom:7F985:syscall_return:syscall central return: restore A/X/Y + RTI (consumes fake-BRK frame)
+NesPrgRom:7F98C:syscall_table:27-slot raw 2-byte syscall handler table; id0=$F500 reset. data, not a sub
+NesPrgRom:7F9C2:write_ppuctrl:== LEmp write_ppuctrl ($F9C1) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7F9C8:write_ppumask:== LEmp write_ppumask ($F9C7) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7F9CE:nmi_on:== LEmp nmi_on ($F9CD) score 1.00 relocated-identical; 8 callers
+NesPrgRom:7F9D6:nmi_off:== LEmp nmi_off ($F9D5) score 1.00 relocated-identical; 7 callers
+NesPrgRom:7F9DE:set_prg_bank:== LEmp set_prg_bank ($F9DD) score 1.00 relocated-identical; 23 callers
+NesPrgRom:7F9F9:controller_poll:== LEmp controller_poll ($F9F8) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7FA22:palette_upload:~ LEmp palette_upload ($FA21) score 0.89 diverged (reloc); same function -- verify; 2 callers
+NesPrgRom:7FA5F:calc_nametable_addr:== LEmp calc_nametable_addr ($FA55) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7FA99:syscall_id01_syscall_set_nt_exram_mode:id1: ~LEmp syscall_set_nt_exram_mode 0.79
+NesPrgRom:7FAB9:syscall_id02_syscall_call_banked_routine:id2: ==LEmp syscall_call_banked_routine 0.97
+NesPrgRom:7FAF7:syscall_id03_syscall_set_prg_bank:id3: ==LEmp syscall_set_prg_bank 1.00
+NesPrgRom:7FAFF:syscall_id04_syscall_get_prg_bank:id4: ==LEmp syscall_get_prg_bank 1.00
+NesPrgRom:7FB06:syscall_id05_syscall_set_chr_banks:id5: ==LEmp syscall_set_chr_banks 1.00
+NesPrgRom:7FB14:syscall_id06_syscall_set_sprite_block:id6: ==LEmp syscall_set_sprite_block 1.00
+NesPrgRom:7FB2C:syscall_id07_syscall_queue_vram_row:id7: ==LEmp syscall_queue_vram_row 1.00
+NesPrgRom:7FB30:queue_vram_row_raw:== LEmp queue_vram_row_raw ($FB30) score 0.98 relocated-identical; 1 callers
+NesPrgRom:7FB6C:syscall_id08_syscall_queue_ppu_transfer:id8: ==LEmp syscall_queue_ppu_transfer 1.00
+NesPrgRom:7FBA8:syscall_id09_syscall_banked_blit_m3:id9: ==LEmp syscall_banked_blit_m3 1.00
+NesPrgRom:7FBB0:syscall_id10_syscall_banked_ppu_blit:id10: ==LEmp syscall_banked_ppu_blit 1.00
+NesPrgRom:7FBB8:queue_ppu_transfer_masked:== LEmp queue_ppu_transfer_masked ($FBB7) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7FC1E:syscall_id11_syscall_set_fill_mode:id11: ==LEmp syscall_set_fill_mode 1.00
+NesPrgRom:7FC29:syscall_id12_syscall_set_chr_banks:id12: ==LEmp syscall_set_chr_banks 1.00
+NesPrgRom:7FC50:syscall_id13_syscall_set_chr_bank_alt:id13: ==LEmp syscall_set_chr_bank_alt 1.00
+NesPrgRom:7FC6E:syscall_id14_syscall_set_metasprite:id14: ==LEmp syscall_set_metasprite 1.00
+NesPrgRom:7FCD4:syscall_id15_syscall_ppu_copy_blocking:id15: ==LEmp syscall_ppu_copy_blocking 1.00
+NesPrgRom:7FCF5:syscall_id16_syscall_read_controller:id16: ==LEmp syscall_read_controller 1.00
+NesPrgRom:7FCFC:syscall_id17_syscall_busy_wait:id17: ==LEmp syscall_busy_wait 1.00
+NesPrgRom:7FD10:syscall_id18_syscall_set_scroll:id18: ~LEmp syscall_set_scroll 0.78
+NesPrgRom:7FD49:syscall_id19_syscall_scroll_vsplit:id19: ==LEmp syscall_scroll_vsplit 1.00
+NesPrgRom:7FD85:syscall_id20_syscall_set_vertical_split:id20: ==LEmp syscall_set_vertical_split 1.00
+NesPrgRom:7FDB3:syscall_id21_syscall_play_music:id21: ==LEmp syscall_play_music 1.00
+NesPrgRom:7FE38:syscall_id22_syscall_set_sound_param:id22: ~LEmp syscall_set_sound_param 0.75
+NesPrgRom:7FE3D:syscall_id23_syscall_audio_reset:id23: ==LEmp syscall_audio_reset 1.00
+NesPrgRom:7FE6C:syscall_id24_syscall_audio_is_playing:id24: ==LEmp syscall_audio_is_playing 1.00
+NesPrgRom:7FE82:syscall_id25_syscall_play_music:id25: ==LEmp syscall_play_music 1.00
+NesPrgRom:7FF31:syscall_id26_syscall_set_sound_params:id26: ==LEmp syscall_set_sound_params 1.00
+NesPrgRom:7C003:draw_string:THE text primitive: render null-terminated string (ptr=arg1) at cursor $7286, CHR page $728E; arg2=mode. E299 native prologue -> str-render loop @ $C009 (calls str_render_char/$C325). ~200+ call sites
+NesPrgRom:7C03E:str_render_char:text renderer: fetch next source char via ($0A),y, dispatch control vs printable
+NesPrgRom:7C0FA:str_advance_col:advance the destination column pointer (+1), check $DF terminator
+NesPrgRom:7C104:str_ctrl_df:handle control code $DF
+NesPrgRom:7C144:str_put_char:write a glyph to the dest buffer via ($10),y
+NesPrgRom:7C179:str_ctrl_dispatch:dispatch on control codes $DE / $DF
+NesPrgRom:7C1A3:str_ctrl_newline:handle newline ($0A): set $17, wrap to next line
+NesPrgRom:7C2D8:str_check_window_bounds:compare cursor $728C against window extent $7286 (line/wrap gate)
+NesPrgRom:7C2EA:str_wrap_line:advance line: inc_ptr_zpx + back to str_render_char
+NesPrgRom:7C325:str_flag16_check:text-state helper: gate on flag $16
+NesPrgRom:7C32A:save_block_to_stack:== LEmp save_block_to_stack ($DB1A) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7C344:restore_block_from_stack:== LEmp restore_block_from_stack ($DB34) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7C35F:inc_ptr_zpx:increment the 16-bit zero-page pointer at $00,x (carry to $01,x)
+NesPrgRom:7C366:inc_word_08:== LEmp inc_word_08 ($DB56) score 1.00 relocated-identical; 5 callers
+NesPrgRom:7C36D:inc_word_1a:== LEmp inc_word_1a ($DB5D) score 1.00 relocated-identical; 7 callers
+NesPrgRom:7C374:inc_word_10:== LEmp inc_word_10 ($DB64) score 1.00 relocated-identical; 4 callers
+NesPrgRom:7C37B:inc_word_0e:== LEmp inc_word_0e ($DB6B) score 1.00 relocated-identical; 6 callers
+NesPrgRom:7C382:calc_record_ptrs:== LEmp calc_record_ptrs ($DB72) score 0.98 relocated-identical; 2 callers
+NesPrgRom:7C41D:invoke_syscall_a_dc6e:~ LEmp invoke_syscall_a_dc6e ($DC0D) score 0.82 diverged (reloc); same function -- verify; 3 callers
+NesPrgRom:7C42F:store_advance_ptrs:== LEmp store_advance_ptrs ($DC1F) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7C444:calc_record_ptrs2:== LEmp calc_record_ptrs2 ($DC34) score 1.00 relocated-identical; 3 callers
+NesPrgRom:7C47B:wait_input:poll read_controller(0)/(1) in a loop until a button edge (JUMPT/JUMPF back)
+NesPrgRom:7C4A9:frame_sync:mul_wide + CFC0 + %2 parity: frame sync used by the wait loops
+NesPrgRom:7C4DC:loop_init_c4dc:set local11=0, enter loop @ $C4F1 (loop-init entry)
+NesPrgRom:7C4FE:incr_deref_field:32-bit: DEREF ptr, INC, POPSTORE (increment a value in place)
+NesPrgRom:7C554:format_field:set up field-format context: work buffer @ fp-179, value arg1 -> formats a display field (tail @ L_C56F)
+NesPrgRom:7C70B:set_draw_origin:set draw origin: window_stack_lo=$7286=col(arg1), window_stack_depth=$7288=row(arg2) (136 callers)
+NesPrgRom:7C719:draw_field:format value (*arg2) via format_field mode 0, render at cursor (119 callers)
+NesPrgRom:7C72A:finalize_cursor:clamp/validate draw origin (if window_stack_lo<0 branch); shared tail of set_tile_cursor/col/row
+NesPrgRom:7C770:set_tile_cursor:set_draw_origin(arg1,arg2) + C72A finalize -> position for next draw_string/tile (201 callers, hottest)
+NesPrgRom:7C77F:set_cursor_col:window_stack_lo $7286 = arg + finalize_cursor
+NesPrgRom:7C78C:set_cursor_row:window_stack_depth $7288 = arg + finalize_cursor
+NesPrgRom:7C799:draw_field_m1:format value (*arg2) via format_field mode 1, render at cursor (135 callers) -- flag-1 variant of draw_field
+NesPrgRom:7C7AA:input_check:read_controller once, return pressed bool
+NesPrgRom:7C7C9:frame_wait:wrapper: frame_sync(0)
+NesPrgRom:7C7D4:wait_input_timeout:shared wait tail (JUMP $C7EE); returns bool (input-or-timeout)
+NesPrgRom:7C7F6:cursor_blink_wait:if callback $7290: invoke, wait_input_timeout(20), toggle; frame_sync -- cursor-blink input loop
+NesPrgRom:7C824:menu_pick:draw a selectable item list (label via draw_string, CHR alt-bank, cursor $737d) and return the picked index (13 callers; A156 grid-select)
+NesPrgRom:7C9CD:dispatch_indirect:CALLPTR through a computed fn pointer (LONG $26/$0E selector)
+NesPrgRom:7CCF3:draw_labeled_value:draw label string (draw_string arg1) + value field (draw_field_m1 $DF1A, arg2,arg3) + C9CD; arg4=mode (15 callers)
+NesPrgRom:7CD12:draw_labeled_value_1:draw_labeled_value(arg1,arg2,arg3, mode=1) preset (9 callers)
+NesPrgRom:7CD20:draw_labeled_value_2:draw_labeled_value(1,r13,1,r12) preset
+NesPrgRom:7CD2E:place_cursor_sprite:write OAM descriptor $FFFC-$FFFF: CHR $DF14[737d], palette $E0, pos from $7286<<3
+NesPrgRom:7CD5F:menu_input_loop:draw cursor (place_cursor_sprite) + invoke $7290 callback + wait; returns frame_sync
+NesPrgRom:7CD9F:prompt_confirm:draw prompt string $DF23, wait input (C4A9), on result 1/64 draw $DF2A -> OK/confirm dialog (56 callers)
+NesPrgRom:7CDF7:draw_info_panel:set origin C70B(24,7) + draw_field from $6000 + strings $DF2E/$DF3D (SRAM-backed panel)
+NesPrgRom:7CE37:reset_all_chr:reset all 64 CHR banks (set_chr_banks(0,64)) + clear VRAM row (queue_vram_row 0,0,0) -- screen/CHR wipe (20 callers)
+NesPrgRom:7CE4D:helper_ce4d:shared-tail fragment (JUMP $CE66); role TBD (obscured)
+NesPrgRom:7CE6E:scale_helper_ce6e:shared-tail scaler (JUMP $CE85); base of the CE8D/CE9B chain (obscured; A3F4 post-draw step)
+NesPrgRom:7CE8D:scale_x6:scale_helper_ce6e(arg*6)
+NesPrgRom:7CE9B:scale_6b88:scale_x6(mem_6B88*arg*3) = CE6E(mem_6B88*arg*18); A3F4 calls scale_6b88(1) after draw_string
+NesPrgRom:7CEAD:mul_wide:== LEmp mul_wide ($D69D) score 0.97 relocated-identical; 1 callers
+NesPrgRom:7CF89:add32:== LEmp add32 ($D779) score 1.00 relocated-identical; 14 callers
+NesPrgRom:7CF9E:shl32:== LEmp shl32 ($D78E) score 1.00 relocated-identical; 9 callers
+NesPrgRom:7CFA9:shl32_b1:== LEmp shl32_b1 ($D799) score 1.00 relocated-identical; 8 callers
+NesPrgRom:7CFB4:shl32_b2:== LEmp shl32_b2 ($D7A4) score 1.00 relocated-identical; 7 callers
+NesPrgRom:7CFC0:write_struct_9472:set up a descriptor at $9472 from VM args (called by frame_sync)
+NesPrgRom:7CFE1:load_operand16_14:== LEmp load_operand16_14 ($D7D1) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7D003:calc_axis_diff_fold:absolute difference of two args, folded to 0..4 (coordinate/direction calc)
+NesPrgRom:7D026:scan_records_6c90_flag:scan the SRAM record array at $6C90 (stride ~7) for flag bit $40, collect indices
+NesPrgRom:7D08C:calc_from_record_fields:combine record fields +1/+2/+3 via shl/shr into a derived value
+NesPrgRom:7D1A9:inc_word_00_d1a9:== LEmp inc_word_00 ($DB4F) score 1.00 relocated-identical; 3 callers
+NesPrgRom:7D1B0:find_port_by_key:search the 70-port table ($AFD8 = bank58 ports @ $A000, stride 19) for a match; return code 1/2/3
+NesPrgRom:7D230:collect_ports_by_key:scan the 70-port table (stride 19), collect matching port indices into a list ($0e)
+NesPrgRom:7D29B:scan_records_6662:scan 16 records at $6662 (stride 21) matching two key fields + flag bit $02
+NesPrgRom:7D30C:record_field_byte:deref record ptr ($0a), return the BYTE at +3 in $08 (guards paged-window ptr >=$A000)
+NesPrgRom:7D31E:read_bank_record_byte:copy_from_bank58 + read a field byte (record iterator step)
+NesPrgRom:7D326:record_field_word:deref record ptr ($0a), return the WORD at +3/+4 in $08/$09 (paged-ptr guarded)
+NesPrgRom:7D33D:copy_from_bank58:bank-switch read: get cur bank, map bank $FA&63=58 (records) @ window2, copy ($0a)->$0800 buffer, restore
+NesPrgRom:7D384:invoke_syscall_a:invoke a syscall with id in A via jmp($FFDE) (used for set/get_prg_bank $52/$54)
+NesPrgRom:7D394:read_record_70a9:index the record array at $70A9 (stride $31=49) by $0a/$0e, deref a field
+NesPrgRom:7D399:read_record_70a9_alt:alt entry of read_record_70a9 (skips the arg-load prologue)
+NesPrgRom:7D3D1:shr_a_y_guarded:A >>= Y (logical shift-right Y times; Y=0 guard) = A / 2^Y
+NesPrgRom:7D3D5:shr_a_y:A >>= Y (logical shift-right Y times) = A / 2^Y
+NesPrgRom:7D3DA:shl_a_y:A <<= Y (shift-left Y times) = A * 2^Y
+NesPrgRom:7D3DF:reduce_word_c0:reduce the 16-bit value at $00,x toward $C0 (repeated -$100; coordinate wrap/clamp)
+NesPrgRom:7D405:calc_pos_relative:position/offset calc against the stored position $7265/$7266
+NesPrgRom:7D4A5:stub_d4a5:single LOADL_quick; shared-tail / data entry (role TBD)
+NesPrgRom:7D4FA:set_var_7268:store arg -> $7268 byte
+NesPrgRom:7D532:record_base_6b1c:idx<5 ? $6B1C + idx*21 : (fallthru) -- SRAM record base, stride 21 (market/port ctx; 119 callers)
+NesPrgRom:7D550:record_base_d604:idx -> $D604 + idx*17 ROM table base (guard idx==31) (17 callers)
+NesPrgRom:7D56B:draw_string_banked:page resource bank 58 ($FA & $3F) into PRG slot 2, draw_string(arg1), restore prior bank (154 callers)
+NesPrgRom:7D59E:record_iter_6c90:setup iterator over $6C90 records (+35 field offset)
+NesPrgRom:7D5D3:ret_50_or:if flag: return 50 else fallthrough
+NesPrgRom:7D615:record_scan_6c90_6aa4:iterate $6C90(+35) against $6AA4 records
+NesPrgRom:7D652:record_iter_d824:setup iterator: $D824 (+64 stride) + $666D
+NesPrgRom:7D6A6:record_iter_6a9a:setup iterator over the $6A9A table
+NesPrgRom:7D6D6:search_6a9a:record_iter_6a9a(arg) + found-check; returns 0 if not found
+NesPrgRom:7D718:search_6a9a_b:variant of search_6a9a (different match test)
+NesPrgRom:7D75A:record_scan_6c90_6aa4_b:iterate $6C90(+35) + $6AA4 (variant of record_scan_6c90_6aa4)
+NesPrgRom:7D791:search_6a9a_ptr:search_6a9a on ptr LEAL $FFF6; return $FF on miss (called by draw_box_from_native)
+NesPrgRom:7D7D8:record_scan_67ba:large scan over $67BA records; compare field vs +100 bound (127 ops)
+NesPrgRom:7D87B:record_proc_6c96_1:$6C96[idx] bitfield (AND) -> record_base_6b1c + record_field_byte; process/display
+NesPrgRom:7D8BE:record_proc_6c96_2:record_proc_6c96 variant (78 ops)
+NesPrgRom:7D92F:record_proc_6c96_3:record_proc_6c96 variant (80 ops)
+NesPrgRom:7D9A8:record_proc_6c96_4:record_proc_6c96 variant (46 ops)
+NesPrgRom:7D9EA:record_base_6aa4:idx -> $6AA4 + idx*24 SRAM record; extracts a field value (9 callers; market draw_field value)
+NesPrgRom:7DA2A:record_base_6aa4_b:idx*24 + $6AA4 record base (companion to record_base_6aa4)
+NesPrgRom:7DA6A:record_read_6c90:read byte/word fields from $6C90[idx] record
+NesPrgRom:7DA89:mul_field_000b:multiply the $000B far-var by arg
+NesPrgRom:7DAD1:compute_dad1:$1000-based compute via load_operand16_14 (64 ops; role TBD)
+NesPrgRom:7DB4B:record_proc_6004:idx*51 + $6004 record + table $C0D4 -> record_field_byte (display)
+NesPrgRom:7DBB2:char_class_dbb2:byte checks vs 32(space)/other -- char-class / terminator scan
+NesPrgRom:7DC0C:to_upper:if $000B in a..z ($61-$7A): $000B -= 32
+NesPrgRom:7DC31:to_lower:if $000B in A..Z ($41-$5A): $000B += 32
+NesPrgRom:7DC56:cmp_lt_neg1:if arg < arg2: return -1 (signed compare helper)
+NesPrgRom:7DC72:native_table_dc72:11 sequential native CALLs, no stack ops -> likely a native-address DATA table misparsed as bytecode; VERIFY
+NesPrgRom:7DC96:draw_icon_df4e:2x2 tile from $DF4E[idx*24+], palette $E0
+NesPrgRom:7DCC8:draw_icon_dfae:2x2 tile from $DFAE/$DFAC tables, palette $E0
+NesPrgRom:7DCEC:copy_from_bank:== LEmp copy_from_bank ($F3A3) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7DD5A:invoke_syscall_a_dc6e_dd5a:~ LEmp invoke_syscall_a_dc6e ($DC0D) score 0.82 diverged (reloc); same function -- verify; 3 callers
+NesPrgRom:7DD6C:max_s16:== LEmp max_s16 ($DCD6) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7DD8C:min_s16:copy 5 args + signed compare $0b:$09 -> select (companion to max_s16 $DD6C)
+NesPrgRom:7DDB5:memset_ptr:fill $0a bytes at dest ($0e/$0f) with byte $0c
+NesPrgRom:7DDE0:memcpy_ptr:== LEmp memcpy_ptr ($DD1F) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7DE0C:jmp_indirect_ptr0c:== LEmp jmp_indirect_ptr0c ($DD4B) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7DE0F:bc_syscall3_bridge:== LEmp bc_syscall3_bridge ($DD4E) score 1.00 relocated-identical; 2 callers
+NesPrgRom:7DE21:bc_syscall4_bridge:== LEmp bc_syscall4_bridge ($DD60) score 1.00 relocated-identical; 1 callers
+NesPrgRom:7DE3A:call_in_bank_dcd1:== LEmp call_in_bank_dcd1 ($DD79) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7DE8B:abs_s16:16-bit absolute value: negate $08/$09 (two's-complement) if sign bit set
+NesPrgRom:7DEA6:str_copy:copy NUL-terminated string from source ($0a) to dest ($08); alt entry $DEBF scans dest to its NUL first = append/concat
+NesPrgRom:7DEBF:str_end_ptr:advance pointer $0c/$0d to the null terminator
+NesPrgRom:7DEF3:strlen:count bytes to null terminator -> length in $08/$09
+NesPrgRom:3672:nat_1_1672:native_call sub (bank1:$1672); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:6003:nat_3_0003:native_call sub (bank3:$0003); best LEmp 0.22 -- UW-specific, READ
+NesPrgRom:6053:nat_3_0053:native_call sub (bank3:$0053); best LEmp 0.24 -- UW-specific, READ
+NesPrgRom:6087:nat_3_0087:native_call sub (bank3:$0087); best LEmp 0.46 -- UW-specific, READ
+NesPrgRom:6170:nat_3_0170:native_call sub (bank3:$0170); best LEmp 0.23 -- UW-specific, READ
+NesPrgRom:61B0:nat_3_01b0:native_call sub (bank3:$01B0); best LEmp 0.28 -- UW-specific, READ
+NesPrgRom:61DA:nat_3_01da:native_call sub (bank3:$01DA); best LEmp 0.19 -- UW-specific, READ
+NesPrgRom:628C:nat_3_028c:native_call sub (bank3:$028C); best LEmp 0.19 -- UW-specific, READ
+NesPrgRom:6318:nat_3_0318:native_call sub (bank3:$0318); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:64E3:nat_3_04e3:native_call sub (bank3:$04E3); best LEmp 0.38 -- UW-specific, READ
+NesPrgRom:6660:nat_3_0660:native_call sub (bank3:$0660); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:6C8F:nat_3_0c8f:native_call sub (bank3:$0C8F); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:6D09:nat_3_0d09:native_call sub (bank3:$0D09); best LEmp 0.21 -- UW-specific, READ
+NesPrgRom:6DC6:nat_3_0dc6:native_call sub (bank3:$0DC6); best LEmp 0.16 -- UW-specific, READ
+NesPrgRom:6F38:nat_3_0f38:native_call sub (bank3:$0F38); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:7121:nat_3_1121:native_call sub (bank3:$1121); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:71E2:nat_3_11e2:native_call sub (bank3:$11E2); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:73A0:nat_3_13a0:native_call sub (bank3:$13A0); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:7449:nat_3_1449:native_call sub (bank3:$1449); best LEmp 0.16 -- UW-specific, READ
+NesPrgRom:75C5:nat_3_15c5:native_call sub (bank3:$15C5); best LEmp 0.07 -- UW-specific, READ
+NesPrgRom:790D:nat_3_190d:native_call sub (bank3:$190D); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:792B:nat_3_192b:native_call sub (bank3:$192B); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:7A22:nat_3_1a22:native_call sub (bank3:$1A22); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:8003:nat_4_0003:native_call sub (bank4:$0003); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:8074:nat_4_0074:native_call sub (bank4:$0074); best LEmp 0.22 -- UW-specific, READ
+NesPrgRom:810B:nat_4_010b:native_call sub (bank4:$010B); best LEmp 0.22 -- UW-specific, READ
+NesPrgRom:819D:nat_4_019d:native_call sub (bank4:$019D); best LEmp 0.23 -- UW-specific, READ
+NesPrgRom:81F1:nat_4_01f1:native_call sub (bank4:$01F1); best LEmp 0.19 -- UW-specific, READ
+NesPrgRom:82A9:nat_4_02a9:native_call sub (bank4:$02A9); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:83E8:nat_4_03e8:native_call sub (bank4:$03E8); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:8702:nat_4_0702:native_call sub (bank4:$0702); best LEmp 0.21 -- UW-specific, READ
+NesPrgRom:874D:nat_4_074d:native_call sub (bank4:$074D); best LEmp 0.21 -- UW-specific, READ
+NesPrgRom:8797:nat_4_0797:native_call sub (bank4:$0797); best LEmp 0.21 -- UW-specific, READ
+NesPrgRom:87E5:nat_4_07e5:native_call sub (bank4:$07E5); best LEmp 0.22 -- UW-specific, READ
+NesPrgRom:8814:nat_4_0814:native_call sub (bank4:$0814); best LEmp 0.08 -- UW-specific, READ
+NesPrgRom:8B81:nat_4_0b81:native_call sub (bank4:$0B81); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:8C7C:nat_4_0c7c:native_call sub (bank4:$0C7C); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:8E0C:nat_4_0e0c:native_call sub (bank4:$0E0C); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:8FA4:nat_4_0fa4:native_call sub (bank4:$0FA4); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:904F:nat_4_104f:native_call sub (bank4:$104F); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:9283:nat_4_1283:native_call sub (bank4:$1283); best LEmp 0.08 -- UW-specific, READ
+NesPrgRom:9550:nat_4_1550:native_call sub (bank4:$1550); best LEmp 0.24 -- UW-specific, READ
+NesPrgRom:959A:nat_4_159a:native_call sub (bank4:$159A); best LEmp 0.20 -- UW-specific, READ
+NesPrgRom:9602:nat_4_1602:native_call sub (bank4:$1602); best LEmp 0.24 -- UW-specific, READ
+NesPrgRom:964C:nat_4_164c:native_call sub (bank4:$164C); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:98E7:nat_4_18e7:native_call sub (bank4:$18E7); best LEmp 0.20 -- UW-specific, READ
+NesPrgRom:AC75:nat_5_0c75:native_call sub (bank5:$0C75); best LEmp 0.14 -- UW-specific, READ
+NesPrgRom:ADBA:nat_5_0dba:native_call sub (bank5:$0DBA); best LEmp 0.20 -- UW-specific, READ
+NesPrgRom:AE63:nat_5_0e63:native_call sub (bank5:$0E63); best LEmp 0.18 -- UW-specific, READ
+NesPrgRom:AF1D:nat_5_0f1d:native_call sub (bank5:$0F1D); best LEmp 0.14 -- UW-specific, READ
+NesPrgRom:B186:nat_5_1186:native_call sub (bank5:$1186); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:B890:nat_5_1890:native_call sub (bank5:$1890); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:B98E:nat_5_198e:native_call sub (bank5:$198E); best LEmp 0.19 -- UW-specific, READ
+NesPrgRom:C003:nat_6_0003:native_call sub (bank6:$0003); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:C046:nat_6_0046:native_call sub (bank6:$0046); best LEmp 0.19 -- UW-specific, READ
+NesPrgRom:C203:nat_6_0203:native_call sub (bank6:$0203); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:C300:nat_6_0300:native_call sub (bank6:$0300); best LEmp 0.23 -- UW-specific, READ
+NesPrgRom:CAA5:nat_6_0aa5:native_call sub (bank6:$0AA5); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:D20E:nat_6_120e:native_call sub (bank6:$120E); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:D561:nat_6_1561:native_call sub (bank6:$1561); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:D778:nat_6_1778:native_call sub (bank6:$1778); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:E003:nat_7_0003:native_call sub (bank7:$0003); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:E19C:nat_7_019c:native_call sub (bank7:$019C); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:E363:nat_7_0363:native_call sub (bank7:$0363); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:E527:nat_7_0527:native_call sub (bank7:$0527); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:EAAA:nat_7_0aaa:native_call sub (bank7:$0AAA); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:ECE2:nat_7_0ce2:native_call sub (bank7:$0CE2); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:EED1:nat_7_0ed1:native_call sub (bank7:$0ED1); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:10003:nat_8_0003:native_call sub (bank8:$0003); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:10103:nat_8_0103:native_call sub (bank8:$0103); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:101B8:nat_8_01b8:native_call sub (bank8:$01B8); best LEmp 0.20 -- UW-specific, READ
+NesPrgRom:10368:nat_8_0368:native_call sub (bank8:$0368); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:10479:nat_8_0479:native_call sub (bank8:$0479); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:105F2:nat_8_05f2:native_call sub (bank8:$05F2); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:107E7:nat_8_07e7:native_call sub (bank8:$07E7); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:10B82:nat_8_0b82:native_call sub (bank8:$0B82); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:10F79:nat_8_0f79:native_call sub (bank8:$0F79); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:1110F:nat_8_110f:native_call sub (bank8:$110F); best LEmp 0.19 -- UW-specific, READ
+NesPrgRom:111B5:nat_8_11b5:native_call sub (bank8:$11B5); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:112C7:nat_8_12c7:native_call sub (bank8:$12C7); best LEmp 0.43 -- UW-specific, READ
+NesPrgRom:11332:nat_8_1332:native_call sub (bank8:$1332); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:11560:nat_8_1560:native_call sub (bank8:$1560); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:11652:nat_8_1652:native_call sub (bank8:$1652); best LEmp 0.26 -- UW-specific, READ
+NesPrgRom:12062:nat_9_0062:native_call sub (bank9:$0062); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:121E7:nat_9_01e7:native_call sub (bank9:$01E7); best LEmp 0.09 -- UW-specific, READ
+NesPrgRom:12A46:nat_9_0a46:native_call sub (bank9:$0A46); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:12F0B:nat_9_0f0b:native_call sub (bank9:$0F0B); best LEmp 0.16 -- UW-specific, READ
+NesPrgRom:13396:nat_9_1396:native_call sub (bank9:$1396); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:13640:nat_9_1640:native_call sub (bank9:$1640); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:13D3E:nat_9_1d3e:native_call sub (bank9:$1D3E); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:14003:nat_10_0003:native_call sub (bank10:$0003); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:14234:nat_10_0234:native_call sub (bank10:$0234); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:14380:nat_10_0380:native_call sub (bank10:$0380); best LEmp 0.10 -- UW-specific, READ
+NesPrgRom:144EE:nat_10_04ee:native_call sub (bank10:$04EE); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:1460D:nat_10_060d:native_call sub (bank10:$060D); best LEmp 0.15 -- UW-specific, READ
+NesPrgRom:1470E:nat_10_070e:native_call sub (bank10:$070E); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:14918:nat_10_0918:native_call sub (bank10:$0918); best LEmp 0.14 -- UW-specific, READ
+NesPrgRom:149ED:nat_10_09ed:native_call sub (bank10:$09ED); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:14AC0:nat_10_0ac0:native_call sub (bank10:$0AC0); best LEmp 0.16 -- UW-specific, READ
+NesPrgRom:14C0B:nat_10_0c0b:native_call sub (bank10:$0C0B); best LEmp 0.07 -- UW-specific, READ
+NesPrgRom:14ECB:nat_10_0ecb:native_call sub (bank10:$0ECB); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:15104:nat_10_1104:native_call sub (bank10:$1104); best LEmp 0.17 -- UW-specific, READ
+NesPrgRom:1A003:nat_13_0003:native_call sub (bank13:$0003); best LEmp 0.13 -- UW-specific, READ
+NesPrgRom:1A154:nat_13_0154:native_call sub (bank13:$0154); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:1A3AE:nat_13_03ae:native_call sub (bank13:$03AE); best LEmp 0.08 -- UW-specific, READ
+NesPrgRom:1A791:nat_13_0791:native_call sub (bank13:$0791); best LEmp 0.11 -- UW-specific, READ
+NesPrgRom:1AB84:nat_13_0b84:native_call sub (bank13:$0B84); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:1AD20:nat_13_0d20:native_call sub (bank13:$0D20); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:1B373:nat_13_1373:native_call sub (bank13:$1373); best LEmp 0.12 -- UW-specific, READ
+NesPrgRom:2274E:nat_17_074e:native_call sub (bank17:$074E); best LEmp 0.08 -- UW-specific, READ
+NesPrgRom:228E9:nat_17_08e9:native_call sub (bank17:$08E9); best LEmp 0.08 -- UW-specific, READ
+NesPrgRom:22B0A:nat_17_0b0a:native_call sub (bank17:$0B0A); best LEmp 0.07 -- UW-specific, READ
+NesPrgRom:2003:win_open:window open/setup: push window-stack $7286/$7288, draw frame (127 callers)
+NesPrgRom:207D:win_close:window close: dec depth $7288, redraw via win_open (55 callers)
+NesPrgRom:208D:draw_banked_menu:draw a grid of draw_string_banked items + menu_pick; return idx-1/255
+NesPrgRom:20EB:draw_text_menu:draw a grid of menu strings (set_tile_cursor + draw_string per item) then menu_pick; return idx-1/255 (string analog of draw_tile_grid) (9 callers)
+NesPrgRom:2156:draw_tile_grid:draw arg6 tiles in an arg7-wide grid from table arg5 (C770 set-cursor + C003 draw-tile), then menu-select C824 (25 callers)
+NesPrgRom:21B1:draw_text_menu_2:draw_string grid + menu_pick (mode 2) variant of draw_text_menu
+NesPrgRom:2216:menu_select:menu_pick($BA90,...) wrapper returning selection idx-1 (255=cancel) (9 callers)
+NesPrgRom:2242:draw_party_sprite:build+set_metasprite ($0501) for the party avatar from entity $6662 (facing +8, pos +2/+3)
+NesPrgRom:2292:animate_party_sprite:busy_wait + draw_party_sprite, loop redrawing when the facing field $6662+8 changes
+NesPrgRom:2340:draw_year:draw_field year = mem_6B8B + 1500 at (12,3); gated on mem_7068 (10 callers)
+NesPrgRom:236D:draw_month:draw_field month name from table $BA96[mem_6B8A] at (4,3); gated on mem_7068 (10 callers)
+NesPrgRom:239D:draw_day:draw_field day = mem_6B89 + 1 at (8,3), string $BAE1/$BAE6 by mem_7068 (10 callers)
+NesPrgRom:23D0:draw_icon_2x2:blit a 2x2 tile (banked_blit_m3) from index tables $BAE9/$BAEB[arg3], sprite palette $E0 (14 callers)
+NesPrgRom:23F4:draw_text:THE common text wrapper: draw_string(arg1,1) + scale_6b88(1) standard post-step (152 callers -- hottest bank1 sub)
+NesPrgRom:2405:blit_alloc_tiles:blit tile block (banked_ppu_blit id10) at x,y,w,h; advance VRAM cursor $7269 by w*h; arg5=single/double (32 callers)
+NesPrgRom:249B:blit_free_tiles:reverse of blit_alloc_tiles: rewind cursor $7269, blit via banked_blit_m3 id09 (restore bg) (30 callers)
+NesPrgRom:2502:blit_block_save:blit_alloc_tiles + push this rect (x/y/w/h) onto save-stack idx $726B, arrays $726D/73/79/7F (15 callers)
+NesPrgRom:2544:blit_block_unwind:pop one saved rect off $726B stack, restore background via blit_free_tiles (17 callers)
+NesPrgRom:2589:reset_chr_alloc:flush CHR banks (set_chr_banks id12) then reset CHR alloc tracker $738E/8B/8A/8C (25 callers)
+NesPrgRom:25BB:resolve_field_ptr:resolve a record field ptr by mode arg4 / index arg3 ($6542 stride-7 table -> fp-134/138); return 64 on bad input (42 callers)
+NesPrgRom:2675:upload_sprite_block:copy 32 bytes from bank15 (copy_from_bank_dc80) -> OAM sprite block (set_sprite_block id06) (16 callers)
+NesPrgRom:2692:draw_menu_frame:native menu-box draw: unpack_draw_args + build metasprite params ($56-$5C, $12=($0c<<3)+$40) (8 callers)
+NesPrgRom:273C:native_draw_box:bank1 NATIVE tile-box draw (12-arg: x,y,w,h,attr...); called by the box primitives
+NesPrgRom:27B7:set_sprite_rect:load metasprite rect params $52/$54/$56/$58/$5A/$5C from $10/$11/$0a/$0b
+NesPrgRom:2813:draw_sprite_a813:sprite param setup ($52/$54/$58/$5A) + do_ppu_transfer
+NesPrgRom:283B:do_ppu_transfer:native syscall-8 wrapper (id=8 queue_ppu_transfer): sets $50=8, jmp ($ffde)
+NesPrgRom:283D:native_syscall:generic native syscall gate: id in A -> $50, push return, jmp ($ffde)
+NesPrgRom:284D:unpack_draw_args:read VM args ($02),y -> pointer $08/$09/$0a + zero the $52+ param block
+NesPrgRom:28B2:fill_tile_buffer:write $0a cells into the $72B6 map-tile buffer via add_a_to_ptr (val $0e, then $0c)
+NesPrgRom:28E4:connect_map_tile:map-buffer tile connect: 14x14 bounds, follow $ff-terminated link chain via ($16),y -> ($14)
+NesPrgRom:2918:connect_map_tile_b:variant of connect_map_tile (different match/link rule)
+NesPrgRom:2961:add_a_to_ptr:add A to the 16-bit zero-page pointer at $00,x (carry into $01,x)
+NesPrgRom:296B:draw_map_frame:blit a map sprite from frame table $BC96 (ptr $1a/$1b) via native_syscall; uses $66
+NesPrgRom:29D2:cmp_coords:16-bit compare of two map coords ($08:$10, $09:$11) -> branch
+NesPrgRom:2A0B:map_tile_lookup:set up tile-attr table ptr $BDB6 ($40/$41) + frame ptr from $1a/$1b, read tile via ($08),y
+NesPrgRom:2A8E:scroll_map_row:shift map-buffer rows: copy ($12)->($16), ($0e)->($18), advance ptrs (inc_ptr16)
+NesPrgRom:2AF9:fill_screen_buffer:fill screen_buffer $7062 (28 rows) with tile $3c via add_a_to_ptr
+NesPrgRom:2B18:inc_ptr16:increment the 16-bit zero-page pointer at $00,x (bank1 copy of inc_ptr_zpx)
+NesPrgRom:2B1F:do_set_prg_bank:native syscall-3 wrapper (set_prg_bank) with params $52/$54; lda #3 -> native_syscall
+NesPrgRom:2B2C:blit_screen_buffer_m3:banked_blit_m3 variant of blit_screen_buffer ($7062/$73AA full 30x28)
+NesPrgRom:2B54:write_screen_2x2:copy a 2x2 map tile (bank2 $AF92-$AF98) into screen_buffer $7062 at grid (arg1,arg2)
+NesPrgRom:2BB6:calc_record_fields_abb6:calc_from_record_fields over record $70A9 fields (+2,+3,+18...) -> local accumulator
+NesPrgRom:2C46:calc_position_seasonal:calc_from_record_fields ($70A5/$70A7) + calc_record_fields_abb6($70A9), branch on game_month season (2..8)
+NesPrgRom:2CB7:draw_map_object_2x2:write_screen_2x2 + blit a 2x2 sprite ($AF92/$AF96, palette $E0) at the map cell
+NesPrgRom:2CDD:draw_map_sprite_anim:animated 2x2 map sprite: read_record_70a9 -> $BDB6 index -> sprite_anim_frame*72 frame tables $BC96/$BC98
+NesPrgRom:2D41:place_object_sprite:build+place a mode-gated metasprite (mem_6671 flags) from CHR table $BB02[737d<<4] via set_chr_bank_alt (15 callers)
+NesPrgRom:2E0B:draw_entity_sprite:draw entity arg3 sprite from $6662[arg3<<4] (facing %8); arg3==0 -> place_object_sprite else 2x2 blit from $BB32/$BB34
+NesPrgRom:2E54:step_entity:advance an entity one step via nat_1_1672 + dir-delta tables $7085/$7087; store facing to $666A
+NesPrgRom:2EA5:pick_random_step:pick a random valid move (load_operand16_14 RNG *13) until calc_pos_relative accepts it -- wander AI
+NesPrgRom:2EEA:move_entity_ai:update entity arg1: load pos $6662, step toward target (step_entity) or wander (pick_random_step); reset move timer
+NesPrgRom:2F60:load_map_sprite_data:copy_from_bank_dc80 map sprite/tile data -> buffers $72A0 (21b) + $72B6 (196b)
+NesPrgRom:2F7F:select_party_pose:derive a pose/state (0-7) from party record $6662+3 (used by redraw_screen_if_changed)
+NesPrgRom:2FCD:lookup_region_music:return $BB52[arg1] -- map region -> music/zone id (drives draw_map_view audio)
+NesPrgRom:2FD9:draw_map_view:render the overworld map at (arg1,arg2): load_map_sprite_data + tile loop; on region change ($BB55[y/6] vs mem_737C) trigger audio (83 ops)
+NesPrgRom:3192:upload_cursor_sprites:upload two 16-sprite blocks from $BBDC[mem_7262] + $F376 (mem_7262 = anim frame) (8 callers)
+NesPrgRom:31D9:draw_message_frame:native_draw_box(7, row, 18, 8, 2, 0) -- the message/dialog box frame
+NesPrgRom:31F8:draw_message_line:set_tile_cursor + draw_string $BC1C at line arg1 inside the message box
+NesPrgRom:3223:show_prompt_bc23:draw_message_frame + draw_string $BC23 prompt (4 callers)
+NesPrgRom:324B:show_message:draw_message_frame + draw_message_line(1) (36 callers)
+NesPrgRom:3259:show_message_line2:draw_message_frame + draw_message_line(2)
+NesPrgRom:3267:show_prompt_bc27:mem_7380=2; blit value (banked_blit_m3) + resolve_field_ptr + draw_message_frame + draw_string $BC27 (6 callers)
+NesPrgRom:32B1:show_prompt_bc2b:resolve_field_ptr + draw_message_frame + draw_string $BC2B (5 callers)
+NesPrgRom:32E8:show_prompt_record:show_prompt_bc27(search_6a9a_ptr(), 0) -- prompt seeded from a $6A9A record (30 callers)
+NesPrgRom:32F7:draw_object_count:blit a 2x2 sprite $BC2F[arg3] + a 1x1 digit $BC4F[arg4%10], palette $E0
+NesPrgRom:3345:draw_ship_status:blit 5x8 ship sprite ($AED6/$AEFE) + draw_object_count from mem_7080/7081/7084
+NesPrgRom:3398:sum_fleet_cargo:sum +16/+18 word fields over the fleet records ($6AA4 stride24 + $6C90 stride7) (45 ops)
+NesPrgRom:34BD:draw_hud_panel:top status bar: reset_chr_alloc + draw_string $BC88 + draw_ship_status + draw_month/draw_year (dirty-gated)
+NesPrgRom:3563:refresh_hud:screen_dirty=0 + draw_hud_panel (force HUD redraw)
+NesPrgRom:3570:blit_screen_buffer:banked_ppu_blit full 30x28 playfield from $7062(tiles)/$73AA(attr) -> PPU (4 callers)
+NesPrgRom:3598:redraw_screen_if_changed:if vram cursor moved: full-screen blit_m3 $7062/$73AA + place_object_sprite; clears mem_7380 (8 callers)
+NesPrgRom:35E5:redraw_dialog_region:if mem_7380 dirty: blit 30x8 region from $7062/$73AA; clears flag (6 callers)
+NesPrgRom:3634:party_in_rect:test whether party map pos (mem_6664/6665) lies inside rect (arg1,arg2,+arg3,+arg4); return 1 if inside
+NesPrgRom:37CE:clear_two_ppu_regions:blank two fixed PPU regions (0,6,32,14)+(1,20,1,8) via queue_ppu_transfer id08 (33 callers)
+NesPrgRom:37EC:clear_screen_top:clear top strip (0,0,32,6) + clear_two_ppu_regions (10 callers)
+NesPrgRom:3801:draw_box_frame:push dims (w=8,h=24,x=20) -> native_draw_box $A73C
+NesPrgRom:381B:win_render_syscall:window render via syscall_entry_struct (14-arg PPU descriptor)
+NesPrgRom:383F:draw_window:draw_box_frame + win_render_syscall(1) -- THE window primitive (291 calls/11 banks)
+NesPrgRom:384D:draw_window_2:draw_box_frame + win_render_syscall(2) -- window render mode 2
+NesPrgRom:385B:draw_window_3:draw_box_frame + win_render_syscall(3) -- window render mode 3
+NesPrgRom:3869:draw_box_variant:box draw via native_draw_box $A73C + extra arg (99 calls)
+NesPrgRom:3889:draw_box_from_native:call native $D791 -> draw_box_variant (69 calls)
+NesPrgRom:3898:modal_input_loop:metasprite + frame_sync input loop (helper_ce4d dispatch; switch on button) -- modal cursor handler (8 callers)
+NesPrgRom:39A0:sum_matching_6aa4:sum a field over $6AA4 records (stride 24) whose key byte == arg1 (record aggregation; 15 callers)
+NesPrgRom:3A11:lookup_stat_ba11:record lookup via tables $B50A(stride5)/$67B2(stride14)/$B888(stride88), mem_7067 index -> computed stat (role: derived value; 25 ops)
+NesSaveRam:4:npc_records:overworld NPC/rival ship records (SRAM, stride 51; +4=event type, +5=destination port key)
+NesSaveRam:662:entity_table:overworld entity table (party + NPCs), stride 16: +0/+1=x/y, +2/+3=target x/y, +8=facing/frame
+NesSaveRam:664:party_map_x:party position X on the overworld map (party_in_rect, redraw)
+NesSaveRam:665:party_map_y:party position Y on the overworld map
+NesSaveRam:671:sprite_mode_flags:sprite/metasprite mode flags (bit1/bit5 gate place_object_sprite draw paths)
+NesSaveRam:B87:os_mode_flags:OS mode-flags byte; mask &4 (bit2)=AUDIO-ENABLED, gates audio_param/reset/playing_gated ($E0C1/$E0D6/$E0EA); (ch.7; bit corrected ch.22)
+NesSaveRam:B89:game_day:in-game day-of-month (draw_day renders mem_6B89+1)
+NesSaveRam:B8A:game_month:in-game month index into name table $BA96 (draw_month)
+NesSaveRam:B8B:game_year_off:in-game year offset; actual year = mem_6B8B + 1500 (draw_year; UW is set in the 1500s)
+NesSaveRam:1050:player_char_record:main player-character/quest working record $7050-$705F (hottest RAM; ch.6/14)
+NesSaveRam:1052:quest_target_port:quest destination port index (compared vs current_port for hook triggers)
+NesSaveRam:105F:quest_flags:main quest-progress flag byte (bits gate tavern/court hooks: &1/&2/&8)
+NesSaveRam:1062:screen_buffer:main 30x28 nametable tile buffer in RAM; blit_screen_buffer/redraw_* push it to PPU
+NesSaveRam:1067:current_port:current port index (indexes port records $67B2 stride14, $AFD8 70-port table stride19, $B50A stride5)
+NesSaveRam:1085:dir_delta_x_table:per-direction X step deltas (step_entity indexes by facing)
+NesSaveRam:1087:dir_delta_y_table:per-direction Y step deltas (step_entity indexes by facing)
+NesSaveRam:1262:sprite_anim_frame:cursor/sprite animation frame index (upload_cursor_sprites -> $BBDC[7262<<4])
+NesSaveRam:1268:active_entity_idx:index of the entity currently being processed (handle_active_entity)
+NesSaveRam:1269:vram_tile_cursor:running VRAM/CHR tile allocation cursor; blit_alloc_tiles advances, blit_free_tiles rewinds (overflow guard $8000)
+NesSaveRam:126B:blit_save_sp:save-stack index for blit_block_save/unwind; saved rects in x=$726D y=$7273 w=$7279 h=$727F arrays
+NesSaveRam:1286:window_stack_lo:UI window-nesting stack pointer (win_open/close $A003/$A07D; bank62 lib too)
+NesSaveRam:1288:window_stack_depth:UI window nesting depth/counter (dec on win_close)
+NesSaveRam:1298:ship_sail_state:sailing engine RT state cluster $7298-$729B (bank 8 native movement: position/heading/speed -- field map TBD via emulator, ch.15)
+NesSaveRam:137A:entity_x_work:working entity X for the movement engine (move_entity_ai/step_entity)
+NesSaveRam:137B:entity_y_work:working entity Y for the movement engine
+NesSaveRam:137C:current_region:current overworld map region / music zone (draw_map_view compares vs $BB55[y/6])
+NesSaveRam:137D:ui_shared_var_737d:hot shared UI var touched by ~15 bank-1 subs (cursor/handle? -- TBD)
+NesSaveRam:1380:screen_dirty:redraw/dirty flag; dialogs set=2, redraw_screen_if_changed/redraw_dialog_region clear it
+NesSaveRam:138A:blit_pos_x:sprite blit X (sprite renderers bank35/36, place_object_sprite)
+NesSaveRam:138B:blit_pos_y:sprite blit Y
+NesSaveRam:138C:blit_frame_state:packed sprite frame/state index (bank35/36 sprite renderers)
+NesSaveRam:138E:chr_alloc_count:CHR-bank allocation count; reset_chr_alloc flushes via set_chr_banks(count, 64-count)
+NesSaveRam:13AA:attr_buffer:attribute buffer paired with screen_buffer $7062 (2nd src of the screen blits)
+NesPrgRom:28003:sum_cargo_qty:sum a cargo field over $6AA4 ship records (stride 24)
+NesPrgRom:2802C:calc_ship_total:sum_cargo_qty + hold-value fields +16/+18/+20 (/10)
+NesPrgRom:28059:market_draw_gold:draws "Total gold: %5d" + "%3d/%3d" qty (leaf; bank62 draw helpers)
+NesPrgRom:28094:market_draw_ship_load:draws "Ship  Load/Max" capacity row
+NesPrgRom:28119:market_draw_goods_list:renders the goods list (goods-string table $95xx; native helpers)
+NesPrgRom:2826F:market_sell_screen:SELL screen: "No goods on that vessel", "Variety Amt Rate" (draw_window x6)
+NesPrgRom:28485:market_sell_pick_ship:SELL: "Which ships cargo is for sale?" ship picker
+NesPrgRom:285C7:sum_cargo_space:sum the $6AAA cargo-space field over ships
+NesPrgRom:285F2:get_port_goods_row:port goods row: $B864 + record_field_byte($B50A[mem_7067])*88
+NesPrgRom:2866D:scan_ships_cargo:iterate $6AA4 ships accumulating a cargo field
+NesPrgRom:2872D:find_ship_cargo_a:iterate $6AA4 ships (short scan a)
+NesPrgRom:28759:find_ship_cargo_b:iterate $6AA4 ships (short scan b)
+NesPrgRom:28789:market_draw_cargo:draws "cargo:%2d","Space left:%3d","Gold:" cargo/space panel
+NesPrgRom:2889F:calc_port_prices:compute goods prices from port record $67B2[mem_7067] + goods table
+NesPrgRom:28988:market_draw_goods_table:render the market goods table (qty/price grid)
+NesPrgRom:28A5A:market_buy_confirm:BUY confirm: "will cost ye %d gold","We cant buy at those prices" (draw_window x7)
+NesPrgRom:28CEC:market_buy_menu:BUY menu: "What are ye looking for today?","Variety Amt Cost" (orchestrator: 7 subs)
+NesPrgRom:28E27:market_buy_pick_ship:BUY: "Which ship will carry the goods?" ship picker (top orchestrator)
+NesPrgRom:28F90:find_ship_with_good:find first ship whose good field == arg2
+NesPrgRom:28FB7:market_price_list:price-list screen: "Sell  Buy","Variety for for", per-good buy/sell prices
+NesPrgRom:291C7:market_pick_ship:"Which one?" ship picker
+NesPrgRom:29231:accrue_port_investment:grow mem_6F72 port-investment toward cap 50000 ($C350)
+NesPrgRom:2926E:calc_good_price:port trade price for a good (port record + RNG load_operand16_14)
+NesPrgRom:292AE:market_invest_port:port investment txn: "We're out of gold!","can't invest in this port","can't accept any more"
+NesPrgRom:2947B:market_help_menu:"How can I help ye?" market top menu
+NesPrgRom:2C003:shipyard_entry:entry/gate: "You cant buy another","no man to navigate","we dont build ships here"
+NesPrgRom:2C12E:load_shipyard_sprites:set_sprite_block $9116 (ship icon tiles)
+NesPrgRom:2C13E:draw_ship_icon:load_shipyard_sprites + position by arg1%3
+NesPrgRom:2C17C:shipyard_clear:mem_7064=-1 + clear_two_ppu_regions
+NesPrgRom:2C19F:get_ship_condition:extract packed condition bits (>>5&7, >>2&3, >>4&1) from ship record+20
+NesPrgRom:2C1CE:calc_used_ship_price:used-ship price from depreciation of condition bits (record+20)
+NesPrgRom:2C22A:calc_ship_price_capped:ship price formula, capped at 100
+NesPrgRom:2C28A:calc_ship_build_cost:build cost formula (base 300=$012C + condition adjustments -200)
+NesPrgRom:2C2D1:get_ship_word18:record_field_word(ship+18)
+NesPrgRom:2C2E6:get_ship_word15:record_field_word(ship+15)
+NesPrgRom:2C2FA:get_ship_byte17:record_field_byte(ship+17)
+NesPrgRom:2C30F:shipyard_draw_ship_stats:ship stat panel: Crew/Capacity/Cargo/Power/Handling/Durability/Arms
+NesPrgRom:2C40B:shipyard_buy_confirm_name:buy confirm + "Name yer ship"
+NesPrgRom:2C5F4:shipyard_buy_used_dialog:BUY-USED: " is a %s","I'll sell this vessel for %d gold","We cant afford it"
+NesPrgRom:2C7B0:shipyard_buy_used_select:BUY-USED ship picker: "Which ship will ye buy?","Just looking, eh?"
+NesPrgRom:2C854:shipyard_buy_used:buy-used handler (shipyard_buy_used_select result)
+NesPrgRom:2C868:call_ship_build:call_in_bank_dcd1 ship-build routine ($8068)
+NesPrgRom:2C880:load_shipyard_sprites_b:set_sprite_block $9498 (2nd ship icon set)
+NesPrgRom:2C890:shipyard_clear_b:mem_7064=-1 + load_shipyard_sprites_b
+NesPrgRom:2C8DA:calc_ship_value:ship value formula (typed-arg variant of calc_used_ship_price base)
+NesPrgRom:2C8EE:draw_stat_durability:stat row: "Durability: %3d"
+NesPrgRom:2C907:calc_ship_price_new:new-ship price (depreciation formula, typed args)
+NesPrgRom:2C933:draw_stat_handling:stat row: "Handling:   %3d"
+NesPrgRom:2C94C:calc_ship_price_new_capped:new-ship price capped at 100
+NesPrgRom:2C97A:draw_stat_power:stat row: "Power:      %3d"
+NesPrgRom:2C993:calc_ship_build_cost_b:build cost (typed-arg variant of calc_ship_build_cost)
+NesPrgRom:2C9BA:draw_stat_capacity:stat row: "Capacity:  %4d"
+NesPrgRom:2C9D4:draw_stat_cargo:stat row: "Cargo:%3d"
+NesPrgRom:2C9E8:draw_stat_crew:stat row: "Crew: %3d"
+NesPrgRom:2C9FC:draw_stat_arms:stat row: "Arms: %3d"
+NesPrgRom:2CA11:shipyard_confirm:"Is this OK" confirm box
+NesPrgRom:2CA2D:shipyard_build_confirm_name:build confirm + "Name your ship"
+NesPrgRom:2CBCE:shipyard_build_arms_crew:BUILD config: "how many gun placements","How many bunks for the crew"
+NesPrgRom:2CC83:shipyard_build_hull_masts:BUILD config: "What kind of hull?"(Teak..),"How many masts?","3-point"
+NesPrgRom:2CF62:shipyard_build_confirm:"Shall I build one for ye"
+NesPrgRom:2CFB7:shipyard_build_entry:BUILD entry: "Ye want to build?","Choose yer hull","Cold feet, eh?"
+NesPrgRom:2E003:call_court_menu:-> bank26 court_menu ($88C3)
+NesPrgRom:2E014:tavern_recruit_sailor:-> event_recruit_sailor
+NesPrgRom:2E025:call_quest_dialogue:-> bank24 quest dialogue ($8F9E)
+NesPrgRom:2E036:tavern_waitress:-> event_waitress
+NesPrgRom:2E047:tavern_quest_reward:-> event_quest_reward
+NesPrgRom:2E058:tavern_entry_menu:"Make yerself at home","What shall we do, Captain?" + Crew
+NesPrgRom:2E13F:tavern_scan_state:tavern state scan (35 ops; local accumulation)
+NesPrgRom:2E1CE:tavern_scan_records:scan_records_6c90_flag record enumeration
+NesPrgRom:2E236:tavern_resolve_field:compute_dad1 + resolve_field_ptr(2,21,..)
+NesPrgRom:2E24B:tavern_scan_ports:iterate $B50A port-index records
+NesPrgRom:2E275:quest_flag_8:predicate: mem_705F & 8 (quest-state bit)
+NesPrgRom:2E280:quest_flag_2:predicate: mem_705F & 2
+NesPrgRom:2E28B:quest_flag_1:predicate: mem_705F & 1
+NesPrgRom:2E296:at_target_port:predicate: mem_7052 (quest target port) == mem_7067 (current port)
+NesPrgRom:2E2A5:tavern_calc_port:port record calc ($B50A[arg]*5, field*50)
+NesPrgRom:2E33A:tavern_recruit_greet:recruit NPC greet: "Are you the one they call"
+NesPrgRom:2E375:tavern_recruit_stats:recruit stat line "%s %d? %s %d?"
+NesPrgRom:2E3C9:tavern_draw_port_name:"at <port>": draw_string_banked port name from $AFD8[arg*19]
+NesPrgRom:2E3FA:tavern_draw_name:draw_string_banked a $6542 record name
+NesPrgRom:2E439:tavern_rumor_rival_loc:RUMOR: rival/pirate location "seeking out your ship!","sailing for"
+NesPrgRom:2E4FA:tavern_rumor_port_specialty:RUMOR: "specialty of this here port","it can be bought"
+NesPrgRom:2E58F:tavern_quest_hook:"The King of Portugal/head trader is looking for you"
+NesPrgRom:2E674:tavern_rumor_intro:"The <x>"/"They say" rumor lead-in
+NesPrgRom:2E6A8:tavern_hook_search:"Someone's looking for ye in <port>","Are ye searching for a place" recruit/quest hook (210 ops)
+NesPrgRom:2EA63:tavern_quest_hook_b:"The King/inn master is looking for you in <port>"
+NesPrgRom:2EB1A:tavern_hook_king:"The King of Portugal is looking for","Are you the brave soul who's going"
+NesPrgRom:2EBB9:tavern_hook_king_b:"The King of Portugal","I hear you're heading for <port>" hook variant
+NesPrgRom:2EC56:tavern_dispatch_event:dispatch tavern event by mem_7054 (quest state)
+NesPrgRom:2EC95:tavern_rumor_trade:TRADE RUMOR: "X will pay a fine price for","marketplace in Y doesnt have"
+NesPrgRom:2EE60:tavern_stay_gather_info:"Let's stay a while and find out","order some[thing]"
+NesPrgRom:2EF14:draw_tavern_box:draw_box_variant(8,1)
+NesPrgRom:2EF20:tavern_crew_roster:"<Mates at a glance>" crew list
+NesPrgRom:2EFA6:tavern_dismiss_confirm:"OK to part from <mate>" dismiss confirm
+NesPrgRom:2F06D:tavern_dismiss_crew:"mates to part from","cant spare a navigator","Who are ye parting from?"
+NesPrgRom:36003:poker_init:initialize a poker round
+NesPrgRom:360B7:poker_card_rank:extract card rank (card>>4 &15)
+NesPrgRom:360F1:poker_deal_card:deal a card (call_in_bank $8B39 blit)
+NesPrgRom:36130:poker_setup_hand:load/prepare a hand (copy_from_bank cards)
+NesPrgRom:361BF:poker_eval_card:evaluate a single card
+NesPrgRom:36228:poker_load_deck:copy_from_bank_dc80 the deck
+NesPrgRom:36292:poker_shuffle:RNG shuffle (load_operand16_14)
+NesPrgRom:362B7:poker_score_hand:score a hand via poker_read_hand ($96FE)
+NesPrgRom:363C6:poker_draw_area:blit_alloc_tiles the poker felt
+NesPrgRom:36414:poker_get_score:return poker_score_hand result
+NesPrgRom:36426:draw_card_sprite:blit a 2x2 card sprite ($B09E)
+NesPrgRom:36445:clear_card_sprite:clear a card cell
+NesPrgRom:3645D:poker_play_round:poker round main loop (75 ops)
+NesPrgRom:365DB:poker_ai_decide:dealer AI decision ($9A9C table)
+NesPrgRom:366C7:poker_round_flow:round flow orchestration (87 ops)
+NesPrgRom:368C2:poker_deal_to_seat:deal card to a seat position ($9AC6 table)
+NesPrgRom:3691F:poker_bet_screen:"Bet:%3d","Gold:%5d","Dlr","Continue" -- dealer poker table
+NesPrgRom:3736F:poker_reset:reset_all_chr + reload
+NesPrgRom:373F1:poker_card_position:card screen position from $9F1B table
+NesPrgRom:3748B:poker_loop_948b:iteration helper
+NesPrgRom:3753E:poker_dispatch:dispatch by state (switch)
+NesPrgRom:37675:poker_draw_box:draw_box_variant + win_render
+NesPrgRom:376A3:poker_loop_96a3:iteration helper
+NesPrgRom:376FE:poker_read_hand:read a hand from cards (copy_from_bank_dc80)
+NesPrgRom:3777B:poker_loop_977b:iteration helper
+NesPrgRom:3780E:poker_load_hand:load a hand (copy_from_bank_dc80)
+NesPrgRom:378E2:poker_main:poker top orchestrator (99 ops)
+NesPrgRom:38003:bj_draw_table:blit the blackjack table ($B2DE) + dealer art ($A816)
+NesPrgRom:3806B:bj_draw_card:blit a 2-tile card from $8B8E/$8BAE suit/rank tables
+NesPrgRom:380F5:bj_delay:scale_x6(3) short delay
+NesPrgRom:38100:bj_deal:deal cards
+NesPrgRom:38168:blackjack_hit:"Hit" (blackjack hit/stand)
+NesPrgRom:381C8:bj_draw_card_hi:bj_draw_card for the high nibble (card>>4)
+NesPrgRom:381EE:bj_card_value:card face value (card & 15)
+NesPrgRom:38205:bj_is_face_card:is card a face card (9<rank<13)?
+NesPrgRom:38236:bj_hand_value:total hand value (with ace handling)
+NesPrgRom:38291:bj_check_bust:check if hand busts (>21)
+NesPrgRom:382C9:bj_hit_loop:hit/draw loop
+NesPrgRom:38366:bj_deal_loop:deal loop
+NesPrgRom:383B2:bj_draw_hand:blit_block_save a hand
+NesPrgRom:383F6:bj_loop_83f6:iteration helper
+NesPrgRom:3843C:bj_draw_prompt:"%s" prompt box (native_draw_box)
+NesPrgRom:38463:bj_clear_area:clear play area (queue_ppu_transfer)
+NesPrgRom:38482:blackjack_bet_screen:"Total gold:%5d","Bet: %d","Continue"
+NesPrgRom:38AB0:bj_reset:reset_all_chr + reload
+NesPrgRom:38AF1:bj_loop_8af1:iteration helper
+NesPrgRom:38B39:bj_blit_card_2x3:blit a 2x3 card sprite ($B072)
+NesPrgRom:38B51:bj_clear_card:clear a 2x4 card cell
+NesPrgRom:38B62:bj_loop_8b62:iteration helper
+NesPrgRom:30003:quest_scan_ports:iterate $B50A port-index records
+NesPrgRom:3002D:quest_flag_8:predicate: mem_705F & 8
+NesPrgRom:30038:quest_flag_2:predicate: mem_705F & 2
+NesPrgRom:30043:quest_flag_1:predicate: mem_705F & 1
+NesPrgRom:3004E:quest_at_target_port:predicate: quest_target_port == current_port
+NesPrgRom:3005D:quest_calc_port:port record calc ($B50A[arg]*5, field*50)
+NesPrgRom:300F2:quest_draw_stats:"%s %d. %s %d." stat line
+NesPrgRom:30146:quest_draw_port_name:"at <port>" via $AFD8[arg*19]
+NesPrgRom:30177:event_hook_generic:"Someone's looking for you in <port>"
+NesPrgRom:3018D:quest_draw_name:draw_string_banked a $6542 record name
+NesPrgRom:301CC:event_royal_summons:"I hear the King of Portugal wants to see you"
+NesPrgRom:301DD:event_track_npc:"He's on his way here","on the lookout for your ship" (find NPC/rival)
+NesPrgRom:30281:event_trade_intel:"sold at the market here","I hear they sell it in %s" (where to buy/sell)
+NesPrgRom:302FA:event_trader_hook:"The trader at the marketplace here is looking for you"
+NesPrgRom:3030B:event_quest_objective:"a place to buy","Do your best to meet the King's demands"
+NesPrgRom:303E3:event_guild_hook:"The guild master is looking for you"
+NesPrgRom:30414:quest_has_item:"<x> has the %s" item-holder line
+NesPrgRom:30438:event_map_clue:TREASURE/MAP: "Looking for points on this map?","in search of the %s?"
+NesPrgRom:30776:event_quest_urgency:"The King is expecting you","Hurry up and sail"
+NesPrgRom:307BE:quest_cond:quest-flag predicate combo
+NesPrgRom:30805:event_hook_multi:"The King's looking for you, pet!","inn master's been looking for you"
+NesPrgRom:308B3:event_story_princess:MAIN STORY: "Something serious at the palace","save the princess?"
+NesPrgRom:3094C:event_fetch_gift:ROMANCE/FETCH: "bring me back a little gift from <port>","visit me on your way back"
+NesPrgRom:309D8:quest_dispatch:dispatch quest event by mem_7054 (switch)
+NesPrgRom:30A0D:quest_decline:"Oh, that's not necessary. Thanks" decline box
+NesPrgRom:30A23:event_waitress:"no sign of a waitress","<X> would appreciate 10 gold pieces"
+NesPrgRom:30BD3:event_quest_reward:"I'm glad you came through for us!","deposit your reward at the palace"
+NesPrgRom:30E31:event_recruit_crew:"no room for more crew","Spend how much","Anyone want to join"
+NesPrgRom:30F6A:quest_clear_screen:mem_7063=240 + blit_alloc_tiles full clear
+NesPrgRom:30F9E:quest_pick:"Which one?" picker
+NesPrgRom:30FEB:event_recruit_sailor:"I don't see any sailors here","Approach whom?","How'd you like to join"
+NesPrgRom:32003:call_court_check_gold:-> bank26 court_check_gold_request ($80D0)
+NesPrgRom:32014:call_court_check_crew:-> bank26 court_check_crew_request ($8003)
+NesPrgRom:32025:call_court_eval:-> bank26 court_eval_state ($817A)
+NesPrgRom:32036:court_request_menu:draw_window + "What do you need?" ($907B) + draw_tile_grid select ($9068)
+NesPrgRom:3206E:court_announce:"Announcing Sir <name>" court presentation
+NesPrgRom:32176:court_cond_active:predicate: mem_705F&1 && mem_7052==mem_7067 && mem_7053
+NesPrgRom:3219B:court_cond_1:predicate on mem_705F &8/&2 + court_eval ($8176)
+NesPrgRom:321BC:court_cond_2:predicate: mem_705F&8 set, &2 clear + court_eval
+NesPrgRom:321DD:court_cond_3:predicate: mem_705F&8 set, &2 set + court_eval
+NesPrgRom:321FE:draw_court_box:draw_box_variant(1,1)
+NesPrgRom:3220A:court_wait_loop:loop on mem_6F72 until court_eval done; set mem_7267=255
+NesPrgRom:32278:court_turnin_legendary:quest turn-in: "Ah, the legendary <item>!","Bestow this man with a new title"
+NesPrgRom:32484:draw_record_name:draw_string_banked for the $6542[(arg+20)*7] record name
+NesPrgRom:324CD:court_story_peace:story milestone: "Well done! At last there will be peace" + new title
+NesPrgRom:32626:court_deliver_letter:"the famous <name>","I bring a letter from the King" (inter-kingdom diplomacy)
+NesPrgRom:3269A:court_reward_service:"done an excellent service","I hereby award you a new title","Your reward"
+NesPrgRom:32814:court_scan_records:scan_records_6c90_flag entry (record enumeration)
+NesPrgRom:328AA:court_eval_quest:"I knew I could count on you","this isn't enough! Will you go" (quest eval)
+NesPrgRom:32BBB:court_port_support:"Support | Port  Index" -- port investment/support system
+NesPrgRom:32BF1:court_init_state:zero working locals, enter the court processing loop
+NesPrgRom:32CF1:court_cond_savings:predicate: mem_6F74 + mem_705F&8 + mem_7054==1 (savings/reward gate)
+NesPrgRom:32E19:royal_bank_deposit_full:"You cannot deposit more"
+NesPrgRom:32EF0:royal_bank_no_more_gold:"We don't need more gold"
+NesPrgRom:32FD9:royal_bank_no_gold:"There's no gold in your name here"
+NesPrgRom:20003:call_fleet_menu:-> bank17 fleet menu ($8714)
+NesPrgRom:20014:call_fleet_cargo:-> bank17 fleet cargo ($96F6)
+NesPrgRom:20025:call_shipyard_from_helm:-> bank22 shipyard ($8ACE)
+NesPrgRom:20036:helm_draw_compass:draw the 8-dir compass sprite (232, positioned)
+NesPrgRom:200A8:helm_set_chr:set_chr_banks(1,4)
+NesPrgRom:200B5:helm_port_rumor:"Cap'n, a port is rumored to lie..." landfall hint
+NesPrgRom:2010C:helm_set_sail:"Set the compass bearing","All hands aloft! Set to the %s" (steer, 8 compass dirs)
+NesPrgRom:20165:helm_anchor:"Heave to! Anchor down!","All hands up anchor! We're off"
+NesPrgRom:201B0:helm_yesno_menu:draw_text_menu($9632) 2-option confirm
+NesPrgRom:201D4:coord_out_of_bounds:arg1/arg2 outside 0..13 map grid
+NesPrgRom:201F7:check_move_target:coord_out_of_bounds guard + move validity
+NesPrgRom:20249:helm_move_loop:movement stepping loop
+NesPrgRom:202B1:helm_sailing_skill_up:"your sailing skill has improved"
+NesPrgRom:2041B:helm_call_at_port:MOVE->dock: "There's no port here","OK to call at <port>" (enter port menu)
+NesPrgRom:2055E:can_move_to:!out_of_bounds && calc_pos_relative passable
+NesPrgRom:20597:helm_dir_loop:direction scan loop
+NesPrgRom:205C2:helm_move_ship:move the ship entity $6662 on the sea grid
+NesPrgRom:20705:helm_debark:DEBARK: "Select a landing point","OK to go ashore" (land exploration)
+NesPrgRom:207BA:helm_anchor_fail:"We can't drop anchor here"
+NesPrgRom:2084D:helm_compare_pos:compare two positions (arg1,arg2 ptrs)
+NesPrgRom:208F9:helm_fill_row:row fill helper
+NesPrgRom:20936:helm_look_fleets:"There are %d fleets there","Which one"
+NesPrgRom:2099A:helm_show_position:"We don't have a sextant" / "Our present position is %s %d"
+NesPrgRom:20A7C:helm_col_facing:ship facing<7 ? 18 : 1 (column by heading)
+NesPrgRom:20A90:helm_row_origin:737d==1 ? 11 : 1
+NesPrgRom:20AA3:helm_draw_fleets:draw nearby fleet markers ("R","E>%s")
+NesPrgRom:20C7B:helm_scan_ports:iterate the $AFD8 70-port table
+NesPrgRom:20CD9:helm_iter_cd9:column iteration helper
+NesPrgRom:20D3A:helm_look_area:scan the area around party_map_x/y
+NesPrgRom:20D7D:helm_look_prompt:helm_look_area + show_prompt_record
+NesPrgRom:20D89:helm_look:LOOK: "No fleet within view","Look where?","that's the port"
+NesPrgRom:20F26:helm_scan_f26:record scan helper
+NesPrgRom:20FB7:helm_scan_records:scan_records_6c90_flag enumeration
+NesPrgRom:2102C:helm_tables_902c:set up tables $6A6E/$6549
+NesPrgRom:21068:helm_loop_9068:record loop helper
+NesPrgRom:2108E:helm_hail_fleet:ORDER/hail: talk to other ships ("best sold in","Good luck") -- trade intel
+NesPrgRom:21182:clear_npc_event:clear npc_records[arg-1]+4 event type = 0
+NesPrgRom:211A1:helm_hail_suspicious:"Hmm, they're a suspicious lot" (hail rebuff; mem_6B8C gate)
+NesPrgRom:211D1:helm_pick_fleet:"There's not a fleet near us","Which fleet?" fleet picker
+NesPrgRom:21301:helm_menu_9301:draw_text_menu($99D3) 3-option
+NesPrgRom:21325:helm_iter_9325:range iteration helper
+NesPrgRom:21377:helm_attack_fleet:BATTLE: "no fleet to attack","Which fleet?" -> naval combat
+NesPrgRom:118CB:animate_sail_sprites:animate sprite blocks from $9D6A + wave anim (upload_cursor_sprites by mem_6B8C/5)
+NesPrgRom:11904:animate_sail_sprites_b:sprite anim from $9DAA (idx_valid_lt21 gated)
+NesPrgRom:1193E:draw_ship_at_sea:draw the ship sprite from entity $6662 pos/facing while at sea
+NesPrgRom:11A34:load_ship_sprites:set_sprite_block from $9DCA
+NesPrgRom:11A4B:update_wave_anim:upload_cursor_sprites(mem_6B8C/5) wrapper
+NesPrgRom:11A5B:lookup_ship_record:record_base_6b1c($6C96[arg1*7] & 15) -- ship record by index
+NesPrgRom:11A70:sail_event_land_ho:"Land ho! There's a port in sight!"
+NesPrgRom:11A8D:sail_event_out_of_provisions:"The <ship> has run out of %s!" (food/water depletion)
+NesPrgRom:11AC3:accrue_capped_6f72:grow mem_6F72 by a record-derived amount, capped at 50000 ($C350)
+NesPrgRom:11B00:sum_ship_stat:sum a stat over ships ($B50A[arg1] + scan_records_6c90_flag)
+NesPrgRom:11BC0:dispatch_sail_event:blit_screen_buffer + prompt + dispatch $9E2B[ship_sail_state] handler + redraw_dialog_region
+NesPrgRom:11E2B:sail_event_handlers:jump table of sailing-event handlers (indexed by ship_sail_state)
+NesPrgRom:4003:clear_ui_state:reset window origin + UI state
+NesPrgRom:4030:init_entry:os_mode_flags=255 + reset_all_chr (entry init)
+NesPrgRom:4055:char_create_helper_a:char-create helper
+NesPrgRom:40B5:char_create_init:clear_ui_state + char_create_helper_a
+NesPrgRom:40D0:load_char_portrait:copy_from_bank(2,250) char graphics
+NesPrgRom:410A:load_save_data:copy_from_bank(1,249) $8000 -> SRAM $6000 (size $1061) -- load saved game
+NesPrgRom:4121:title_menu:"New Adventure","Saved Game","Which one?" (new vs load)
+NesPrgRom:419D:draw_ok_prompt:"OK" prompt at (7,25)
+NesPrgRom:41BD:char_create:CHARACTER CREATION: 5 stats (Charisma/Wisdom/Intel/Courage/Strength) + bonus-point assign + "Enter name of hero"(Leon Franco) + flagship name
+NesPrgRom:4702:char_create_loop:character-creation main loop
+NesPrgRom:4737:char_create_helper_b:char-create helper
+NesPrgRom:47C0:char_create_stats:char_create_helper_b (stat assignment)
+NesPrgRom:47CB:entry_upload_sprites:upload_sprite_block for the entry scene
+NesPrgRom:4807:entry_start_audio:audio_param_gated title music
+NesPrgRom:4844:entry_countdown_a:decrement loop helper
+NesPrgRom:486A:entry_format_text:str_copy $9BFC formatter
+NesPrgRom:4947:entry_sprite_anim:upload_sprite_block + vram_row anim
+NesPrgRom:49F9:entry_countdown_b:decrement loop helper
+NesPrgRom:4A21:entry_anim_1:intro animation frame loop 1
+NesPrgRom:4A74:entry_anim_2:intro animation frame loop 2
+NesPrgRom:4AC6:entry_anim_3:intro animation frame loop 3
+NesPrgRom:4B1A:entry_anim_4:intro animation frame loop 4
+NesPrgRom:4B6D:entry_anim_5:intro animation frame loop 5
+NesPrgRom:4BC2:entry_anim_6:intro animation frame loop 6
+NesPrgRom:4C19:entry_anim_7:intro animation frame loop 7
+NesPrgRom:4C70:draw_title_logo:sprite $913E + blit title image $A074
+NesPrgRom:4D61:title_screen:sprite $912E + play_music(20) -- title screen
+NesPrgRom:4EAE:press_start:"Press start button" prompt
+NesPrgRom:4F57:entry_init_nametable:set_nt_exram_mode init
+NesPrgRom:500C:str_stat_charisma:"Charisma"
+NesPrgRom:5015:str_stat_wisdom:"Wisdom"
+NesPrgRom:501C:str_stat_intel:"Intel"
+NesPrgRom:5022:str_stat_courage:"Courage"
+NesPrgRom:502A:str_stat_strength:"Strength"
+NesPrgRom:5033:str_enter_hero_name:"Enter name of hero" (default Leon Franco)
+NesPrgRom:5077:str_bonus_points:"Bonus %3d","Please assign bonus points"
+NesPrgRom:50C9:str_enter_flagship:"Enter name of flagship"
+NesPrgRom:18003:combat_clear_metasprite:set_metasprite($0500,0,..) clear
+NesPrgRom:18015:combat_grid_wrap:mem_74C4 % 15 grid wrap
+NesPrgRom:180AB:combat_draw_sprite:draw a combat sprite
+NesPrgRom:181A6:combat_tile_x:mem_74C0 -> pixel X
+NesPrgRom:181E1:combat_dir_81e1:direction helper (arg4<5)
+NesPrgRom:18209:combat_check_8209:arg3==0x3C0 check
+NesPrgRom:182E4:combat_move_82e4:movement helper (arg4<2)
+NesPrgRom:183F7:combat_grid_index:arg<5?0:5 + arg%5 grid index
+NesPrgRom:1840E:combat_get_ship_stat:ship record $6C90[arg1] field
+NesPrgRom:18491:combat_grid_side:arg3<5 ? 0 : 1 (which fleet side)
+NesPrgRom:184C1:combat_ship_84c1:ship record calc
+NesPrgRom:1852F:combat_get_stat_0:combat_get_ship_stat(arg,0)
+NesPrgRom:18549:combat_get_stat_1:combat_get_ship_stat(arg,1)
+NesPrgRom:18560:combat_pos_8560:arg<5 ? arg : arg2 position select
+NesPrgRom:185EC:combat_85ec:helper
+NesPrgRom:18683:combat_get_ship_8683:ship record $6C90[arg2]
+NesPrgRom:186E6:combat_86e6:combat_pos_8560 wrapper
+NesPrgRom:18704:combat_action_8704:combat action (53 ops)
+NesPrgRom:188DD:combat_calc_power:max_s16 combat power from ship+2 stat
+NesPrgRom:1890F:combat_890f:helper
+NesPrgRom:18943:combat_set_state:mem_75F8=13
+NesPrgRom:1895C:combat_loop_895c:iteration helper
+NesPrgRom:18978:combat_scan_749e:$749E fleet scan
+NesPrgRom:18A05:combat_draw_a05:sprite draw (232)
+NesPrgRom:18A69:combat_a69:helper (46 ops)
+NesPrgRom:18B20:combat_b20:helper
+NesPrgRom:18B68:combat_grid_to_index:mem_74C2*15 + mem_74C0
+NesPrgRom:18BB5:combat_bb5:helper
+NesPrgRom:18BF3:combat_board:"Board which ship?" (boarding attack)
+NesPrgRom:18C85:combat_c85:ship-index helper
+NesPrgRom:18D01:combat_fire:"Fire on which ship?" (cannon attack)
+NesPrgRom:18D91:combat_board_check:sub_9CA7 gate -> combat_board
+NesPrgRom:18DB2:combat_db2:helper (arg1*8)
+NesPrgRom:18E19:combat_e19:mem_75FA state (51 ops)
+NesPrgRom:18ED8:combat_ed8:mem_75F8=13 (35 ops)
+NesPrgRom:18FAE:combat_draw_mobility:draws "Mobility:%2d"
+NesPrgRom:19093:combat_ret1:return 1
+NesPrgRom:1909A:combat_9a:sprite helper (232)
+NesPrgRom:190C3:combat_clear_metasprite2:set_metasprite($0100,0,..) clear
+NesPrgRom:190D5:combat_wait_button:read_controller wait loop
+NesPrgRom:1913D:combat_draw_ship_stats:battle ship panel: flagship/Crew/Arms(%d guns)/Mobility/Durability/Tacking power/Battle level
+NesPrgRom:192A3:combat_view_vessel:"View which vessel?" (inspect target)
+NesPrgRom:1931A:combat_set_74e0:mem_74E0=3
+NesPrgRom:19329:combat_329:draw markers wrapper (42 ops)
+NesPrgRom:193D2:combat_load_d2:memcpy_ptr $9FBD (48 ops)
+NesPrgRom:1948F:combat_wait_2:wait-while-2 loop
+NesPrgRom:194B8:combat_b8:sub_9B5F wrapper
+NesPrgRom:19569:combat_draw_markers:fleet markers ("R-","E>")
+NesPrgRom:1958B:combat_reset_75f6:mem_75F6=0
+NesPrgRom:195DC:combat_side_parity:mem_74C0 % 2 ? 2 : 1
+NesPrgRom:195EF:combat_95ef:arg + mem_74C0
+NesPrgRom:1965C:combat_5c:helper
+NesPrgRom:19696:combat_96:side-parity helper
+NesPrgRom:196F7:combat_f7:side-parity helper
+NesPrgRom:19785:combat_85:mem_74C0 helper
+NesPrgRom:197AE:combat_ae:mem_74C0 helper
+NesPrgRom:197D5:combat_d5:sub_9CA7 gate
+NesPrgRom:19810:combat_scan_74a3:$74A3 fleet scan
+NesPrgRom:19900:combat_00:helper
+NesPrgRom:19962:combat_get_ship_class:ship $6C96 >>4 &3 (ship class)
+NesPrgRom:199FA:combat_99fa:$74BB fleet array (43 ops)
+NesPrgRom:19AF0:combat_f0:combat_scan_74a3 wrapper
+NesPrgRom:19B5F:combat_calc_ship_stat:ship stat from record+20
+NesPrgRom:19BB1:combat_bb1:arg + mem_74C0
+NesPrgRom:19C2D:combat_get_ship_class_2d:ship $6C96 >>4 &3 (variant)
+NesPrgRom:19CA7:combat_can_board:boarding-range test (combat_side_parity)
+NesPrgRom:22003:fleet_row_origin:737d==1 ? 11 : 7
+NesPrgRom:22016:fleet_col_by_facing:entity facing<7 ? 20 : 2
+NesPrgRom:2202E:fleet_draw_grid:lay out the fleet grid (arg3 rows)
+NesPrgRom:220E2:fleet_select_mate:"Which mate?","Yourself","Mate"
+NesPrgRom:22155:fleet_draw_row:blit_block_save a fleet row
+NesPrgRom:221BA:fleet_row_base:737d==1 ? 3 : 7
+NesPrgRom:221CD:fleet_list_loop:fleet list render loop
+NesPrgRom:2223D:fleet_select_ship:"Which ship?"
+NesPrgRom:222BF:fleet_scroll_loop:fleet list scroll loop
+NesPrgRom:222F5:fleet_view_cargo:"cargo of the <ship>","No cargo on that ship"
+NesPrgRom:223BE:fleet_col_b:entity facing<7 ? 16 : 1
+NesPrgRom:223D6:fleet_show_prompt:show_prompt_record wrapper
+NesPrgRom:22403:fleet_scan_666d:iterate $666D records
+NesPrgRom:2243B:fleet_row_c:737d==1 ? 11 : 1
+NesPrgRom:2244E:fleet_col_by_pos:party_map_x>=7 ? 2 : 14
+NesPrgRom:2245F:fleet_view_items:"We have these items","A-more B-end"
+NesPrgRom:22562:calc_sprite_pos:entity $6662 pos -> screen tile pos
+NesPrgRom:225E1:calc_sprite_pos_b:screen pos from mem_705B/C/D/E
+NesPrgRom:2264C:draw_fleet_sprite:build+draw a fleet member sprite
+NesPrgRom:22666:fleet_look:"There's nothing unusual" look result
+NesPrgRom:22693:calc_map_pos:map cell from mem_705B/705C (/3)
+NesPrgRom:226FD:fleet_redraw:calc_map_pos + redraw_screen_if_changed
+NesPrgRom:22714:fleet_menu_loop:fleet management menu loop
+NesPrgRom:22B0A:fleet_leaf_8b0a:uncaught leaf helper (cross-bank CALL target)
+NesPrgRom:22DC3:fleet_set_rations:"Set rations to what (1-99)?"
+NesPrgRom:22EA4:fleet_thanks:"Thank you very much!" ($6BBF record reward)
+NesPrgRom:22F7A:fleet_col_d:entity facing<7 ? 16 : 2
+NesPrgRom:22F92:fleet_give_gold_loyalty:pay crew: "Give how much","Loyalty:%4d" (loyalty via gold)
+NesPrgRom:23042:fleet_gold_limit:"There's a limit to your gold!"
+NesPrgRom:2306F:fleet_replace_mate:"Choose mate to replace"
+NesPrgRom:23211:fleet_draw_panel:queue_ppu_transfer fleet panel region
+NesPrgRom:23252:fleet_fill_loop:panel fill loop
+NesPrgRom:2328A:fleet_draw_roster:"Ship"/"Navigator" roster headers + rows
+NesPrgRom:23364:fleet_iter_9364:range iteration helper
+NesPrgRom:2338A:fleet_ship_cargo:ship record $6C90 -> cargo record $6AA4 link
+NesPrgRom:233C0:fleet_cargo_screen:cargo screen via record_scan_6c90_6aa4_b (64 ops)
+NesPrgRom:2357F:fleet_replace_navigator:"Replace which navigator?","The flagship is the"
+NesPrgRom:235FE:fleet_scan_ships:iterate $6AA4 ship records
+NesPrgRom:2363D:fleet_dispose_vessel:"Dispose of which vessel?"
+NesPrgRom:236F6:fleet_cargo_menu:draw_text_menu($9B68) cargo actions
+NesPrgRom:1E003:land_row_origin:737d==1 ? 11 : 5
+NesPrgRom:1E016:land_check_ships:"We only have one ship!" (need >=2 ships)
+NesPrgRom:1E082:land_load_data:copy_from_bank + call_in_bank_dcd1 ($9814) load
+NesPrgRom:1E0B3:land_loop_80b3:record iteration helper
+NesPrgRom:1E0E7:land_scan_records:scan_records_6c90_flag enumeration
+NesPrgRom:1E126:fleet_order_sail:"Sail","All hands on deck!","scant crew here"
+NesPrgRom:1E171:fleet_order_wait:"OK to stand by until further orders"
+NesPrgRom:1E198:land_redraw:blit_screen_buffer + refresh_hud
+NesPrgRom:1E202:check_repair_hull:is hull ($6C90+0) below max (hull_max)?
+NesPrgRom:1E24A:repair_hull:add arg2*5 to hull ($6C90+0), clamp to hull_max
+NesPrgRom:1E281:repair_mast:add arg2*5 to mast ($6C90+1), clamp to mast_max
+NesPrgRom:1E2B8:repair_rudder:add arg2*5 to rudder ($6C90+2), clamp to rudder_max
+NesPrgRom:1E2EF:repair_apply_loop:apply repairs across parts
+NesPrgRom:1E337:get_hull:ship record $6C90+0 (hull durability)
+NesPrgRom:1E345:get_mast:ship record $6C90+1 (mast)
+NesPrgRom:1E353:get_rudder:ship record $6C90+2 (rudder)
+NesPrgRom:1E361:get_hull_max:record_proc_6c96_1 (hull capacity)
+NesPrgRom:1E36C:get_mast_max:record_proc_6c96_2 (mast capacity)
+NesPrgRom:1E377:get_rudder_max:record_proc_6c96_3 (rudder capacity)
+NesPrgRom:1E382:land_draw_repair_panel:repair panel render (81 ops)
+NesPrgRom:1E4DD:land_confirm:"Is this OK" confirm
+NesPrgRom:1E4F8:draw_hull_gauge:"%3d/%3d -OK-" hull gauge
+NesPrgRom:1E52D:draw_mast_gauge:"%3d/%3d -OK-" mast gauge
+NesPrgRom:1E563:draw_rudder_gauge:"%3d/%3d -OK-" rudder gauge
+NesPrgRom:1E599:draw_repair_row:repair row (part gauge)
+NesPrgRom:1E5B9:draw_lumber_field:"%4d" lumber amount
+NesPrgRom:1E5D0:repair_draw_parts:repair panel: Ship/Hull/Mast/Rudder/bales
+NesPrgRom:1E657:repair_choose:"Choose repairs","doesn't need repairs","Use how much lumber"
+NesPrgRom:1E791:land_loop_8791:iteration helper
+NesPrgRom:1E800:land_row_origin_b:737d==1 ? 11 : 3
+NesPrgRom:1E813:repair_finish:"Repairs are cancelled/finished"
+NesPrgRom:1E99E:repair_no_lumber:"There's nothing to mend","no lumber for repairs"
+NesPrgRom:1E9FE:search_result:"Our search was unsuccessful" / "We found a clear spring!"
+NesPrgRom:1EA83:search_water:SEARCH: "We found a clear spring!","not enough space to store" (find water on land)
+NesPrgRom:1EB57:search_treasure:TREASURE HUNT: "Looks like the treasure's at %s","treasure map","further %s" (dig via map clue)
+NesPrgRom:1EBAF:treasure_found:"Captain ... found the ..." treasure discovery (mem_705F&4 gate)
+NesPrgRom:1ED63:land_loop_8d63:iteration helper
+NesPrgRom:12003:handle_active_entity:dispatch the active entity (active_entity_idx $7268) via handle_entity_at_port
+NesPrgRom:12012:handle_entity_at_port:entity[$6662] pos vs its npc_record[$6004 stride51]: if at destination port (find_port_by_key match) call event handler $9E60[type-1](entity,port), else nat_9_0062
+NesPrgRom:13E60:entity_event_handlers:jump table of overworld entity event handlers, indexed by npc_record+4 event type
+NesPrgRom:46003:compute_sprite_tiles:tile-address calc for a 5x6 sprite: (i>>2)<<8 + (i&3)<<6, walk arg5 cells
+NesPrgRom:46049:blit_sprite5x6:blit a 5x6 sprite from tables $9994/$99F4[blit_frame_state] at (738A,738B), palette 193
+NesPrgRom:4608F:draw_sprite35_a:save pos + build+blit 5x6 sprite (chr_alloc_count < 64 path)
+NesPrgRom:46167:draw_sprite35_b:5x6 sprite variant (chr full path; mem_9994 direct)
+NesPrgRom:4628D:draw_sprite35:dispatch draw_sprite35_a vs _b by chr_alloc_count
+NesPrgRom:48003:decode_sprite_state:unpack blit_frame_state $738C into 5 sub-fields (bit pairs)
+NesPrgRom:480DA:compute_sprite_tiles_36:tile-address calc for a 5x6 sprite (as bank35 compute_sprite_tiles)
+NesPrgRom:48120:blit_sprite5x6_36:blit 5x6 sprite from table $8C56[arg2] at (738A,738B), palette 193
+NesPrgRom:48159:draw_sprite36_a:save state + build+blit 5x6 sprite
+NesPrgRom:481EB:draw_sprite36:decode_sprite_state + dispatch draw variant by chr_alloc_count
+NesPrgRom:4A003:gameover_format_line:str_copy + control-char switch: format an epilogue text line
+NesPrgRom:4A0AE:gameover_setup_sprite:set_sprite_block ($84CA) + busy_wait (scene sprite setup)
+NesPrgRom:4A148:gameover_draw_header:draw title "Uncharted Waters / Exploration..." ($84F7) + blit $B82A
+NesPrgRom:4A175:gameover_draw_date:draw "On <month> <day>" date line (draw_month/draw_day + strings $8502/$8507)
+NesPrgRom:4A1C2:gameover_animation:blit image sequence ($A8A8/$A9D4 10x15) with busy_waits -- lost-at-sea animation
+NesPrgRom:4A33D:show_game_over:top orchestrator: enable audio (os_mode_flags|=$C), audio_reset, run the game-over sequence
+NesPrgRom:16003:clear_metasprite:set_metasprite($0500,0,0,0,0) -- clear the metasprite slot
+NesPrgRom:16015:draw_battle_digit:draw a number tile from $8372[arg4%10] when arg3==1 (count overlay)
+NesPrgRom:160EC:check_ship_active:is ship record $6C90[mem_74D2 stride7] valid/alive?
+NesPrgRom:16129:grid_cell_type:classify a grid cell: arg<16 and (arg-1)%5<=2 ? 2 : 1
+NesPrgRom:16146:scan_fleet_a:iterate fleet-A positions at $749E (count mem_74A8) applying check_ship_active
+NesPrgRom:16238:scan_fleet_b:iterate fleet positions at $749E (variant of scan_fleet_a)
+NesPrgRom:162B8:scan_both_fleets:scan_records_6c90_flag both fleets -> $749E (A, mem_74A8) / $74A3 (B, mem_74AA); dispatch scan_fleet_a/b
+NesPrgRom:162DF:check_collision:symmetric adjacency test scan_both_fleets(a,b) & (b,a); range 35-mem_6B8C*2
+NesPrgRom:16320:roll_evade:RNG gate: load_operand16_14(10) < 7
+NesPrgRom:16346:init_fleet_grid:call_in_bank_dcd1(bank14, $899D/$9583) fleet setup + roll_evade for active_entity_idx
+NesPrgRom:34003:court_check_crew_request:crew-supply check (mem_6FCE, record_iter_6c90); gates "can supply %d men"
+NesPrgRom:340D0:court_check_gold_request:gold-supply check (mem_6FCC vs gold mem_666B); "We dont need any more gold"
+NesPrgRom:34176:court_leaf_8176:tiny court helper (LOADL+RETURN)
+NesPrgRom:3417A:court_eval_state:evaluate court/quest state flags (mem_705F/7052/7053/7054/7067) (144 ops)
+NesPrgRom:341BC:court_leaf_81bc:court eval leaf helper
+NesPrgRom:341DD:court_leaf_81dd:court eval leaf helper (STORE_far + CALL)
+NesPrgRom:341FE:court_leaf_81fe:court leaf: calls draw_text
+NesPrgRom:344C9:court_pose_select:pick a portrait pose from mem_7067 / arg (bounds 11)
+NesPrgRom:344F8:court_draw_scene:draw court scene: clear region + blit backdrop $B452 + cursor; port table $AFD8[mem_7067*19]
+NesPrgRom:3453C:lookup_title_8f04:if arg>=50: return $8F04[arg] (title/rank lookup)
+NesPrgRom:34579:draw_court_sprite:blit a 2x2 court sprite from tables $8FEA/$8FF6/$8F4A by (arg1,arg2)
+NesPrgRom:345D1:draw_court_portrait:draw court portrait: lookup_title_8f04 + draw_court_sprite (palette 224/225)
+NesPrgRom:34626:court_leaf_8626:court leaf helper
+NesPrgRom:346A3:count_record_fields:count consecutive non-zero record_field_byte from arg1
+NesPrgRom:346D4:court_setup_chr:set_chr_banks $8FFE + init court panel state (mem_7068/7069; $AFD8[mem_7067])
+NesPrgRom:34742:court_request_crew:"assign men to the crew" / "His Majesty can supply %d men" -- request crew from the King
+NesPrgRom:34843:court_request_gold:gold petition: "We dont need any more gold" / "manage on your own"
+NesPrgRom:348C3:court_menu:draw_string $9161 + draw_tile_grid $9148 selection (court action menu)
+NesPrgRom:A003:econ_get_6fbc:$6FBC[arg1*4] accessor
+NesPrgRom:A028:econ_get_entity:$6662[arg1<<4] entity accessor
+NesPrgRom:A116:econ_ship_rec35:$6C90 stride-35 record accessor
+NesPrgRom:A229:econ_calc_8229:$6FBC-based calc (39 ops)
+NesPrgRom:A2D1:econ_ship_calc:$6C90 stride-35 record calc
+NesPrgRom:A430:econ_calc_8430:$6FBC-based calc (34 ops)
+NesPrgRom:A4E3:econ_ship_calc_b:$6C90 stride-35 calc
+NesPrgRom:A61A:econ_calc_861a:calc helper (34 ops)
+NesPrgRom:A6C6:econ_calc_86c6:$6FBC calc (64 ops)
+NesPrgRom:A82B:econ_check_882b:arg==3 branch check
+NesPrgRom:A84C:econ_accrue_6fcc:grow mem_6FCC by RNG-scaled amount
+NesPrgRom:A8CF:econ_get_port:port record $A005[arg1]*14 accessor
+NesPrgRom:A8FD:econ_calc_88fd:$6B8D calc (66 ops)
+NesPrgRom:AC1D:econ_loop_8c1d:iteration helper
+NesPrgRom:AC3A:econ_loop_8c3a:iteration helper
+NesPrgRom:AC63:econ_call_nat5:-> nat_5_1186
+NesPrgRom:4C003:ending_init_a:ending init (branch on arg1)
+NesPrgRom:4C09D:ending_init_b:ending init variant
+NesPrgRom:4C141:ending_show_page:display a cutscene text page (ptr arg1)
+NesPrgRom:4C2CC:ending_page_1:ending_show_page $92BE
+NesPrgRom:4C2D9:ending_page_2:ending_show_page $93F5
+NesPrgRom:4C2E6:ending_page_3:ending_show_page $94F1
+NesPrgRom:4C2F3:ending_page_4:ending_show_page $9588
+NesPrgRom:4C300:ending_page_5:ending_show_page $96EB
+NesPrgRom:4C30D:ending_page_6:ending_show_page $970C
+NesPrgRom:4C31A:ending_page_7:ending_show_page $97EA
+NesPrgRom:4C327:ending_text_main:main ending narration ("Lisbon"...) (202 ops)
+NesPrgRom:4C334:ending_page_8:ending_show_page $9AB1
+NesPrgRom:4C341:ending_scene_a:ending scene (play_music 18)
+NesPrgRom:4C407:ending_sprite:set_sprite_block $8784
+NesPrgRom:4C47A:ending_loop:ending sequence loop
+NesPrgRom:4C538:ending_anim:ending animation
+NesPrgRom:4C62B:ending_scene_b:"Lisbon" scene (sprite $8784)
+NesPrgRom:4C68D:ending_scene_c:ending scene (play_music 19)
+NesPrgRom:4C723:ending_format_name:str_copy hero name -> $7390
+NesPrgRom:3A003:cargo_load_sprites:set_sprite_block $88CE
+NesPrgRom:3A013:draw_cargo_box:draw_box_variant(9,1)
+NesPrgRom:3A01F:cargo_ship_list:"Ship" cargo ship list
+NesPrgRom:3A1AC:cargo_no_move:"We won't get anywhere" (need cargo)
+NesPrgRom:3A262:cargo_load_prompt:"You're free to load as..."
+NesPrgRom:3A31D:cargo_full:"This ship is packed full"
+NesPrgRom:3A3D4:cargo_price:"%s will cost ye %d gold"
+NesPrgRom:3A4FF:cargo_loop:cargo iteration loop
+NesPrgRom:3A527:set_cargo_qty:write $6AB4 cargo qty field
+NesPrgRom:3A53E:cargo_ret_853e:small return helper
+NesPrgRom:3A544:check_port_valid:mem_7067 (current_port) > 49 guard
+NesPrgRom:3A57E:cargo_ret_857e:small return helper
+NesPrgRom:3A584:cargo_init:cargo state init
+NesPrgRom:3A5B6:set_cargo_field:write $6AB8 cargo field
+NesPrgRom:3A5CA:check_port_29b:current_port guard (variant)
+NesPrgRom:3A604:cargo_all_full:"All ships are full!"
+NesPrgRom:3A6BC:cargo_clear:blit_alloc_tiles clear
+NesPrgRom:3A72B:cargo_menu:"What do ye want to do?"
+NesPrgRom:3A76E:cargo_reset:mem_7063=0
+NesPrgRom:3A790:draw_captain_line:"Captain, %s"
+NesPrgRom:3A79E:destination_menu:"Where to, Captain?" destination select
+NesPrgRom:3C003:opt_check_port:mem_7067 (current_port) >= 50 guard
+NesPrgRom:3C068:draw_ship_icon_30:blit a 7x4 ship icon
+NesPrgRom:3C139:draw_ship_icon_class:draw_ship_icon_30 by ship class
+NesPrgRom:3C178:get_ship_6aba:$6ABA[arg1*24] field
+NesPrgRom:3C187:opt_passthru_8187:passthrough helper
+NesPrgRom:3C1B3:opt_ship_line:"Ship: " ($6AA4 record)
+NesPrgRom:3C3E1:opt_passthru_83e1:passthrough helper
+NesPrgRom:3C40E:opt_guard_840e:zero guard
+NesPrgRom:3C44A:opt_draw_name:$6542 record name
+NesPrgRom:3C5FF:opt_sprite:upload_sprite_block markers
+NesPrgRom:3C683:opt_loop_8683:iteration loop
+NesPrgRom:3C6C6:opt_calc_div5:arg/5 calc
+NesPrgRom:3C712:opt_scan_a:arg*5 scan
+NesPrgRom:3C778:opt_scan_b:arg*5 scan (variant)
+NesPrgRom:3C7DE:opt_get_entity:$6662[arg1<<4] entity
+NesPrgRom:3C820:opt_get_entity_b:$6662 entity accessor variant
+NesPrgRom:3C8D4:draw_coord_field:"%s %d, %d" coord ($8F92 table)
+NesPrgRom:3C8F1:opt_audio_off:audio_param_gated(0) mute
+NesPrgRom:3C942:draw_last_save:"Last save was on <date>"
+NesPrgRom:3C9F3:opt_message_speed:"Message speed is %d" (mem_6B88)
+NesPrgRom:3CA1B:opt_toggle_8a1b:option toggle (mem_7068)
+NesPrgRom:3CA5C:opt_music_toggle:"Music is %s. Turn..." (os_mode_flags&4)
+NesPrgRom:3CACE:opt_pick:"Which one? (B-cancel)" option picker
+NesPrgRom:2A003:outfit_sprites:set_sprite_block $9258
+NesPrgRom:2A013:draw_ship_icon_21:ship icon by arg%3
+NesPrgRom:2A06F:outfit_clear:mem_7064=-1 + clear
+NesPrgRom:2A09F:draw_stat_durability_21:"Durability: %3d" at (3,12)
+NesPrgRom:2A0C1:draw_stat_handling_21:"Handling: %3d" at (3,14)
+NesPrgRom:2A0E3:draw_stat_power_21:"Power: %3d" at (3,13)
+NesPrgRom:2A105:draw_stat_cargo_21:"Cargo load: %3d" at (3,15)
+NesPrgRom:2A135:draw_stat_total_load:"Total load: %4d/" at (3,18)
+NesPrgRom:2A155:draw_stat_crew_21:"Crewmen:" at (3,16)
+NesPrgRom:2A193:outfit_ship_line:"Ship: %s" ($6AA4)
+NesPrgRom:2A296:outfit_entry:-> shipyard_entry gate
+NesPrgRom:2A2A7:outfit_menu:"What brings you here?"
+NesPrgRom:2A2EE:outfit_no_gold:"We don't have enough gold"
+NesPrgRom:2A301:outfit_cancel:"Changed yer mind, eh?"
+NesPrgRom:2A311:outfit_rename:"Renaming a ship will cost..."
+NesPrgRom:2A41E:outfit_load_guns:"Load guns onto which ship" (101 ops)
+NesPrgRom:2A6AF:outfit_rig_sails:"Rig sails on which ship"
+NesPrgRom:2A8FB:outfit_hire_crew:"A good sailor always needs..." (hire crew)
+NesPrgRom:2AB42:outfit_help:"What do you need?"
+NesPrgRom:2ABB9:outfit_accrue:mem_6F72 accrual toward cap 50000
+NesPrgRom:2ABF6:outfit_port_rec:port record $67B2[current_port]
+NesPrgRom:2AC36:outfit_no_gold_b:"We don't have any gold"
+NesPrgRom:2ADE0:outfit_no_repair:"There's nothing to fix"
+NesPrgRom:2AF71:outfit_fix_which:"Fix which vessel?"
+NesPrgRom:2AFF8:outfit_one_ship:"We've only one ship!"
+NesPrgRom:26003:guild_scan_records:scan_records_6c90_flag enumeration
+NesPrgRom:26085:guild_decline:"Oh well, I'll ask ye no more"
+NesPrgRom:2609D:guild_cant_carry:"Ye can't be carrying..."
+NesPrgRom:260B1:guild_quest_return:"Ye came back with the..." quest-item turn-in (236 ops)
+NesPrgRom:26589:guild_sprites:set_sprite_block $F36F
+NesPrgRom:26599:guild_clear_region:queue_ppu_transfer clear
+NesPrgRom:265AC:guild_show_worth:"Economic worth: %d"
+NesPrgRom:26706:guild_grid_calc:grid position calc
+NesPrgRom:2678F:guild_no_crew:"There's no one but me here"
+NesPrgRom:26808:guild_view_whom:"View whom?"
+NesPrgRom:268E5:guild_which_ship:"Which ship?"
+NesPrgRom:26969:guild_clear_8969:clear helper
+NesPrgRom:269D1:guild_welcome:"Welcome. How may I help"
+NesPrgRom:26A1E:guild_tired:"You must be very tired"
+NesPrgRom:26A87:guild_as_you_wish:"As you wish"
+NesPrgRom:26A97:guild_show_revenue:"Revenue:%5d"
+NesPrgRom:26C43:guild_info_header:"Information on..."
+NesPrgRom:26CE0:guild_info_which:"Information on which?"
+NesPrgRom:26D2B:guild_draw_value:"%5d" value field
+NesPrgRom:26DA5:guild_have_one:"We already have one!"
+NesPrgRom:26E47:guild_interests:"What interests you?"
+NesPrgRom:26EF1:guild_loop_8ef1:iteration helper
+NesPrgRom:26F28:guild_loop_8f28:iteration helper
+NesPrgRom:26F60:guild_clear_top:clear_screen_top
+NesPrgRom:26FA5:guild_draw_8fa5:render helper
+NesPrgRom:27020:guild_dont_deal:"We don't deal in such"
+NesPrgRom:270B1:guild_nothing_sell:"We've nothing to sell"
+NesPrgRom:271DA:guild_which_one:"Which one?"
+NesPrgRom:27232:guild_quest_item:"Ahh, so this is the..." quest item (109 ops)
+NesPrgRom:24003:enc_check_port:current_port gate
+NesPrgRom:24032:enc_port_guard:port index >=50 guard
+NesPrgRom:2406F:enc_side_806f:side/index calc
+NesPrgRom:240C9:enc_setup:encounter setup (mem_7396)
+NesPrgRom:241E0:enc_81e0:helper
+NesPrgRom:24211:enc_port_table:$AFD8[current_port*19] port table
+NesPrgRom:2427F:enc_draw_region:blit_alloc_tiles region
+NesPrgRom:2435C:enc_cursor_835c:vram cursor helper
+NesPrgRom:24383:enc_cursor_8383:vram cursor helper
+NesPrgRom:243BB:enc_83bb:helper (74 ops)
+NesPrgRom:244AB:enc_loop_84ab:iteration helper
+NesPrgRom:24520:enc_set_chr:set_chr_banks(22,4)
+NesPrgRom:2452E:enc_dispatch:dispatch by arg4 (switch)
+NesPrgRom:245B1:enc_check_85b1:arg2==4 check
+NesPrgRom:245E7:enc_85e7:helper
+NesPrgRom:24670:enc_8670:helper (68 ops)
+NesPrgRom:247B3:enc_get_6f76:$6F76[current_port] flag byte
+NesPrgRom:2484F:enc_884f:helper
+NesPrgRom:24950:enc_now_leaving:"Now leaving <port>"
+NesPrgRom:249B8:enc_draw_markers:fleet markers ("R(","E=") (108 ops)
+NesPrgRom:24BA1:get_6f76_bits:$6F76[arg] & 3
+NesPrgRom:24BB1:enc_get_6b99:mem_6B99 bit extract
+NesPrgRom:24BDA:enc_quest_cond:quest predicate (705F&8 && 705F&1 && 7054==..)
+NesPrgRom:24C09:enc_get_6b9b:mem_6B9B bit extract
+NesPrgRom:24C2A:enc_port_rec:$67BA[arg3*14] port record
+NesPrgRom:24C96:enc_port_rec_b:$67BA port record (variant)
+NesPrgRom:24CEE:enc_bribe_ok:"Hmm. I'll let you get..." (bribe accepted)
+NesPrgRom:24D74:enc_8d74:helper
+NesPrgRom:24DED:enc_proud:"All Portuguese are proud"
+NesPrgRom:24E61:enc_scan_ships:scan_records_6c90_flag
+NesPrgRom:24EA2:enc_youll_pay:"Confound it! You'll pay"
+NesPrgRom:24EC8:enc_got_away:"We got away!" (escape)
+NesPrgRom:24F20:enc_no_bribe_gold:"We've no gold for a bribe"
+NesPrgRom:24FD7:enc_honest:"Well, he's an honest sort"
+NesPrgRom:2501E:enc_gruff_men:"Cap'n, some gruff looking men..."
+NesPrgRom:250CC:enc_rumor:"Cap'n, have ye heard of..." rumor
+NesPrgRom:251DD:enc_91dd:entity helper (42 ops)
+NesPrgRom:3:cargo_main:cargo screen main (77 ops)
+NesPrgRom:B7:cargo_calc_80b7:position/qty calc
+NesPrgRom:FC:cargo_draw_char:"%c" char draw
+NesPrgRom:142:cargo_check_8142:bounds check
+NesPrgRom:158:cargo_confirm:"Is this OK" confirm
+NesPrgRom:191:cargo_8191:helper (37 ops)
+NesPrgRom:1F3:cargo_screen:cargo transfer screen (121 ops)
+NesPrgRom:3A6:cargo_load_data:copy_from_bank_dc80 load
+NesPrgRom:3F2:cargo_entity_a:$6662 entity accessor
+NesPrgRom:40D:cargo_entity_b:$6662 entity accessor
+NesPrgRom:42C:cargo_entity_c:$6662 entity accessor
+NesPrgRom:447:get_cargo_6ab6:$6AB6[ship*24] / 10
+NesPrgRom:458:get_cargo_6ab8:$6AB8[ship*24]
+NesPrgRom:467:get_cargo_6ab4:$6AB4[ship*24] / 10
+NesPrgRom:478:cargo_draw_ship:draw a ship cargo row (41 ops)
+NesPrgRom:5F6:cargo_85f6:render helper
+NesPrgRom:698:cargo_cannot_load:"Cannot load more"
+NesPrgRom:6FC:cargo_which_ship:"Which ship? (B-end)"
+NesPrgRom:75B:get_ship_word15_0:record_field_word(ship+15)
+NesPrgRom:76C:draw_hold_gauge:"%3d/%3d" hold gauge ($6C94)
+NesPrgRom:788:cargo_left:"%4d left" cargo remaining (97 ops)
+NesPrgRom:8D3:cargo_left_b:"%4d left" variant
+NesPrgRom:971:cargo_pick_ship:"Which ship?" picker
+NesPrgRom:AE1:cargo_loop_8ae1:iteration helper
+NesPrgRom:B0C:cargo_transfer_col:queue_ppu_transfer column
+NesPrgRom:B28:cargo_choose_vessel:"Choose a vessel"
+NesPrgRom:BDD:cargo_ship_rec:$6AA4[ship*24] record
+NesPrgRom:C83:cargo_barrels_free:"%4d barrels free"
+NesPrgRom:C9B:cargo_draw_qty:"%3d" qty (62 ops)
+NesPrgRom:D8C:cargo_ship_rec_b:$6AA4 record (variant)
+NesPrgRom:E07:cargo_8e07:helper
+NesPrgRom:E7B:cargo_8e7b:helper
+NesPrgRom:EF2:cargo_draw_field:"%4d" field
+NesPrgRom:F6C:cargo_8f6c:helper
+NesPrgRom:1008:cargo_field_9008:"%4d" field
+NesPrgRom:1041:cargo_main_screen:cargo main screen ("%4d") (313 ops)
+NesPrgRom:1777:cargo_load_9777:copy_from_bank_dc80 load
+NesPrgRom:17D4:cargo_header:"Cargo" header
+NesPrgRom:1814:cargo_sprites:upload_sprite_block
+NesPrgRom:1C003:duel_8003:combat-dialogue entry (arg3 branch)
+NesPrgRom:1C0DA:duel_grid_check:arg1 < 16 grid-cell guard
+NesPrgRom:1C0F7:duel_80f7:helper
+NesPrgRom:1C1AD:duel_table_7417:$7417 table setup
+NesPrgRom:1C1DA:duel_81da:helper
+NesPrgRom:1C24B:duel_name_7390:$7390 name buffer setup
+NesPrgRom:1C282:duel_season:game_month season branch
+NesPrgRom:1C33D:duel_fleet_749e:$749E fleet-A scan
+NesPrgRom:1C3B5:duel_load_name:copy_from_bank_dc80 -> $7390
+NesPrgRom:1C429:duel_fleet_74a3:$74A3 fleet-B scan
+NesPrgRom:1C4B0:duel_84b0:helper
+NesPrgRom:1C4E0:duel_84e0:helper
+NesPrgRom:1C504:duel_8504:helper
+NesPrgRom:1C527:duel_grid_8527:grid index calc
+NesPrgRom:1C554:duel_speak:"I'm <name>" combatant line (90 ops)
+NesPrgRom:1C749:duel_scan_ff:scan until $ff terminator
+NesPrgRom:1C77F:duel_draw_markers:fleet markers ("R-","E>")
+NesPrgRom:1C7CA:duel_87ca:arg4<5 guard
+NesPrgRom:1C7F8:duel_87f8:range helper
+NesPrgRom:1C854:duel_8854:draw markers wrapper
+NesPrgRom:1C8B2:duel_get_74dc:mem_74DC accessor
+NesPrgRom:1C906:duel_draw_8906:marker draw ("R","E>[")
+NesPrgRom:1C99D:duel_load_899d:copy_from_bank_dc80 load
+NesPrgRom:1CA56:duel_sprites:upload_sprite_block
+NesPrgRom:1CA7C:duel_resolve_target:resolve_field_ptr for a $6A9A record
+NesPrgRom:1CAB0:duel_ab0:helper (49 ops)
+NesPrgRom:1CBF0:duel_will_hear:"The %s will hear about this"
+NesPrgRom:1CC64:duel_check_705a:mem_7054==3 && mem_705A==arg1
+NesPrgRom:1CC7D:duel_death:"This is the end for <name>" (73 ops)
+NesPrgRom:1CE53:duel_date:"On <date>"
+NesPrgRom:1CE9D:duel_lost_life:"lost his life in a storm"
+NesPrgRom:1CEBA:duel_load_eba:copy_from_bank_dc80 $75FC
+NesPrgRom:1D0BB:duel_90bb:helper
+NesPrgRom:1D118:duel_scan_666d:$666D scan
+NesPrgRom:1D16C:duel_loop_916c:iteration helper
+NesPrgRom:1D195:duel_9195:marker draw + resolve (74 ops)
+NesPrgRom:1D2C4:duel_92c4:render helper (81 ops)
+NesPrgRom:1D4EC:duel_94ec:helper
+NesPrgRom:1D583:duel_9583:marker draw ("R","E?")

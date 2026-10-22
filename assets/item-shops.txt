@@ -1,0 +1,28 @@
+  Lisbon        : Falcon Icon, Sextant, Dagger, Sword
+  Seville       : Falcon Icon, Sextant, Sabre, Dagger
+  Istanbul      : Sextant, Angel Amulet, Sword, Telescope
+  Genoa         : Telescope, Sextant, Falcon Icon, Sword
+  Venice        : Speculum, Hawk Icon, Nymph Amulet, Sextant
+  Pisa          : Telescope, Sextant, Dagger, Silver Rosary
+  Marseille     : Sextant, Nymph Amulet, Telescope, Pearl Bracelet
+  Valencia      : Sun Amulet, Dagger, Telescope, Sextant
+  Naples        : Sabre, Nymph Amulet, Falcon Icon, Silver Rosary
+  Alexandria    : Telescope, Hawk Icon, Sextant, Sword
+  London        : Angel Amulet, Sabre, Sextant, Telescope
+  Bordeaux      : Sword, Hawk Icon, Sextant, Nymph Amulet
+  Oslo          : Telescope, Sun Amulet, Dagger, Hawk Icon
+  Hamburg       : Angel Amulet, Sabre, Telescope, Falcon Icon
+  Antwerp       : Eagle Icon, Telescope, Sextant, Dagger
+  Panama        : Telescope, Dagger, Sword, Sabre
+  Veracruz      : Sabre, Hawk Icon, Sextant, Nymph Amulet
+  Pernambuco    : Telescope, Sextant, Sabre, Hawk Icon
+  Argin         : Telescope, Speculum, Sextant, Nymph Amulet
+  Mozambique    : Telescope, Dagger, Eagle Icon, Sextant
+  Muscat        : Shining Amulet, Dragon Icon, Telescope, Sabre
+  Baghdad       : Shining Amulet, Dragon Icon, Telescope, Sabre
+  Mecca         : Speculum, Sextant, Shining Amulet, Dragon Icon
+  Goa           : Sabre, Dragon Icon, Nymph Amulet, Telescope
+  Ceylon        : Telescope, Speculum, Sextant, Nymph Amulet
+  Calicut       : Speculum, Shining Amulet, Sabre, Dragon Icon
+  Macao         : Chinese Sword, Dragon Icon, Gold Bracelet, Shining Amulet
+  Zeiton        : Chinese Sword, Dragon Icon, Gold Bracelet, Speculum

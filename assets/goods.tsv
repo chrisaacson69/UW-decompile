@@ -1,0 +1,27 @@
+id	addr	category	name
+0	$9529	Spice	Pepper
+1	$9530	Spice	Cinnamon
+2	$9539	Spice	Nutmeg
+3	$9540	Spice	Pimento
+4	$9548	Spice	Cloves
+5	$954F	Food	Olive Oil
+6	$9559	Food	Grapes
+7	$9560	Food	Sugar
+8	$9566	Food	Cheese
+9	$956D	Food	Grain
+10	$9573	Metal/Gem	Gold
+11	$9578	Metal/Gem	Silver
+12	$957F	Metal/Gem	Quartz
+13	$9586	Metal/Gem	Coral
+14	$958C	Metal/Gem	Ivory
+15	$9592	Metal/Gem	Pearl
+16	$9598	Textile	Cotton
+17	$959F	Textile	Raw Silk
+18	$95A8	Textile	Wool
+19	$95AD	Textile	Cloth
+20	$95B3	Textile	Silk
+21	$95B8	Manufactured	Firearms
+22	$95C1	Manufactured	Wood
+23	$95C6	Manufactured	Porcelain
+24	$95D0	Manufactured	Artwork
+25	$95D8	Manufactured	Carpet

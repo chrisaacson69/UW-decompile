@@ -1,0 +1,71 @@
+idx	addr	X	Y	f2	f3	name
+0	$0FD8	32	8	3	12	Lisbon
+1	$0FEB	32	10	6	5	Seville
+2	$0FFE	38	9	11	2	Istanbul
+3	$1011	36	8	2	10	Genoa
+4	$1024	36	8	11	0	Venice
+5	$1037	36	9	5	1	Pisa
+6	$104A	35	9	1	2	Marseille
+7	$105D	33	10	10	6	Valencia
+8	$1070	34	11	1	8	Algiers
+9	$1083	36	10	6	7	Majorca
+10	$1096	35	10	10	11	Tunis
+11	$10A9	36	9	11	9	Naples
+12	$10BC	38	11	6	7	Alexandria
+13	$10CF	40	9	5	10	Trebizond
+14	$10E2	40	7	5	7	Azov
+15	$10F5	34	5	5	5	London
+16	$1108	34	7	5	10	Bordeaux
+17	$111B	35	5	5	2	Oslo
+18	$112E	35	5	8	11	Hamburg
+19	$1141	34	6	9	3	Antwerp
+20	$1154	19	16	12	0	Santo Domingo
+21	$1167	18	16	10	7	Jamaica
+22	$117A	16	16	8	8	Guatemala
+23	$118D	17	17	9	9	Panama
+24	$11A0	14	15	8	10	Veracruz
+25	$11B3	19	17	7	9	Caracas
+26	$11C6	26	22	10	12	Pernambuco
+27	$11D9	32	18	5	11	Argin
+28	$11EC	34	18	5	10	San Jorge
+29	$11FF	42	23	0	4	Sofala
+30	$1212	42	21	8	12	Mozambique
+31	$1225	42	20	5	4	Mombasa
+32	$1238	45	14	8	11	Muscat
+33	$124B	44	12	3	2	Baghdad
+34	$125E	42	16	5	5	Aden
+35	$1271	41	13	5	9	Mecca
+36	$1284	45	13	4	9	Hormuz
+37	$1297	48	16	7	4	Goa
+38	$12AA	47	13	7	10	Diu
+39	$12BD	53	18	9	9	Malacca
+40	$12D0	50	18	11	11	Ceylon
+41	$12E3	53	21	6	6	Sumatra
+42	$12F6	55	22	4	7	Java
+43	$1309	59	21	4	9	Amboina
+44	$131C	58	22	0	3	Ternate
+45	$132F	49	17	5	10	Calicut
+46	$1342	49	18	11	1	Cochin
+47	$1355	59	12	6	2	Nagasaki
+48	$1368	56	14	5	6	Macao
+49	$137B	57	13	12	3	Zeiton
+50	$138E	17	18	11	1	Nova Granada
+51	$13A1	22	31	8	11	Rio de Janeiro
+52	$13B4	55	16	6	8	Da Nang
+53	$13C7	64	15	10	11	Guam
+54	$13DA	1	16	8	5	Kailua
+55	$13ED	8	8	13	7	Eureka
+56	$1400	19	9	5	7	Virginia
+57	$1413	20	27	10	11	Copiapo
+58	$1426	25	26	10	2	Rio Grande
+59	$1439	39	27	6	7	Cape Town
+60	$144C	37	22	6	9	Luanda
+61	$145F	30	16	1	7	Verde
+62	$1472	40	4	5	5	Injiga
+63	$1485	62	22	9	11	Madang
+64	$1498	57	26	9	9	Leveque
+65	$14AB	64	5	1	6	Tanisk
+66	$14BE	48	4	10	7	Sibir
+67	$14D1	18	24	3	4	Chanchan
+68	$14E4	41	19	3	1	Ruwen
+69	$14F7	12	15	9	5	Acapulco

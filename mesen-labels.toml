@@ -1,0 +1,1468 @@
+# ============================================================================================
+# UW-decompile Mesen labels  (recon 2026-07-06; ch.0 recon + ch.1 syscall+static floor + ch.2 native banks)
+# Engine = L'Empereur's relocated +1. Constants: koei-nes/tools/games.toml [uw]. Regenerate: tools/gen_labels.py
+# Native inventory: 336 fixed-floor subs (banks 62/63) + 113 paged native-call ($E299) subs = 449 total.
+# ============================================================================================
+
+[prg.bank63]  # FIXED engine bank ($E000-$FFFF): boot, VM core, dispatcher, syscall, ALU, engine helpers.
+"0xE003" = { name = "os_main", comment = "OS main entry; itself bytecode (JSR vm_entry $E4BF + inline). $E000=JMP $E003" }
+"0xE06F" = { name = "idx_valid_lt21", comment = "bounds check: return arg1 < 21 (guards the 21-element record set) (5 callers)" }
+"0xE08C" = { name = "idx_over_20", comment = "bounds check: return arg1 > 20 (complement of idx_valid_lt21) (21 callers)" }
+"0xE0C1" = { name = "audio_param_gated", comment = "set_sound_param(arg1) only if os_mode_flags & 4 (audio enabled) (22 callers)" }
+"0xE0D6" = { name = "audio_reset_gated", comment = "audio_reset() only if os_mode_flags & 4 (audio enabled) (6 callers)" }
+"0xE0EA" = { name = "audio_playing_gated", comment = "audio_is_playing() only if os_mode_flags & 4 (audio enabled) (2 callers)" }
+"0xE100" = { name = "load_vm_args", comment = "native-sub prologue: copy Y arg-bytes from the VM operand stack ($02) into the native ZP arg block ($08+). The `ldy #N` before each call = arg-byte count. Called by ~every native helper." }
+"0xE146" = { name = "add_a_to_word_zpx", comment = "== LEmp add_a_to_word_zpx ($D352) score 1.00 relocated-identical; 30 callers" }
+"0xE150" = { name = "sub_a_from_word_zpx", comment = "== LEmp sub_a_from_word_zpx ($D35C) score 1.00 relocated-identical; 5 callers" }
+"0xE177" = { name = "alu_mul16", comment = "16-bit multiply via MMC5 hardware multiplier ($5205/$5206). VM-operand arithmetic" }
+"0xE1B4" = { name = "alu_abs16", comment = "absolute value of signed 16-bit VM operand (sign-conditional negate)" }
+"0xE1D9" = { name = "alu_div_push_remainder", comment = "divide then push remainder ($44/$45) to VM stack" }
+"0xE1EB" = { name = "alu_udiv16", comment = "unsigned 16-bit divide (SOFTWARE long-division loop -- MMC5 has a HW multiplier but NO divider); push quotient ($40/$41)" }
+"0xE1FD" = { name = "div16_unsigned", comment = "~ LEmp div16_unsigned ($E26C) score 0.79 diverged (reloc); same function -- verify; 0 callers" }
+"0xE222" = { name = "div16_unsigned_e222", comment = "== LEmp div16_unsigned ($E26C) score 1.00 relocated-identical; 2 callers" }
+"0xE226" = { name = "div16_signed", comment = "== LEmp div16_signed ($E270) score 1.00 relocated-identical; 2 callers" }
+"0xE274" = { name = "div16_setup", comment = "== LEmp div16_setup ($E2BE) score 1.00 relocated-identical; 5 callers" }
+"0xE299" = { name = "native_call_trampoline", comment = "NATIVE-call convention: build VM frame, JMP($0008) to code after 3 inline bytes; RTS->$E311 teardown. 113 paged native subs use this" }
+"0xE338" = { name = "call_vm_from_native", comment = "== LEmp call_vm_from_native ($E382) score 1.00 relocated-identical; 1 callers" }
+"0xE392" = { name = "vm_push_args_zpx", comment = "== LEmp vm_push_args_zpx ($E3DC) score 1.00 relocated-identical; 1 callers" }
+"0xE395" = { name = "vm_pop_operand16", comment = "pop 16-bit operand off VM stack ($02) into native reg $00,x" }
+"0xE3BA" = { name = "vm_push_result16", comment = "push 16-bit native result to VM stack (advance $02)" }
+"0xE3F0" = { name = "alu_shl16_n", comment = "shift-left 16-bit value by Y (asl/rol loop) = multiply by 2^Y" }
+"0xE401" = { name = "alu_shr16_n_signed", comment = "arithmetic shift-right 16-bit by Y (sign-preserving ror)" }
+"0xE415" = { name = "alu_shr16_n", comment = "logical shift-right 16-bit by Y (lsr/ror loop) = divide by 2^Y" }
+"0xE426" = { name = "vm_load_operand16", comment = "load a 16-bit VM-stack operand into native reg $00,x" }
+"0xE445" = { name = "inline_add_word", comment = "pull return addr, read a 16-bit inline operand after the call, add it to the result $08/$09" }
+"0xE485" = { name = "vm_drop_args_inline", comment = "pull return addr, read an inline arg-count byte, subtract it from vm_sp ($02) = drop that many VM-stack args" }
+"0xE4BF" = { name = "vm_entry", comment = "bytecode VM entry: frame-save (PLA->$08/$09,$00/$01; ($02)-9; copy $00-$07)" }
+"0xE503" = { name = "vm_dispatch", comment = "VM dispatcher = vm_entry+0x44; fetch ($06),Y / index $ECD4/$EDD4 / JMP($0000)" }
+"0xE51B" = { name = "vm_op_00_load_offset", comment = "== LEmp vm_op_00_load_offset ($E565) score 1.00 relocated-identical; 0 callers" }
+"0xE51F" = { name = "vm_op_01_loadA_local_neg", comment = "== LEmp vm_op_01_loadA_local_neg ($E569) score 1.00 relocated-identical; 0 callers" }
+"0xE523" = { name = "vm_op_02_loadA_local_neg", comment = "== LEmp vm_op_02_loadA_local_neg ($E56D) score 1.00 relocated-identical; 0 callers" }
+"0xE527" = { name = "vm_op_03_loadA_local_neg", comment = "== LEmp vm_op_03_loadA_local_neg ($E571) score 1.00 relocated-identical; 0 callers" }
+"0xE52B" = { name = "vm_op_04_loadA_local_neg", comment = "== LEmp vm_op_04_loadA_local_neg ($E575) score 1.00 relocated-identical; 0 callers" }
+"0xE52F" = { name = "vm_op_05_loadA_local_neg", comment = "== LEmp vm_op_05_loadA_local_neg ($E579) score 1.00 relocated-identical; 0 callers" }
+"0xE533" = { name = "vm_op_06_loadA_local_neg", comment = "== LEmp vm_op_06_loadA_local_neg ($E57D) score 1.00 relocated-identical; 0 callers" }
+"0xE537" = { name = "vm_op_07_loadA_local_neg", comment = "== LEmp vm_op_07_loadA_local_neg ($E581) score 1.00 relocated-identical; 0 callers" }
+"0xE53B" = { name = "vm_op_08_loadA_local_neg", comment = "== LEmp vm_op_08_loadA_local_neg ($E585) score 1.00 relocated-identical; 0 callers" }
+"0xE53F" = { name = "vm_op_09_loadA_local_neg", comment = "== LEmp vm_op_09_loadA_local_neg ($E589) score 1.00 relocated-identical; 0 callers" }
+"0xE543" = { name = "vm_op_0A_loadA_local_neg", comment = "== LEmp vm_op_0A_loadA_local_neg ($E58D) score 1.00 relocated-identical; 0 callers" }
+"0xE547" = { name = "vm_op_0B_loadA_local_neg", comment = "== LEmp vm_op_0B_loadA_local_neg ($E591) score 1.00 relocated-identical; 0 callers" }
+"0xE560" = { name = "vm_op_0F_loadA_local_pos", comment = "== LEmp vm_op_0F_loadA_local_pos ($E5AA) score 1.00 relocated-identical; 0 callers" }
+"0xE564" = { name = "vm_op_0E_loadA_local_pos", comment = "== LEmp vm_op_0E_loadA_local_pos ($E5AE) score 1.00 relocated-identical; 0 callers" }
+"0xE568" = { name = "vm_op_0D_loadA_local_pos", comment = "== LEmp vm_op_0D_loadA_local_pos ($E5B2) score 1.00 relocated-identical; 0 callers" }
+"0xE56C" = { name = "vm_op_0C_loadA_local_pos", comment = "== LEmp vm_op_0C_loadA_local_pos ($E5B6) score 1.00 relocated-identical; 0 callers" }
+"0xE57A" = { name = "vm_op_10_loadB_local_neg", comment = "== LEmp vm_op_10_loadB_local_neg ($E5C4) score 1.00 relocated-identical; 0 callers" }
+"0xE57E" = { name = "vm_op_11_loadB_local_neg", comment = "== LEmp vm_op_11_loadB_local_neg ($E5C8) score 1.00 relocated-identical; 0 callers" }
+"0xE582" = { name = "vm_op_12_loadB_local_neg", comment = "== LEmp vm_op_12_loadB_local_neg ($E5CC) score 1.00 relocated-identical; 0 callers" }
+"0xE586" = { name = "vm_op_13_loadB_local_neg", comment = "== LEmp vm_op_13_loadB_local_neg ($E5D0) score 1.00 relocated-identical; 0 callers" }
+"0xE58A" = { name = "vm_op_14_loadB_local_neg", comment = "== LEmp vm_op_14_loadB_local_neg ($E5D4) score 1.00 relocated-identical; 0 callers" }
+"0xE58E" = { name = "vm_op_15_loadB_local_neg", comment = "== LEmp vm_op_15_loadB_local_neg ($E5D8) score 1.00 relocated-identical; 0 callers" }
+"0xE592" = { name = "vm_op_16_loadB_local_neg", comment = "== LEmp vm_op_16_loadB_local_neg ($E5DC) score 1.00 relocated-identical; 0 callers" }
+"0xE596" = { name = "vm_op_17_loadB_local_neg", comment = "== LEmp vm_op_17_loadB_local_neg ($E5E0) score 1.00 relocated-identical; 0 callers" }
+"0xE59A" = { name = "vm_op_18_loadB_local_neg", comment = "== LEmp vm_op_18_loadB_local_neg ($E5E4) score 1.00 relocated-identical; 0 callers" }
+"0xE59E" = { name = "vm_op_19_loadB_local_neg", comment = "== LEmp vm_op_19_loadB_local_neg ($E5E8) score 1.00 relocated-identical; 0 callers" }
+"0xE5A2" = { name = "vm_op_1A_loadB_local_neg", comment = "== LEmp vm_op_1A_loadB_local_neg ($E5EC) score 1.00 relocated-identical; 0 callers" }
+"0xE5A6" = { name = "vm_op_1B_loadB_local_neg", comment = "== LEmp vm_op_1B_loadB_local_neg ($E5F0) score 1.00 relocated-identical; 0 callers" }
+"0xE5BF" = { name = "vm_op_1F_loadB_local_pos", comment = "== LEmp vm_op_1F_loadB_local_pos ($E609) score 1.00 relocated-identical; 0 callers" }
+"0xE5C3" = { name = "vm_op_1E_loadB_local_pos", comment = "== LEmp vm_op_1E_loadB_local_pos ($E60D) score 1.00 relocated-identical; 0 callers" }
+"0xE5C7" = { name = "vm_op_1D_loadB_local_pos", comment = "== LEmp vm_op_1D_loadB_local_pos ($E611) score 1.00 relocated-identical; 0 callers" }
+"0xE5CB" = { name = "vm_op_1C_loadB_local_pos", comment = "== LEmp vm_op_1C_loadB_local_pos ($E615) score 1.00 relocated-identical; 0 callers" }
+"0xE5D9" = { name = "vm_op_20_storeA_local_neg", comment = "== LEmp vm_op_20_storeA_local_neg ($E623) score 1.00 relocated-identical; 0 callers" }
+"0xE5DD" = { name = "vm_op_21_storeA_local_neg", comment = "== LEmp vm_op_21_storeA_local_neg ($E627) score 1.00 relocated-identical; 0 callers" }
+"0xE5E1" = { name = "vm_op_22_storeA_local_neg", comment = "== LEmp vm_op_22_storeA_local_neg ($E62B) score 1.00 relocated-identical; 0 callers" }
+"0xE5E5" = { name = "vm_op_23_storeA_local_neg", comment = "== LEmp vm_op_23_storeA_local_neg ($E62F) score 1.00 relocated-identical; 0 callers" }
+"0xE5E9" = { name = "vm_op_24_storeA_local_neg", comment = "== LEmp vm_op_24_storeA_local_neg ($E633) score 1.00 relocated-identical; 0 callers" }
+"0xE5ED" = { name = "vm_op_25_storeA_local_neg", comment = "== LEmp vm_op_25_storeA_local_neg ($E637) score 1.00 relocated-identical; 0 callers" }
+"0xE5F1" = { name = "vm_op_26_storeA_local_neg", comment = "== LEmp vm_op_26_storeA_local_neg ($E63B) score 1.00 relocated-identical; 0 callers" }
+"0xE5F5" = { name = "vm_op_27_storeA_local_neg", comment = "== LEmp vm_op_27_storeA_local_neg ($E63F) score 1.00 relocated-identical; 0 callers" }
+"0xE5F9" = { name = "vm_op_28_storeA_local_neg", comment = "== LEmp vm_op_28_storeA_local_neg ($E643) score 1.00 relocated-identical; 0 callers" }
+"0xE5FD" = { name = "vm_op_29_storeA_local_neg", comment = "== LEmp vm_op_29_storeA_local_neg ($E647) score 1.00 relocated-identical; 0 callers" }
+"0xE601" = { name = "vm_op_2A_storeA_local_neg", comment = "== LEmp vm_op_2A_storeA_local_neg ($E64B) score 1.00 relocated-identical; 0 callers" }
+"0xE605" = { name = "vm_op_2B_storeA_local_neg", comment = "== LEmp vm_op_2B_storeA_local_neg ($E64F) score 1.00 relocated-identical; 0 callers" }
+"0xE61E" = { name = "vm_op_2F_storeA_local_pos", comment = "== LEmp vm_op_2F_storeA_local_pos ($E668) score 1.00 relocated-identical; 0 callers" }
+"0xE622" = { name = "vm_op_2E_storeA_local_pos", comment = "== LEmp vm_op_2E_storeA_local_pos ($E66C) score 1.00 relocated-identical; 0 callers" }
+"0xE626" = { name = "vm_op_2D_storeA_local_pos", comment = "== LEmp vm_op_2D_storeA_local_pos ($E670) score 1.00 relocated-identical; 0 callers" }
+"0xE62A" = { name = "vm_op_2C_storeA_local_pos", comment = "== LEmp vm_op_2C_storeA_local_pos ($E674) score 1.00 relocated-identical; 0 callers" }
+"0xE638" = { name = "vm_op_30_storeB_local_neg", comment = "== LEmp vm_op_30_storeB_local_neg ($E682) score 1.00 relocated-identical; 0 callers" }
+"0xE63C" = { name = "vm_op_31_storeB_local_neg", comment = "== LEmp vm_op_31_storeB_local_neg ($E686) score 1.00 relocated-identical; 0 callers" }
+"0xE640" = { name = "vm_op_32_storeB_local_neg", comment = "== LEmp vm_op_32_storeB_local_neg ($E68A) score 1.00 relocated-identical; 0 callers" }
+"0xE644" = { name = "vm_op_33_storeB_local_neg", comment = "== LEmp vm_op_33_storeB_local_neg ($E68E) score 1.00 relocated-identical; 0 callers" }
+"0xE648" = { name = "vm_op_34_storeB_local_neg", comment = "== LEmp vm_op_34_storeB_local_neg ($E692) score 1.00 relocated-identical; 0 callers" }
+"0xE64C" = { name = "vm_op_35_storeB_local_neg", comment = "== LEmp vm_op_35_storeB_local_neg ($E696) score 1.00 relocated-identical; 0 callers" }
+"0xE650" = { name = "vm_op_36_storeB_local_neg", comment = "== LEmp vm_op_36_storeB_local_neg ($E69A) score 1.00 relocated-identical; 0 callers" }
+"0xE654" = { name = "vm_op_37_storeB_local_neg", comment = "== LEmp vm_op_37_storeB_local_neg ($E69E) score 1.00 relocated-identical; 0 callers" }
+"0xE658" = { name = "vm_op_38_storeB_local_neg", comment = "== LEmp vm_op_38_storeB_local_neg ($E6A2) score 1.00 relocated-identical; 0 callers" }
+"0xE65C" = { name = "vm_op_39_storeB_local_neg", comment = "== LEmp vm_op_39_storeB_local_neg ($E6A6) score 1.00 relocated-identical; 0 callers" }
+"0xE660" = { name = "vm_op_3A_storeB_local_neg", comment = "== LEmp vm_op_3A_storeB_local_neg ($E6AA) score 1.00 relocated-identical; 0 callers" }
+"0xE664" = { name = "vm_op_3B_storeB_local_neg", comment = "== LEmp vm_op_3B_storeB_local_neg ($E6AE) score 1.00 relocated-identical; 0 callers" }
+"0xE67B" = { name = "vm_op_3F_storeB_local_pos", comment = "== LEmp vm_op_3F_storeB_local_pos ($E6C5) score 1.00 relocated-identical; 0 callers" }
+"0xE67F" = { name = "vm_op_3E_storeB_local_pos", comment = "== LEmp vm_op_3E_storeB_local_pos ($E6C9) score 1.00 relocated-identical; 0 callers" }
+"0xE683" = { name = "vm_op_3D_storeB_local_pos", comment = "== LEmp vm_op_3D_storeB_local_pos ($E6CD) score 1.00 relocated-identical; 0 callers" }
+"0xE687" = { name = "vm_op_3C_storeB_local_pos", comment = "== LEmp vm_op_3C_storeB_local_pos ($E6D1) score 1.00 relocated-identical; 0 callers" }
+"0xE692" = { name = "vm_op_clearA_shared", comment = "== LEmp vm_op_clearA_shared ($E6DC) score 1.00 relocated-identical; 0 callers" }
+"0xE69C" = { name = "vm_op_40_clearA_40", comment = "== LEmp vm_op_40_clearA_40 ($E6E6) score 1.00 relocated-identical; 0 callers" }
+"0xE6A3" = { name = "vm_op_setB_imm4_shared", comment = "== LEmp vm_op_setB_imm4_shared ($E6ED) score 1.00 relocated-identical; 0 callers" }
+"0xE6AD" = { name = "vm_op_50_setB_imm4_50", comment = "== LEmp vm_op_50_setB_imm4_50 ($E6F7) score 1.00 relocated-identical; 0 callers" }
+"0xE6B4" = { name = "vm_op_push_imm4_shared", comment = "== LEmp vm_op_push_imm4_shared ($E6FE) score 1.00 relocated-identical; 0 callers" }
+"0xE6BC" = { name = "vm_op_addA_imm4_shared", comment = "== LEmp vm_op_addA_imm4_shared ($E706) score 1.00 relocated-identical; 0 callers" }
+"0xE6C8" = { name = "vm_op_70_nop", comment = "== LEmp vm_op_70_nop ($E712) score 1.00 relocated-identical; 0 callers" }
+"0xE6CB" = { name = "vm_op_82_bb", comment = "== LEmp vm_op_82_bb ($E715) score 1.00 relocated-identical; 0 callers" }
+"0xE6D0" = { name = "vm_op_81_byte", comment = "== LEmp vm_op_81_byte ($E71A) score 1.00 relocated-identical; 0 callers" }
+"0xE6DF" = { name = "vm_op_A4_loadA_mem_word", comment = "== LEmp vm_op_A4_loadA_mem_word ($E729) score 1.00 relocated-identical; 0 callers" }
+"0xE6E4" = { name = "vm_op_83_byte", comment = "== LEmp vm_op_83_byte ($E72E) score 1.00 relocated-identical; 0 callers" }
+"0xE6F3" = { name = "vm_op_84_bwb", comment = "== LEmp vm_op_84_bwb ($E73D) score 1.00 relocated-identical; 0 callers" }
+"0xE6F8" = { name = "vm_op_A6_loadB_mem_word", comment = "== LEmp vm_op_A6_loadB_mem_word ($E742) score 1.00 relocated-identical; 0 callers" }
+"0xE6FD" = { name = "vm_op_85_byte", comment = "== LEmp vm_op_85_byte ($E747) score 1.00 relocated-identical; 0 callers" }
+"0xE70C" = { name = "vm_op_86_bwb", comment = "== LEmp vm_op_86_bwb ($E756) score 1.00 relocated-identical; 0 callers" }
+"0xE711" = { name = "vm_op_A8_loadA_mem_word", comment = "== LEmp vm_op_A8_loadA_mem_word ($E75B) score 1.00 relocated-identical; 0 callers" }
+"0xE716" = { name = "vm_op_87_byte", comment = "== LEmp vm_op_87_byte ($E760) score 1.00 relocated-identical; 0 callers" }
+"0xE723" = { name = "vm_op_88_bwb", comment = "== LEmp vm_op_88_bwb ($E76D) score 1.00 relocated-identical; 0 callers" }
+"0xE728" = { name = "vm_op_AA", comment = "== LEmp vm_op_AA ($E772) score 1.00 relocated-identical; 0 callers" }
+"0xE72D" = { name = "vm_op_DE_loadA_frameaddr", comment = "== LEmp vm_op_DE_loadA_frameaddr ($E777) score 1.00 relocated-identical; 0 callers" }
+"0xE73C" = { name = "vm_op_DF_loadB_frameaddr", comment = "== LEmp vm_op_DF_loadB_frameaddr ($E786) score 1.00 relocated-identical; 0 callers" }
+"0xE74B" = { name = "vm_op_89_loadA_imm_sbyte", comment = "== LEmp vm_op_89_loadA_imm_sbyte ($E795) score 1.00 relocated-identical; 0 callers" }
+"0xE755" = { name = "vm_op_8A_loadA_imm_word", comment = "== LEmp vm_op_8A_loadA_imm_word ($E79F) score 1.00 relocated-identical; 0 callers" }
+"0xE75A" = { name = "vm_op_8B_loadB_imm_byte", comment = "== LEmp vm_op_8B_loadB_imm_byte ($E7A4) score 1.00 relocated-identical; 0 callers" }
+"0xE764" = { name = "vm_op_8C_loadB_imm_word", comment = "== LEmp vm_op_8C_loadB_imm_word ($E7AE) score 1.00 relocated-identical; 0 callers" }
+"0xE769" = { name = "vm_op_8D_sbyte", comment = "== LEmp vm_op_8D_sbyte ($E7B3) score 1.00 relocated-identical; 0 callers" }
+"0xE76F" = { name = "vm_op_8E_push_imm_word", comment = "== LEmp vm_op_8E_push_imm_word ($E7B9) score 1.00 relocated-identical; 0 callers" }
+"0xE775" = { name = "vm_op_8F_addA_imm_sbyte", comment = "== LEmp vm_op_8F_addA_imm_sbyte ($E7BF) score 1.00 relocated-identical; 0 callers" }
+"0xE784" = { name = "vm_op_90_bb", comment = "== LEmp vm_op_90_bb ($E7CE) score 1.00 relocated-identical; 0 callers" }
+"0xE789" = { name = "vm_op_A0_A3_byte", comment = "== LEmp vm_op_A0_A3_byte ($E7D3) score 1.00 relocated-identical; 0 callers" }
+"0xE795" = { name = "vm_op_A5_loadA_mem_byte", comment = "== LEmp vm_op_A5_loadA_mem_byte ($E7DF) score 1.00 relocated-identical; 0 callers" }
+"0xE79A" = { name = "vm_op_A1_A3_byte", comment = "== LEmp vm_op_A1_A3_byte ($E7E4) score 1.00 relocated-identical; 0 callers" }
+"0xE7A6" = { name = "vm_op_A7_loadA_addr_word", comment = "== LEmp vm_op_A7_loadA_addr_word ($E7F0) score 1.00 relocated-identical; 0 callers" }
+"0xE7AB" = { name = "vm_op_A2_A3_byte", comment = "== LEmp vm_op_A2_A3_byte ($E7F5) score 1.00 relocated-identical; 0 callers" }
+"0xE7B5" = { name = "vm_op_A9_storeA_mem_byte", comment = "== LEmp vm_op_A9_storeA_mem_byte ($E7FF) score 1.00 relocated-identical; 0 callers" }
+"0xE7BA" = { name = "vm_op_A3_A3_byte", comment = "== LEmp vm_op_A3_A3_byte ($E804) score 1.00 relocated-identical; 0 callers" }
+"0xE7C4" = { name = "vm_op_AB_word", comment = "== LEmp vm_op_AB_word ($E80E) score 1.00 relocated-identical; 0 callers" }
+"0xE7C9" = { name = "vm_op_EA_host_call_indirect", comment = "== LEmp vm_op_EA_host_call_indirect ($E813) score 1.00 relocated-identical; 0 callers" }
+"0xE7D4" = { name = "vm_op_E9_host_call", comment = "== LEmp vm_op_E9_host_call ($E81E) score 1.00 relocated-identical; 0 callers" }
+"0xE7DF" = { name = "vm_op_DD_host_call_indirect_simple", comment = "== LEmp vm_op_DD_host_call_indirect_simple ($E829) score 1.00 relocated-identical; 0 callers" }
+"0xE7EA" = { name = "vm_op_AC_host_call_simple", comment = "== LEmp vm_op_AC_host_call_simple ($E834) score 1.00 relocated-identical; 0 callers" }
+"0xE7F3" = { name = "vm_call_native", comment = "== LEmp vm_call_native ($E83D) score 1.00 relocated-identical; 2 callers" }
+"0xE816" = { name = "indirect_jmp_trampoline", comment = "== LEmp indirect_jmp_trampoline ($E860) score 1.00 relocated-identical; 1 callers" }
+"0xE819" = { name = "vm_op_AD_byte", comment = "== LEmp vm_op_AD_byte ($E863) score 1.00 relocated-identical; 0 callers" }
+"0xE83A" = { name = "vm_dispatch_with_ptr1_adjust", comment = "== LEmp vm_dispatch_with_ptr1_adjust ($E884) score 1.00 relocated-identical; 0 callers" }
+"0xE848" = { name = "vm_op_AF", comment = "== LEmp vm_op_AF ($E892) score 1.00 relocated-identical; 0 callers" }
+"0xE857" = { name = "vm_op_D6_jump_abs", comment = "== LEmp vm_op_D6_jump_abs ($E8A1) score 1.00 relocated-identical; 0 callers" }
+"0xE861" = { name = "vm_op_D7_branch_nz_abs", comment = "== LEmp vm_op_D7_branch_nz_abs ($E8AB) score 1.00 relocated-identical; 0 callers" }
+"0xE86D" = { name = "vm_op_D8_branch_z_abs", comment = "== LEmp vm_op_D8_branch_z_abs ($E8B7) score 1.00 relocated-identical; 0 callers" }
+"0xE875" = { name = "vm_op_E3", comment = "== LEmp vm_op_E3 ($E8BF) score 1.00 relocated-identical; 0 callers" }
+"0xE883" = { name = "vm_op_E4_branch_nz_rel", comment = "== LEmp vm_op_E4_branch_nz_rel ($E8CD) score 1.00 relocated-identical; 0 callers" }
+"0xE88F" = { name = "vm_op_E5_branch_z_rel", comment = "== LEmp vm_op_E5_branch_z_rel ($E8D9) score 1.00 relocated-identical; 0 callers" }
+"0xE897" = { name = "vm_op_E6_jump_rel_fwd", comment = "== LEmp vm_op_E6_jump_rel_fwd ($E8E1) score 1.00 relocated-identical; 0 callers" }
+"0xE8A5" = { name = "vm_op_E7_branch_nz_rel_fwd", comment = "== LEmp vm_op_E7_branch_nz_rel_fwd ($E8EF) score 1.00 relocated-identical; 0 callers" }
+"0xE8B1" = { name = "vm_op_E8_branch_z_rel_fwd", comment = "== LEmp vm_op_E8_branch_z_rel_fwd ($E8FB) score 1.00 relocated-identical; 0 callers" }
+"0xE8B9" = { name = "vm_op_D9_switch", comment = "== LEmp vm_op_D9_switch ($E903) score 1.00 relocated-identical; 0 callers" }
+"0xE901" = { name = "vm_op_D5_switch", comment = "== LEmp vm_op_D5_switch ($E94B) score 1.00 relocated-identical; 0 callers" }
+"0xE93A" = { name = "vm_op_B0_loadA_ind_word", comment = "== LEmp vm_op_B0_loadA_ind_word ($E984) score 1.00 relocated-identical; 0 callers" }
+"0xE947" = { name = "vm_op_D3_loadA_ind_byte", comment = "== LEmp vm_op_D3_loadA_ind_byte ($E991) score 1.00 relocated-identical; 0 callers" }
+"0xE950" = { name = "vm_op_B1_storeA_ind_word", comment = "== LEmp vm_op_B1_storeA_ind_word ($E99A) score 1.00 relocated-identical; 0 callers" }
+"0xE95F" = { name = "vm_op_D4_storeA_ind_byte", comment = "== LEmp vm_op_D4_storeA_ind_byte ($E9A9) score 1.00 relocated-identical; 0 callers" }
+"0xE96A" = { name = "vm_op_B3_pushA", comment = "== LEmp vm_op_B3_pushA ($E9B4) score 1.00 relocated-identical; 0 callers" }
+"0xE971" = { name = "vm_op_B4_popB", comment = "== LEmp vm_op_B4_popB ($E9BB) score 1.00 relocated-identical; 0 callers" }
+"0xE977" = { name = "vm_pop_operand16", comment = "== LEmp vm_pop_operand16 ($E9C1) score 1.00 relocated-identical; 4 callers" }
+"0xE98C" = { name = "mul16_hw_08_0c", comment = "== LEmp mul16_hw_08_0c ($E9D6) score 1.00 relocated-identical; 0 callers" }
+"0xE9C6" = { name = "vm_op_B8_div_unsigned", comment = "== LEmp vm_op_B8_div_unsigned ($EA10) score 1.00 relocated-identical; 0 callers" }
+"0xE9CC" = { name = "vm_op_B6_div_signed", comment = "== LEmp vm_op_B6_div_signed ($EA16) score 1.00 relocated-identical; 0 callers" }
+"0xE9DC" = { name = "udiv16", comment = "== LEmp udiv16 ($EA26) score 1.00 relocated-identical; 4 callers" }
+"0xEA02" = { name = "vm_op_B9_mod_signed", comment = "== LEmp vm_op_B9_mod_signed ($EA4C) score 1.00 relocated-identical; 0 callers" }
+"0xEA1A" = { name = "vm_op_BA_mod_unsigned", comment = "== LEmp vm_op_BA_mod_unsigned ($EA64) score 1.00 relocated-identical; 0 callers" }
+"0xEA28" = { name = "sdiv16_setup_signs", comment = "== LEmp sdiv16_setup_signs ($EA72) score 1.00 relocated-identical; 2 callers" }
+"0xEA4F" = { name = "vm_op_BB_add", comment = "== LEmp vm_op_BB_add ($EA99) score 1.00 relocated-identical; 0 callers" }
+"0xEA5F" = { name = "vm_op_BC_sub", comment = "== LEmp vm_op_BC_sub ($EAA9) score 1.00 relocated-identical; 0 callers" }
+"0xEA6F" = { name = "vm_op_BD_shl_by_regB", comment = "== LEmp vm_op_BD_shl_by_regB ($EAB9) score 1.00 relocated-identical; 0 callers" }
+"0xEA83" = { name = "vm_op_BF_ashr_by_regB", comment = "== LEmp vm_op_BF_ashr_by_regB ($EACD) score 1.00 relocated-identical; 0 callers" }
+"0xEA9C" = { name = "vm_op_BE_lshr_by_regB", comment = "== LEmp vm_op_BE_lshr_by_regB ($EAE6) score 1.00 relocated-identical; 0 callers" }
+"0xEAB0" = { name = "vm_op_DA_bitand", comment = "== LEmp vm_op_DA_bitand ($EAFA) score 1.00 relocated-identical; 0 callers" }
+"0xEABF" = { name = "vm_op_DB_bitor", comment = "== LEmp vm_op_DB_bitor ($EB09) score 1.00 relocated-identical; 0 callers" }
+"0xEACE" = { name = "vm_op_DC_bitxor", comment = "== LEmp vm_op_DC_bitxor ($EB18) score 1.00 relocated-identical; 0 callers" }
+"0xEADD" = { name = "vm_op_C0_cmp_eq", comment = "== LEmp vm_op_C0_cmp_eq ($EB27) score 1.00 relocated-identical; 0 callers" }
+"0xEAF1" = { name = "vm_op_C1_cmp_ne", comment = "== LEmp vm_op_C1_cmp_ne ($EB3B) score 1.00 relocated-identical; 0 callers" }
+"0xEB05" = { name = "vm_op_C2_cmp_slt", comment = "== LEmp vm_op_C2_cmp_slt ($EB4F) score 1.00 relocated-identical; 0 callers" }
+"0xEB1C" = { name = "vm_op_C4_cmp_sgt", comment = "== LEmp vm_op_C4_cmp_sgt ($EB66) score 1.00 relocated-identical; 0 callers" }
+"0xEB33" = { name = "vm_op_C3_cmp_sge", comment = "== LEmp vm_op_C3_cmp_sge ($EB7D) score 1.00 relocated-identical; 0 callers" }
+"0xEB4A" = { name = "vm_op_C5_cmp_sle", comment = "== LEmp vm_op_C5_cmp_sle ($EB94) score 1.00 relocated-identical; 0 callers" }
+"0xEB61" = { name = "vm_op_C6_cmp_uge", comment = "== LEmp vm_op_C6_cmp_uge ($EBAB) score 1.00 relocated-identical; 0 callers" }
+"0xEB73" = { name = "vm_op_C8_cmp_ugt", comment = "== LEmp vm_op_C8_cmp_ugt ($EBBD) score 1.00 relocated-identical; 0 callers" }
+"0xEB85" = { name = "vm_op_C7_cmp_ule", comment = "== LEmp vm_op_C7_cmp_ule ($EBCF) score 1.00 relocated-identical; 0 callers" }
+"0xEB97" = { name = "vm_op_C9_cmp_ult", comment = "== LEmp vm_op_C9_cmp_ult ($EBE1) score 1.00 relocated-identical; 0 callers" }
+"0xEBA9" = { name = "vm_op_CA_is_zero", comment = "== LEmp vm_op_CA_is_zero ($EBF3) score 1.00 relocated-identical; 0 callers" }
+"0xEBB7" = { name = "vm_op_CB", comment = "== LEmp vm_op_CB ($EC01) score 1.00 relocated-identical; 0 callers" }
+"0xEBC5" = { name = "vm_op_CC", comment = "== LEmp vm_op_CC ($EC0F) score 1.00 relocated-identical; 0 callers" }
+"0xEBD4" = { name = "vm_op_CD_swap_AB", comment = "== LEmp vm_op_CD_swap_AB ($EC1E) score 1.00 relocated-identical; 0 callers" }
+"0xEBE7" = { name = "vm_op_D0_incA", comment = "== LEmp vm_op_D0_incA ($EC31) score 1.00 relocated-identical; 0 callers" }
+"0xEBF0" = { name = "vm_op_D1_decA", comment = "== LEmp vm_op_D1_decA ($EC3A) score 1.00 relocated-identical; 0 callers" }
+"0xEBFB" = { name = "vm_op_D2_aslA", comment = "== LEmp vm_op_D2_aslA ($EC45) score 1.00 relocated-identical; 0 callers" }
+"0xEC02" = { name = "vm_op_E0_byte", comment = "== LEmp vm_op_E0_byte ($EC4C) score 1.00 relocated-identical; 0 callers" }
+"0xEC0D" = { name = "vm_op_E1_byte", comment = "== LEmp vm_op_E1_byte ($EC57) score 1.00 relocated-identical; 0 callers" }
+"0xEC18" = { name = "vm_op_E2_byte", comment = "== LEmp vm_op_E2_byte ($EC62) score 1.00 relocated-identical; 0 callers" }
+"0xEC23" = { name = "vm_op_CF_vm_return", comment = "== LEmp vm_op_CF_vm_return ($EC6D) score 1.00 relocated-identical; 0 callers" }
+"0xEC40" = { name = "vm_op_default", comment = "default/no-op VM handler (37 of 256 slots)" }
+"0xEC41" = { name = "vm_op_FF", comment = "== LEmp vm_op_FF ($EC8B) score 1.00 relocated-identical; 0 callers" }
+"0xEC45" = { name = "vm_fetch_sbyte", comment = "== LEmp vm_fetch_sbyte ($EC8F) score 1.00 relocated-identical; 9 callers" }
+"0xEC54" = { name = "vm_addr_ptr2_plus_sbyte", comment = "== LEmp vm_addr_ptr2_plus_sbyte ($EC9E) score 1.00 relocated-identical; 4 callers" }
+"0xEC6D" = { name = "vm_fetch_word", comment = "== LEmp vm_fetch_word ($ECB7) score 1.00 relocated-identical; 13 callers" }
+"0xEC83" = { name = "vm_read_word_into_ptr0", comment = "== LEmp vm_read_word_into_ptr0 ($ECCD) score 1.00 relocated-identical; 14 callers" }
+"0xEC9A" = { name = "vm_addr_ptr2_plus_word", comment = "== LEmp vm_addr_ptr2_plus_word ($ECE4) score 1.00 relocated-identical; 12 callers" }
+"0xECCE" = { name = "vm_op_call_f339", comment = "VM opcode handler (just before the $ECD4 handler table): jsr $F339, return to vm_dispatch ($E503)" }
+"0xECD4" = { name = "vm_handler_lo", comment = "256-byte VM opcode-handler LO table" }
+"0xEDD4" = { name = "vm_handler_hi", comment = "256-byte VM opcode-handler HI table (=lo+0x100)" }
+"0xEED4" = { name = "syscall_entry_struct", comment = "~ LEmp syscall_entry_struct ($EF1E) score 0.89 diverged (reloc); same function -- verify; 0 callers" }
+"0xEEE7" = { name = "syscall_entry_struct", comment = "syscall entry: copy param struct, fake-BRK to ($FFDE) [LEmp $EF1E analog]" }
+"0xEEF4" = { name = "syscall_entry_simple", comment = "== LEmp syscall_entry_simple ($EF3E) score 0.91 relocated-identical; 2 callers" }
+"0xEF01" = { name = "syscall_entry_simple", comment = "syscall entry (id in A), fake-BRK to ($FFDE) [LEmp $EF3E analog]" }
+"0xEF06" = { name = "extop_dispatch", comment = "opcode $B7 ext-op (32-bit math) sub-dispatcher; index $EF21 table" }
+"0xEF21" = { name = "extop_table", comment = "ext-op handler address table (2-byte entries)" }
+"0xEFB0" = { name = "sdiv32", comment = "== LEmp sdiv32 ($F019) score 1.00 relocated-identical; 0 callers" }
+"0xEFBE" = { name = "sdiv32_setup", comment = "== LEmp sdiv32_setup ($F027) score 1.00 relocated-identical; 2 callers" }
+"0xEFDC" = { name = "udiv32", comment = "== LEmp udiv32 ($F045) score 1.00 relocated-identical; 1 callers" }
+"0xF0E7" = { name = "negate32_operand", comment = "== LEmp negate32_operand ($F150) score 1.00 relocated-identical; 1 callers" }
+"0xF0FB" = { name = "test_nonzero32", comment = "== LEmp test_nonzero32 ($F164) score 1.00 relocated-identical; 1 callers" }
+"0xF183" = { name = "cmp32_a_minus_b", comment = "== LEmp cmp32_a_minus_b ($F1EC) score 1.00 relocated-identical; 4 callers" }
+"0xF196" = { name = "cmp32_b_minus_a", comment = "== LEmp cmp32_b_minus_a ($F1FF) score 1.00 relocated-identical; 4 callers" }
+"0xF28D" = { name = "vm_bitfield_read", comment = "== LEmp vm_bitfield_read ($F2F6) score 1.00 relocated-identical; 2 callers" }
+"0xF2C3" = { name = "vm_bitfield_read_test", comment = "== LEmp vm_bitfield_read_test ($F32C) score 1.00 relocated-identical; 1 callers" }
+"0xF2EC" = { name = "vm_bitfield_write", comment = "== LEmp vm_bitfield_write ($F355) score 1.00 relocated-identical; 1 callers" }
+"0xF329" = { name = "make_bitmask", comment = "== LEmp make_bitmask ($F392) score 1.00 relocated-identical; 2 callers" }
+"0xF33A" = { name = "copy_from_bank_dc80", comment = "== LEmp copy_from_bank_dc80 ($F423) score 1.00 relocated-identical; 0 callers" }
+"0xF500" = { name = "reset", comment = "RESET: PPU warmup -> init chain ($F5BA.., banking $F53D) -> JMP $E000" }
+"0xF53D" = { name = "boot_banking_init", comment = "$5116<-$FE(bank62@C000),$5117=bank63,$5114/$5115 boot windows, MMC5 unlock" }
+"0xF559" = { name = "boot_init_banking", comment = "== LEmp boot_init_banking ($F559) score 1.00 relocated-identical; 1 callers" }
+"0xF597" = { name = "boot_init_exram", comment = "== LEmp boot_init_exram ($F597) score 1.00 relocated-identical; 1 callers" }
+"0xF5AF" = { name = "boot_init_ppu_regs", comment = "== LEmp boot_init_ppu_regs ($F5AF) score 1.00 relocated-identical; 1 callers" }
+"0xF5BA" = { name = "boot_init_oam", comment = "== LEmp boot_init_oam ($F5BA) score 1.00 relocated-identical; 1 callers" }
+"0xF5CF" = { name = "boot_init_vm_pointers", comment = "== LEmp boot_init_vm_pointers ($F5CF) score 1.00 relocated-identical; 1 callers" }
+"0xF5E8" = { name = "boot_init_flags", comment = "== LEmp boot_init_flags ($F5E8) score 1.00 relocated-identical; 1 callers" }
+"0xF5FC" = { name = "boot_init_nmi_queue", comment = "== LEmp boot_init_nmi_queue ($F5FC) score 1.00 relocated-identical; 1 callers" }
+"0xF611" = { name = "boot_init_sound", comment = "== LEmp boot_init_sound ($F611) score 1.00 relocated-identical; 1 callers" }
+"0xF64C" = { name = "nmi_handler", comment = "== LEmp nmi_handler ($F64C) score 1.00 relocated-identical; 0 callers" }
+"0xF693" = { name = "check_flush_flag_cc", comment = "== LEmp check_flush_flag_cc ($F693) score 1.00 relocated-identical; 1 callers" }
+"0xF69F" = { name = "nmi_defer_if_low_stack", comment = "== LEmp nmi_defer_if_low_stack ($F69F) score 1.00 relocated-identical; 1 callers" }
+"0xF6EB" = { name = "nmi_map_gfx_bank", comment = "== LEmp nmi_map_gfx_bank ($F6EB) score 1.00 relocated-identical; 4 callers" }
+"0xF6F7" = { name = "map_prg_bank_b0", comment = "== LEmp map_prg_bank_b0 ($F711) score 1.00 relocated-identical; 4 callers" }
+"0xF6FF" = { name = "nmi_flush_nametable", comment = "== LEmp nmi_flush_nametable ($F719) score 0.95 relocated-identical; 1 callers" }
+"0xF720" = { name = "ppu_vram_fill_run", comment = "NMI PPU helper: write byte $AC to $2007 (VRAM data) $A8 times = fill a VRAM run. (was mis-named "phantom_overlap_f720" -- a borrowed LEmp name for what is real code in UW; ch.21 read)" }
+"0xF777" = { name = "nmi_flush_ppu_read", comment = "== LEmp nmi_flush_ppu_read ($F788) score 0.94 relocated-identical; 1 callers" }
+"0xF7D1" = { name = "nmi_flush_exram_attr", comment = "== LEmp nmi_flush_exram_attr ($F7D9) score 1.00 relocated-identical; 1 callers" }
+"0xF832" = { name = "nmi_flush_exram_attr2", comment = "== LEmp nmi_flush_exram_attr2 ($F83A) score 1.00 relocated-identical; 1 callers" }
+"0xF882" = { name = "nmi_flush_ppu_fill", comment = "== LEmp nmi_flush_ppu_fill ($F88A) score 0.93 relocated-identical; 1 callers" }
+"0xF8D8" = { name = "nmi_update_scroll_split", comment = "== LEmp nmi_update_scroll_split ($F8D7) score 1.00 relocated-identical; 1 callers" }
+"0xF92E" = { name = "music_nmi_tick", comment = "== LEmp music_nmi_tick ($F92D) score 1.00 relocated-identical; 1 callers" }
+"0xF962" = { name = "syscall_dispatch", comment = "PRIVATE syscall dispatcher=($FFDE). id@$50 asl -> $F98C, jmp($006F); ret $F985" }
+"0xF985" = { name = "syscall_return", comment = "syscall central return: restore A/X/Y + RTI (consumes fake-BRK frame)" }
+"0xF98C" = { name = "syscall_table", comment = "27-slot raw 2-byte syscall handler table; id0=$F500 reset. data, not a sub" }
+"0xF9C2" = { name = "write_ppuctrl", comment = "== LEmp write_ppuctrl ($F9C1) score 1.00 relocated-identical; 4 callers" }
+"0xF9C8" = { name = "write_ppumask", comment = "== LEmp write_ppumask ($F9C7) score 1.00 relocated-identical; 1 callers" }
+"0xF9CE" = { name = "nmi_on", comment = "== LEmp nmi_on ($F9CD) score 1.00 relocated-identical; 8 callers" }
+"0xF9D6" = { name = "nmi_off", comment = "== LEmp nmi_off ($F9D5) score 1.00 relocated-identical; 7 callers" }
+"0xF9DE" = { name = "set_prg_bank", comment = "== LEmp set_prg_bank ($F9DD) score 1.00 relocated-identical; 23 callers" }
+"0xF9F9" = { name = "controller_poll", comment = "== LEmp controller_poll ($F9F8) score 1.00 relocated-identical; 2 callers" }
+"0xFA22" = { name = "palette_upload", comment = "~ LEmp palette_upload ($FA21) score 0.89 diverged (reloc); same function -- verify; 2 callers" }
+"0xFA5F" = { name = "calc_nametable_addr", comment = "== LEmp calc_nametable_addr ($FA55) score 1.00 relocated-identical; 2 callers" }
+"0xFA99" = { name = "syscall_id01_syscall_set_nt_exram_mode", comment = "id1: ~LEmp syscall_set_nt_exram_mode 0.79" }
+"0xFAB9" = { name = "syscall_id02_syscall_call_banked_routine", comment = "id2: ==LEmp syscall_call_banked_routine 0.97" }
+"0xFAF7" = { name = "syscall_id03_syscall_set_prg_bank", comment = "id3: ==LEmp syscall_set_prg_bank 1.00" }
+"0xFAFF" = { name = "syscall_id04_syscall_get_prg_bank", comment = "id4: ==LEmp syscall_get_prg_bank 1.00" }
+"0xFB06" = { name = "syscall_id05_syscall_set_chr_banks", comment = "id5: ==LEmp syscall_set_chr_banks 1.00" }
+"0xFB14" = { name = "syscall_id06_syscall_set_sprite_block", comment = "id6: ==LEmp syscall_set_sprite_block 1.00" }
+"0xFB2C" = { name = "syscall_id07_syscall_queue_vram_row", comment = "id7: ==LEmp syscall_queue_vram_row 1.00" }
+"0xFB30" = { name = "queue_vram_row_raw", comment = "== LEmp queue_vram_row_raw ($FB30) score 0.98 relocated-identical; 1 callers" }
+"0xFB6C" = { name = "syscall_id08_syscall_queue_ppu_transfer", comment = "id8: ==LEmp syscall_queue_ppu_transfer 1.00" }
+"0xFBA8" = { name = "syscall_id09_syscall_banked_blit_m3", comment = "id9: ==LEmp syscall_banked_blit_m3 1.00" }
+"0xFBB0" = { name = "syscall_id10_syscall_banked_ppu_blit", comment = "id10: ==LEmp syscall_banked_ppu_blit 1.00" }
+"0xFBB8" = { name = "queue_ppu_transfer_masked", comment = "== LEmp queue_ppu_transfer_masked ($FBB7) score 1.00 relocated-identical; 2 callers" }
+"0xFC1E" = { name = "syscall_id11_syscall_set_fill_mode", comment = "id11: ==LEmp syscall_set_fill_mode 1.00" }
+"0xFC29" = { name = "syscall_id12_syscall_set_chr_banks", comment = "id12: ==LEmp syscall_set_chr_banks 1.00" }
+"0xFC50" = { name = "syscall_id13_syscall_set_chr_bank_alt", comment = "id13: ==LEmp syscall_set_chr_bank_alt 1.00" }
+"0xFC6E" = { name = "syscall_id14_syscall_set_metasprite", comment = "id14: ==LEmp syscall_set_metasprite 1.00" }
+"0xFCD4" = { name = "syscall_id15_syscall_ppu_copy_blocking", comment = "id15: ==LEmp syscall_ppu_copy_blocking 1.00" }
+"0xFCF5" = { name = "syscall_id16_syscall_read_controller", comment = "id16: ==LEmp syscall_read_controller 1.00" }
+"0xFCFC" = { name = "syscall_id17_syscall_busy_wait", comment = "id17: ==LEmp syscall_busy_wait 1.00" }
+"0xFD10" = { name = "syscall_id18_syscall_set_scroll", comment = "id18: ~LEmp syscall_set_scroll 0.78" }
+"0xFD49" = { name = "syscall_id19_syscall_scroll_vsplit", comment = "id19: ==LEmp syscall_scroll_vsplit 1.00" }
+"0xFD85" = { name = "syscall_id20_syscall_set_vertical_split", comment = "id20: ==LEmp syscall_set_vertical_split 1.00" }
+"0xFDB3" = { name = "syscall_id21_syscall_play_music", comment = "id21: ==LEmp syscall_play_music 1.00" }
+"0xFE38" = { name = "syscall_id22_syscall_set_sound_param", comment = "id22: ~LEmp syscall_set_sound_param 0.75" }
+"0xFE3D" = { name = "syscall_id23_syscall_audio_reset", comment = "id23: ==LEmp syscall_audio_reset 1.00" }
+"0xFE6C" = { name = "syscall_id24_syscall_audio_is_playing", comment = "id24: ==LEmp syscall_audio_is_playing 1.00" }
+"0xFE82" = { name = "syscall_id25_syscall_play_music", comment = "id25: ==LEmp syscall_play_music 1.00" }
+"0xFF31" = { name = "syscall_id26_syscall_set_sound_params", comment = "id26: ==LEmp syscall_set_sound_params 1.00" }
+
+[prg.bank62]  # SEMI-FIXED shared-library band ($C000-$DFFF): native record/string/UI helpers + bytecode.
+"0xC003" = { name = "draw_string", comment = "THE text primitive: render null-terminated string (ptr=arg1) at cursor $7286, CHR page $728E; arg2=mode. E299 native prologue -> str-render loop @ $C009 (calls str_render_char/$C325). ~200+ call sites" }
+"0xC03E" = { name = "str_render_char", comment = "text renderer: fetch next source char via ($0A),y, dispatch control vs printable" }
+"0xC0FA" = { name = "str_advance_col", comment = "advance the destination column pointer (+1), check $DF terminator" }
+"0xC104" = { name = "str_ctrl_df", comment = "handle control code $DF" }
+"0xC144" = { name = "str_put_char", comment = "write a glyph to the dest buffer via ($10),y" }
+"0xC179" = { name = "str_ctrl_dispatch", comment = "dispatch on control codes $DE / $DF" }
+"0xC1A3" = { name = "str_ctrl_newline", comment = "handle newline ($0A): set $17, wrap to next line" }
+"0xC2D8" = { name = "str_check_window_bounds", comment = "compare cursor $728C against window extent $7286 (line/wrap gate)" }
+"0xC2EA" = { name = "str_wrap_line", comment = "advance line: inc_ptr_zpx + back to str_render_char" }
+"0xC325" = { name = "str_flag16_check", comment = "text-state helper: gate on flag $16" }
+"0xC32A" = { name = "save_block_to_stack", comment = "== LEmp save_block_to_stack ($DB1A) score 1.00 relocated-identical; 1 callers" }
+"0xC344" = { name = "restore_block_from_stack", comment = "== LEmp restore_block_from_stack ($DB34) score 1.00 relocated-identical; 1 callers" }
+"0xC35F" = { name = "inc_ptr_zpx", comment = "increment the 16-bit zero-page pointer at $00,x (carry to $01,x)" }
+"0xC366" = { name = "inc_word_08", comment = "== LEmp inc_word_08 ($DB56) score 1.00 relocated-identical; 5 callers" }
+"0xC36D" = { name = "inc_word_1a", comment = "== LEmp inc_word_1a ($DB5D) score 1.00 relocated-identical; 7 callers" }
+"0xC374" = { name = "inc_word_10", comment = "== LEmp inc_word_10 ($DB64) score 1.00 relocated-identical; 4 callers" }
+"0xC37B" = { name = "inc_word_0e", comment = "== LEmp inc_word_0e ($DB6B) score 1.00 relocated-identical; 6 callers" }
+"0xC382" = { name = "calc_record_ptrs", comment = "== LEmp calc_record_ptrs ($DB72) score 0.98 relocated-identical; 2 callers" }
+"0xC41D" = { name = "invoke_syscall_a_dc6e", comment = "~ LEmp invoke_syscall_a_dc6e ($DC0D) score 0.82 diverged (reloc); same function -- verify; 3 callers" }
+"0xC42F" = { name = "store_advance_ptrs", comment = "== LEmp store_advance_ptrs ($DC1F) score 1.00 relocated-identical; 2 callers" }
+"0xC444" = { name = "calc_record_ptrs2", comment = "== LEmp calc_record_ptrs2 ($DC34) score 1.00 relocated-identical; 3 callers" }
+"0xC47B" = { name = "wait_input", comment = "poll read_controller(0)/(1) in a loop until a button edge (JUMPT/JUMPF back)" }
+"0xC4A9" = { name = "frame_sync", comment = "advances the RNG every frame: local10=rng_next()+1 -> rng_store_seed($9472), then %2 parity wait. THIS is why idle/menu/step timing changes random outcomes -- the PRNG state churns forward continuously (timing-manipulable RNG)." }
+"0xC4DC" = { name = "loop_init_c4dc", comment = "set local11=0, enter loop @ $C4F1 (loop-init entry)" }
+"0xC4FE" = { name = "incr_deref_field", comment = "32-bit: DEREF ptr, INC, POPSTORE (increment a value in place)" }
+"0xC554" = { name = "format_field", comment = "set up field-format context: work buffer @ fp-179, value arg1 -> formats a display field (tail @ L_C56F)" }
+"0xC70B" = { name = "set_draw_origin", comment = "set draw origin: window_stack_lo=$7286=col(arg1), window_stack_depth=$7288=row(arg2) (136 callers)" }
+"0xC719" = { name = "draw_field", comment = "format value (*arg2) via format_field mode 0, render at cursor (119 callers)" }
+"0xC72A" = { name = "finalize_cursor", comment = "clamp/validate draw origin (if window_stack_lo<0 branch); shared tail of set_tile_cursor/col/row" }
+"0xC770" = { name = "set_tile_cursor", comment = "set_draw_origin(arg1,arg2) + C72A finalize -> position for next draw_string/tile (201 callers, hottest)" }
+"0xC77F" = { name = "set_cursor_col", comment = "window_stack_lo $7286 = arg + finalize_cursor" }
+"0xC78C" = { name = "set_cursor_row", comment = "window_stack_depth $7288 = arg + finalize_cursor" }
+"0xC799" = { name = "draw_field_m1", comment = "format value (*arg2) via format_field mode 1, render at cursor (135 callers) -- flag-1 variant of draw_field" }
+"0xC7AA" = { name = "input_check", comment = "read_controller once, return pressed bool" }
+"0xC7C9" = { name = "frame_wait", comment = "wrapper: frame_sync(0)" }
+"0xC7D4" = { name = "wait_input_timeout", comment = "shared wait tail (JUMP $C7EE); returns bool (input-or-timeout)" }
+"0xC7F6" = { name = "cursor_blink_wait", comment = "if callback $7290: invoke, wait_input_timeout(20), toggle; frame_sync -- cursor-blink input loop" }
+"0xC824" = { name = "menu_pick", comment = "draw a selectable item list (label via draw_string, CHR alt-bank, cursor $737d) and return the picked index (13 callers; A156 grid-select)" }
+"0xC9CD" = { name = "dispatch_indirect", comment = "CALLPTR through a computed fn pointer (LONG $26/$0E selector)" }
+"0xCCF3" = { name = "draw_labeled_value", comment = "draw label string (draw_string arg1) + value field (draw_field_m1 $DF1A, arg2,arg3) + C9CD; arg4=mode (15 callers)" }
+"0xCD12" = { name = "draw_labeled_value_1", comment = "draw_labeled_value(arg1,arg2,arg3, mode=1) preset (9 callers)" }
+"0xCD20" = { name = "draw_labeled_value_2", comment = "draw_labeled_value(1,r13,1,r12) preset" }
+"0xCD2E" = { name = "place_cursor_sprite", comment = "write OAM descriptor $FFFC-$FFFF: CHR $DF14[737d], palette $E0, pos from $7286<<3" }
+"0xCD5F" = { name = "menu_input_loop", comment = "draw cursor (place_cursor_sprite) + invoke $7290 callback + wait; returns frame_sync" }
+"0xCD9F" = { name = "prompt_confirm", comment = "draw prompt string $DF23, wait input (C4A9), on result 1/64 draw $DF2A -> OK/confirm dialog (56 callers)" }
+"0xCDF7" = { name = "draw_info_panel", comment = "set origin C70B(24,7) + draw_field from $6000 + strings $DF2E/$DF3D (SRAM-backed panel)" }
+"0xCE37" = { name = "reset_all_chr", comment = "reset all 64 CHR banks (set_chr_banks(0,64)) + clear VRAM row (queue_vram_row 0,0,0) -- screen/CHR wipe (20 callers)" }
+"0xCE4D" = { name = "helper_ce4d", comment = "shared-tail fragment (JUMP $CE66); role TBD (obscured)" }
+"0xCE6E" = { name = "scale_helper_ce6e", comment = "shared-tail scaler (JUMP $CE85); base of the CE8D/CE9B chain (obscured; A3F4 post-draw step)" }
+"0xCE8D" = { name = "scale_x6", comment = "scale_helper_ce6e(arg*6)" }
+"0xCE9B" = { name = "scale_6b88", comment = "scale_x6(mem_6B88*arg*3) = CE6E(mem_6B88*arg*18); A3F4 calls scale_6b88(1) after draw_string" }
+"0xCEAD" = { name = "rng_next", comment = "PRNG core: reads the 4-byte state at $9472, churns it through the multi-round scrambler ($CF9E/$CF89/$CFA9), returns a raw 16-bit value. MISLABELED "mul_wide" by LEmp (0.97 borrow) -- it is NOT a multiply. Every random event routes through here." }
+"0xCF89" = { name = "add32", comment = "== LEmp add32 ($D779) score 1.00 relocated-identical; 14 callers" }
+"0xCF9E" = { name = "shl32", comment = "== LEmp shl32 ($D78E) score 1.00 relocated-identical; 9 callers" }
+"0xCFA9" = { name = "shl32_b1", comment = "== LEmp shl32_b1 ($D799) score 1.00 relocated-identical; 8 callers" }
+"0xCFB4" = { name = "shl32_b2", comment = "== LEmp shl32_b2 ($D7A4) score 1.00 relocated-identical; 7 callers" }
+"0xCFC0" = { name = "write_struct_9472", comment = "set up a descriptor at $9472 from VM args (called by frame_sync)" }
+"0xCFE1" = { name = "rng_below", comment = "bounded RNG: returns rng_next() mod N where N=VM arg (via udiv16 $E1EB); N==0 returns 0. MISLABELED "load_operand16_14" by LEmp (1.00 borrow). Callers: calc_good_price, pick_random_step, poker_shuffle, roll_evade, accrue_port_investment, ..." }
+"0xD003" = { name = "calc_axis_diff_fold", comment = "absolute difference of two args, folded to 0..4 (coordinate/direction calc)" }
+"0xD026" = { name = "scan_records_6c90_flag", comment = "scan the SRAM record array at $6C90 (stride ~7) for flag bit $40, collect indices" }
+"0xD08C" = { name = "calc_from_record_fields", comment = "combine record fields +1/+2/+3 via shl/shr into a derived value" }
+"0xD1A9" = { name = "inc_word_00_d1a9", comment = "== LEmp inc_word_00 ($DB4F) score 1.00 relocated-identical; 3 callers" }
+"0xD1B0" = { name = "find_port_by_key", comment = "search the 70-port table ($AFD8 = bank58 ports @ $A000, stride 19) for a match; return code 1/2/3" }
+"0xD230" = { name = "collect_ports_by_key", comment = "scan the 70-port table (stride 19), collect matching port indices into a list ($0e)" }
+"0xD29B" = { name = "scan_records_6662", comment = "scan 16 records at $6662 (stride 21) matching two key fields + flag bit $02" }
+"0xD30C" = { name = "record_field_byte", comment = "deref record ptr ($0a), return the BYTE at +3 in $08 (guards paged-window ptr >=$A000)" }
+"0xD31E" = { name = "read_bank_record_byte", comment = "copy_from_bank58 + read a field byte (record iterator step)" }
+"0xD326" = { name = "record_field_word", comment = "deref record ptr ($0a), return the WORD at +3/+4 in $08/$09 (paged-ptr guarded)" }
+"0xD33D" = { name = "copy_from_bank58", comment = "bank-switch read: get cur bank, map bank $FA&63=58 (records) @ window2, copy ($0a)->$0800 buffer, restore" }
+"0xD384" = { name = "invoke_syscall_a", comment = "invoke a syscall with id in A via jmp($FFDE) (used for set/get_prg_bank $52/$54)" }
+"0xD394" = { name = "read_record_70a9", comment = "index the record array at $70A9 (stride $31=49) by $0a/$0e, deref a field" }
+"0xD399" = { name = "read_record_70a9_alt", comment = "alt entry of read_record_70a9 (skips the arg-load prologue)" }
+"0xD3D1" = { name = "shr_a_y_guarded", comment = "A >>= Y (logical shift-right Y times; Y=0 guard) = A / 2^Y" }
+"0xD3D5" = { name = "shr_a_y", comment = "A >>= Y (logical shift-right Y times) = A / 2^Y" }
+"0xD3DA" = { name = "shl_a_y", comment = "A <<= Y (shift-left Y times) = A * 2^Y" }
+"0xD3DF" = { name = "reduce_word_c0", comment = "reduce the 16-bit value at $00,x toward $C0 (repeated -$100; coordinate wrap/clamp)" }
+"0xD405" = { name = "calc_pos_relative", comment = "position/offset calc against the stored position $7265/$7266" }
+"0xD4A5" = { name = "stub_d4a5", comment = "single LOADL_quick; shared-tail / data entry (role TBD)" }
+"0xD4FA" = { name = "set_var_7268", comment = "store arg -> $7268 byte" }
+"0xD532" = { name = "record_base_6b1c", comment = "idx<5 ? $6B1C + idx*21 : (fallthru) -- SRAM record base, stride 21 (market/port ctx; 119 callers)" }
+"0xD550" = { name = "record_base_d604", comment = "idx -> $D604 + idx*17 ROM table base (guard idx==31) (17 callers)" }
+"0xD56B" = { name = "draw_string_banked", comment = "page resource bank 58 ($FA & $3F) into PRG slot 2, draw_string(arg1), restore prior bank (154 callers)" }
+"0xD59E" = { name = "record_iter_6c90", comment = "setup iterator over $6C90 records (+35 field offset)" }
+"0xD5D3" = { name = "ret_50_or", comment = "if flag: return 50 else fallthrough" }
+"0xD615" = { name = "record_scan_6c90_6aa4", comment = "iterate $6C90(+35) against $6AA4 records" }
+"0xD652" = { name = "record_iter_d824", comment = "setup iterator: $D824 (+64 stride) + $666D" }
+"0xD6A6" = { name = "record_iter_6a9a", comment = "setup iterator over the $6A9A table" }
+"0xD6D6" = { name = "search_6a9a", comment = "record_iter_6a9a(arg) + found-check; returns 0 if not found" }
+"0xD718" = { name = "search_6a9a_b", comment = "variant of search_6a9a (different match test)" }
+"0xD75A" = { name = "record_scan_6c90_6aa4_b", comment = "iterate $6C90(+35) + $6AA4 (variant of record_scan_6c90_6aa4)" }
+"0xD791" = { name = "search_6a9a_ptr", comment = "search_6a9a on ptr LEAL $FFF6; return $FF on miss (called by draw_box_from_native)" }
+"0xD7D8" = { name = "record_scan_67ba", comment = "large scan over $67BA records; compare field vs +100 bound (127 ops)" }
+"0xD87B" = { name = "record_proc_6c96_1", comment = "$6C96[idx] bitfield (AND) -> record_base_6b1c + record_field_byte; process/display" }
+"0xD8BE" = { name = "record_proc_6c96_2", comment = "record_proc_6c96 variant (78 ops)" }
+"0xD92F" = { name = "record_proc_6c96_3", comment = "record_proc_6c96 variant (80 ops)" }
+"0xD9A8" = { name = "record_proc_6c96_4", comment = "record_proc_6c96 variant (46 ops)" }
+"0xD9EA" = { name = "record_base_6aa4", comment = "idx -> $6AA4 + idx*24 SRAM record; extracts a field value (9 callers; market draw_field value)" }
+"0xDA2A" = { name = "record_base_6aa4_b", comment = "idx*24 + $6AA4 record base (companion to record_base_6aa4)" }
+"0xDA6A" = { name = "record_read_6c90", comment = "read byte/word fields from $6C90[idx] record" }
+"0xDA89" = { name = "mul_field_000b", comment = "multiply the $000B far-var by arg" }
+"0xDAD1" = { name = "compute_dad1", comment = "$1000-based compute via load_operand16_14 (64 ops; role TBD)" }
+"0xDB4B" = { name = "record_proc_6004", comment = "idx*51 + $6004 record + table $C0D4 -> record_field_byte (display)" }
+"0xDBB2" = { name = "char_class_dbb2", comment = "byte checks vs 32(space)/other -- char-class / terminator scan" }
+"0xDC0C" = { name = "to_upper", comment = "if $000B in a..z ($61-$7A): $000B -= 32" }
+"0xDC31" = { name = "to_lower", comment = "if $000B in A..Z ($41-$5A): $000B += 32" }
+"0xDC56" = { name = "cmp_lt_neg1", comment = "if arg < arg2: return -1 (signed compare helper)" }
+"0xDC72" = { name = "native_table_dc72", comment = "11 sequential native CALLs, no stack ops -> likely a native-address DATA table misparsed as bytecode; VERIFY" }
+"0xDC96" = { name = "draw_icon_df4e", comment = "2x2 tile from $DF4E[idx*24+], palette $E0" }
+"0xDCC8" = { name = "draw_icon_dfae", comment = "2x2 tile from $DFAE/$DFAC tables, palette $E0" }
+"0xDCEC" = { name = "copy_from_bank", comment = "== LEmp copy_from_bank ($F3A3) score 1.00 relocated-identical; 0 callers" }
+"0xDD5A" = { name = "invoke_syscall_a_dc6e_dd5a", comment = "~ LEmp invoke_syscall_a_dc6e ($DC0D) score 0.82 diverged (reloc); same function -- verify; 3 callers" }
+"0xDD6C" = { name = "min_s16", comment = "returns the SMALLER of two s16 (was mis-borrowed as max_s16 from L'Emp; traced MIN)" }
+"0xDD8C" = { name = "max_s16", comment = "returns the LARGER of two s16 (was labeled min_s16; traced MAX)" }
+"0xDDB5" = { name = "memset_ptr", comment = "fill $0a bytes at dest ($0e/$0f) with byte $0c" }
+"0xDDE0" = { name = "memcpy_ptr", comment = "== LEmp memcpy_ptr ($DD1F) score 1.00 relocated-identical; 0 callers" }
+"0xDE0C" = { name = "jmp_indirect_ptr0c", comment = "== LEmp jmp_indirect_ptr0c ($DD4B) score 1.00 relocated-identical; 1 callers" }
+"0xDE0F" = { name = "bc_syscall3_bridge", comment = "== LEmp bc_syscall3_bridge ($DD4E) score 1.00 relocated-identical; 2 callers" }
+"0xDE21" = { name = "bc_syscall4_bridge", comment = "== LEmp bc_syscall4_bridge ($DD60) score 1.00 relocated-identical; 1 callers" }
+"0xDE3A" = { name = "call_in_bank_dcd1", comment = "== LEmp call_in_bank_dcd1 ($DD79) score 1.00 relocated-identical; 0 callers" }
+"0xDE8B" = { name = "abs_s16", comment = "16-bit absolute value: negate $08/$09 (two's-complement) if sign bit set" }
+"0xDEA6" = { name = "str_copy", comment = "copy NUL-terminated string from source ($0a) to dest ($08); alt entry $DEBF scans dest to its NUL first = append/concat" }
+"0xDEBF" = { name = "str_end_ptr", comment = "advance pointer $0c/$0d to the null terminator" }
+"0xDEF3" = { name = "strlen", comment = "count bytes to null terminator -> length in $08/$09" }
+
+# --- PAGED native-call ($E299) subs: 113 UW-specific native routines the bytecode tiler can't see ---
+# (tools/native_banks.py). Each = JSR $E299 + 3 inline bytes + native body @ stub+6. bank62's is merged above.
+[prg.bank1]  # PAGED native-call ($E299) subs; window base $A000
+"0xB672" = { name = "nat_1_1672", comment = "native_call sub (bank1:$1672); best LEmp 0.12 -- UW-specific, READ" }
+
+[prg.bank3]  # PAGED native-call ($E299) subs; window base $8000
+"0x8003" = { name = "nat_3_0003", comment = "native_call sub (bank3:$0003); best LEmp 0.22 -- UW-specific, READ" }
+"0x8053" = { name = "nat_3_0053", comment = "native_call sub (bank3:$0053); best LEmp 0.24 -- UW-specific, READ" }
+"0x8087" = { name = "nat_3_0087", comment = "native_call sub (bank3:$0087); best LEmp 0.46 -- UW-specific, READ" }
+"0x8170" = { name = "nat_3_0170", comment = "native_call sub (bank3:$0170); best LEmp 0.23 -- UW-specific, READ" }
+"0x81B0" = { name = "nat_3_01b0", comment = "native_call sub (bank3:$01B0); best LEmp 0.28 -- UW-specific, READ" }
+"0x81DA" = { name = "nat_3_01da", comment = "native_call sub (bank3:$01DA); best LEmp 0.19 -- UW-specific, READ" }
+"0x828C" = { name = "nat_3_028c", comment = "native_call sub (bank3:$028C); best LEmp 0.19 -- UW-specific, READ" }
+"0x8318" = { name = "nat_3_0318", comment = "native_call sub (bank3:$0318); best LEmp 0.10 -- UW-specific, READ" }
+"0x84E3" = { name = "nat_3_04e3", comment = "native_call sub (bank3:$04E3); best LEmp 0.38 -- UW-specific, READ" }
+"0x8660" = { name = "nat_3_0660", comment = "native_call sub (bank3:$0660); best LEmp 0.09 -- UW-specific, READ" }
+"0x8C8F" = { name = "nat_3_0c8f", comment = "native_call sub (bank3:$0C8F); best LEmp 0.17 -- UW-specific, READ" }
+"0x8D09" = { name = "nat_3_0d09", comment = "native_call sub (bank3:$0D09); best LEmp 0.21 -- UW-specific, READ" }
+"0x8DC6" = { name = "nat_3_0dc6", comment = "native_call sub (bank3:$0DC6); best LEmp 0.16 -- UW-specific, READ" }
+"0x8F38" = { name = "nat_3_0f38", comment = "native_call sub (bank3:$0F38); best LEmp 0.09 -- UW-specific, READ" }
+"0x9121" = { name = "nat_3_1121", comment = "native_call sub (bank3:$1121); best LEmp 0.17 -- UW-specific, READ" }
+"0x91E2" = { name = "nat_3_11e2", comment = "native_call sub (bank3:$11E2); best LEmp 0.12 -- UW-specific, READ" }
+"0x93A0" = { name = "nat_3_13a0", comment = "native_call sub (bank3:$13A0); best LEmp 0.17 -- UW-specific, READ" }
+"0x9449" = { name = "nat_3_1449", comment = "native_call sub (bank3:$1449); best LEmp 0.16 -- UW-specific, READ" }
+"0x95C5" = { name = "nat_3_15c5", comment = "native_call sub (bank3:$15C5); best LEmp 0.07 -- UW-specific, READ" }
+"0x990D" = { name = "nat_3_190d", comment = "native_call sub (bank3:$190D); best LEmp 0.10 -- UW-specific, READ" }
+"0x992B" = { name = "nat_3_192b", comment = "native_call sub (bank3:$192B); best LEmp 0.10 -- UW-specific, READ" }
+"0x9A22" = { name = "nat_3_1a22", comment = "native_call sub (bank3:$1A22); best LEmp 0.13 -- UW-specific, READ" }
+
+[prg.bank4]  # PAGED native-call ($E299) subs; window base $8000
+"0x8003" = { name = "nat_4_0003", comment = "native_call sub (bank4:$0003); best LEmp 0.17 -- UW-specific, READ" }
+"0x8074" = { name = "nat_4_0074", comment = "native_call sub (bank4:$0074); best LEmp 0.22 -- UW-specific, READ" }
+"0x810B" = { name = "nat_4_010b", comment = "native_call sub (bank4:$010B); best LEmp 0.22 -- UW-specific, READ" }
+"0x819D" = { name = "nat_4_019d", comment = "native_call sub (bank4:$019D); best LEmp 0.23 -- UW-specific, READ" }
+"0x81F1" = { name = "nat_4_01f1", comment = "native_call sub (bank4:$01F1); best LEmp 0.19 -- UW-specific, READ" }
+"0x82A9" = { name = "nat_4_02a9", comment = "native_call sub (bank4:$02A9); best LEmp 0.15 -- UW-specific, READ" }
+"0x83E8" = { name = "nat_4_03e8", comment = "native_call sub (bank4:$03E8); best LEmp 0.09 -- UW-specific, READ" }
+"0x8702" = { name = "nat_4_0702", comment = "native_call sub (bank4:$0702); best LEmp 0.21 -- UW-specific, READ" }
+"0x874D" = { name = "nat_4_074d", comment = "native_call sub (bank4:$074D); best LEmp 0.21 -- UW-specific, READ" }
+"0x8797" = { name = "nat_4_0797", comment = "native_call sub (bank4:$0797); best LEmp 0.21 -- UW-specific, READ" }
+"0x87E5" = { name = "nat_4_07e5", comment = "native_call sub (bank4:$07E5); best LEmp 0.22 -- UW-specific, READ" }
+"0x8814" = { name = "nat_4_0814", comment = "native_call sub (bank4:$0814); best LEmp 0.08 -- UW-specific, READ" }
+"0x8B81" = { name = "nat_4_0b81", comment = "native_call sub (bank4:$0B81); best LEmp 0.15 -- UW-specific, READ" }
+"0x8C7C" = { name = "nat_4_0c7c", comment = "native_call sub (bank4:$0C7C); best LEmp 0.15 -- UW-specific, READ" }
+"0x8E0C" = { name = "nat_4_0e0c", comment = "native_call sub (bank4:$0E0C); best LEmp 0.11 -- UW-specific, READ" }
+"0x8FA4" = { name = "nat_4_0fa4", comment = "native_call sub (bank4:$0FA4); best LEmp 0.17 -- UW-specific, READ" }
+"0x904F" = { name = "nat_4_104f", comment = "native_call sub (bank4:$104F); best LEmp 0.11 -- UW-specific, READ" }
+"0x9283" = { name = "nat_4_1283", comment = "native_call sub (bank4:$1283); best LEmp 0.08 -- UW-specific, READ" }
+"0x9550" = { name = "nat_4_1550", comment = "native_call sub (bank4:$1550); best LEmp 0.24 -- UW-specific, READ" }
+"0x959A" = { name = "nat_4_159a", comment = "native_call sub (bank4:$159A); best LEmp 0.20 -- UW-specific, READ" }
+"0x9602" = { name = "nat_4_1602", comment = "native_call sub (bank4:$1602); best LEmp 0.24 -- UW-specific, READ" }
+"0x964C" = { name = "nat_4_164c", comment = "native_call sub (bank4:$164C); best LEmp 0.13 -- UW-specific, READ" }
+"0x98E7" = { name = "nat_4_18e7", comment = "native_call sub (bank4:$18E7); best LEmp 0.20 -- UW-specific, READ" }
+
+[prg.bank5]  # PAGED native-call ($E299) subs; window base $8000
+"0x8C75" = { name = "nat_5_0c75", comment = "native_call sub (bank5:$0C75); best LEmp 0.14 -- UW-specific, READ" }
+"0x8DBA" = { name = "nat_5_0dba", comment = "native_call sub (bank5:$0DBA); best LEmp 0.20 -- UW-specific, READ" }
+"0x8E63" = { name = "nat_5_0e63", comment = "native_call sub (bank5:$0E63); best LEmp 0.18 -- UW-specific, READ" }
+"0x8F1D" = { name = "nat_5_0f1d", comment = "native_call sub (bank5:$0F1D); best LEmp 0.14 -- UW-specific, READ" }
+"0x9186" = { name = "nat_5_1186", comment = "native_call sub (bank5:$1186); best LEmp 0.10 -- UW-specific, READ" }
+"0x9890" = { name = "nat_5_1890", comment = "native_call sub (bank5:$1890); best LEmp 0.12 -- UW-specific, READ" }
+"0x998E" = { name = "nat_5_198e", comment = "native_call sub (bank5:$198E); best LEmp 0.19 -- UW-specific, READ" }
+
+[prg.bank6]  # PAGED native-call ($E299) subs; window base $8000
+"0x8003" = { name = "nat_6_0003", comment = "native_call sub (bank6:$0003); best LEmp 0.15 -- UW-specific, READ" }
+"0x8046" = { name = "nat_6_0046", comment = "native_call sub (bank6:$0046); best LEmp 0.19 -- UW-specific, READ" }
+"0x8203" = { name = "nat_6_0203", comment = "native_call sub (bank6:$0203); best LEmp 0.13 -- UW-specific, READ" }
+"0x8300" = { name = "nat_6_0300", comment = "native_call sub (bank6:$0300); best LEmp 0.23 -- UW-specific, READ" }
+"0x8AA5" = { name = "nat_6_0aa5", comment = "native_call sub (bank6:$0AA5); best LEmp 0.09 -- UW-specific, READ" }
+"0x920E" = { name = "nat_6_120e", comment = "native_call sub (bank6:$120E); best LEmp 0.09 -- UW-specific, READ" }
+"0x9561" = { name = "nat_6_1561", comment = "native_call sub (bank6:$1561); best LEmp 0.09 -- UW-specific, READ" }
+"0x9778" = { name = "nat_6_1778", comment = "native_call sub (bank6:$1778); best LEmp 0.12 -- UW-specific, READ" }
+
+[prg.bank7]  # PAGED native-call ($E299) subs; window base $A000
+"0xA003" = { name = "nat_7_0003", comment = "native_call sub (bank7:$0003); best LEmp 0.12 -- UW-specific, READ" }
+"0xA19C" = { name = "nat_7_019c", comment = "native_call sub (bank7:$019C); best LEmp 0.12 -- UW-specific, READ" }
+"0xA363" = { name = "nat_7_0363", comment = "native_call sub (bank7:$0363); best LEmp 0.12 -- UW-specific, READ" }
+"0xA527" = { name = "nat_7_0527", comment = "native_call sub (bank7:$0527); best LEmp 0.09 -- UW-specific, READ" }
+"0xAAAA" = { name = "nat_7_0aaa", comment = "native_call sub (bank7:$0AAA); best LEmp 0.12 -- UW-specific, READ" }
+"0xACE2" = { name = "nat_7_0ce2", comment = "native_call sub (bank7:$0CE2); best LEmp 0.11 -- UW-specific, READ" }
+"0xAED1" = { name = "nat_7_0ed1", comment = "native_call sub (bank7:$0ED1); best LEmp 0.09 -- UW-specific, READ" }
+
+[prg.bank8]  # PAGED native-call ($E299) subs; window base $A000
+"0xA003" = { name = "nat_8_0003", comment = "native_call sub (bank8:$0003); best LEmp 0.12 -- UW-specific, READ" }
+"0xA103" = { name = "nat_8_0103", comment = "native_call sub (bank8:$0103); best LEmp 0.15 -- UW-specific, READ" }
+"0xA1B8" = { name = "nat_8_01b8", comment = "native_call sub (bank8:$01B8); best LEmp 0.20 -- UW-specific, READ" }
+"0xA368" = { name = "nat_8_0368", comment = "native_call sub (bank8:$0368); best LEmp 0.13 -- UW-specific, READ" }
+"0xA479" = { name = "nat_8_0479", comment = "native_call sub (bank8:$0479); best LEmp 0.09 -- UW-specific, READ" }
+"0xA5F2" = { name = "nat_8_05f2", comment = "native_call sub (bank8:$05F2); best LEmp 0.09 -- UW-specific, READ" }
+"0xA7E7" = { name = "nat_8_07e7", comment = "native_call sub (bank8:$07E7); best LEmp 0.10 -- UW-specific, READ" }
+"0xAB82" = { name = "nat_8_0b82", comment = "native_call sub (bank8:$0B82); best LEmp 0.10 -- UW-specific, READ" }
+"0xAF79" = { name = "nat_8_0f79", comment = "native_call sub (bank8:$0F79); best LEmp 0.11 -- UW-specific, READ" }
+"0xB10F" = { name = "nat_8_110f", comment = "native_call sub (bank8:$110F); best LEmp 0.19 -- UW-specific, READ" }
+"0xB1B5" = { name = "nat_8_11b5", comment = "native_call sub (bank8:$11B5); best LEmp 0.17 -- UW-specific, READ" }
+"0xB2C7" = { name = "nat_8_12c7", comment = "native_call sub (bank8:$12C7); best LEmp 0.43 -- UW-specific, READ" }
+"0xB332" = { name = "nat_8_1332", comment = "native_call sub (bank8:$1332); best LEmp 0.13 -- UW-specific, READ" }
+"0xB560" = { name = "nat_8_1560", comment = "native_call sub (bank8:$1560); best LEmp 0.13 -- UW-specific, READ" }
+"0xB652" = { name = "nat_8_1652", comment = "native_call sub (bank8:$1652); best LEmp 0.26 -- UW-specific, READ" }
+
+[prg.bank9]  # PAGED native-call ($E299) subs; window base $8000
+"0x8062" = { name = "nat_9_0062", comment = "native_call sub (bank9:$0062); best LEmp 0.15 -- UW-specific, READ" }
+"0x81E7" = { name = "nat_9_01e7", comment = "native_call sub (bank9:$01E7); best LEmp 0.09 -- UW-specific, READ" }
+"0x8A46" = { name = "nat_9_0a46", comment = "native_call sub (bank9:$0A46); best LEmp 0.10 -- UW-specific, READ" }
+"0x8F0B" = { name = "nat_9_0f0b", comment = "native_call sub (bank9:$0F0B); best LEmp 0.16 -- UW-specific, READ" }
+"0x9396" = { name = "nat_9_1396", comment = "native_call sub (bank9:$1396); best LEmp 0.11 -- UW-specific, READ" }
+"0x9640" = { name = "nat_9_1640", comment = "native_call sub (bank9:$1640); best LEmp 0.15 -- UW-specific, READ" }
+"0x9D3E" = { name = "nat_9_1d3e", comment = "native_call sub (bank9:$1D3E); best LEmp 0.15 -- UW-specific, READ" }
+
+[prg.bank10]  # PAGED native-call ($E299) subs; window base $A000
+"0xA003" = { name = "nat_10_0003", comment = "native_call sub (bank10:$0003); best LEmp 0.12 -- UW-specific, READ" }
+"0xA234" = { name = "nat_10_0234", comment = "native_call sub (bank10:$0234); best LEmp 0.13 -- UW-specific, READ" }
+"0xA380" = { name = "nat_10_0380", comment = "native_call sub (bank10:$0380); best LEmp 0.10 -- UW-specific, READ" }
+"0xA4EE" = { name = "nat_10_04ee", comment = "native_call sub (bank10:$04EE); best LEmp 0.13 -- UW-specific, READ" }
+"0xA60D" = { name = "nat_10_060d", comment = "native_call sub (bank10:$060D); best LEmp 0.15 -- UW-specific, READ" }
+"0xA70E" = { name = "nat_10_070e", comment = "native_call sub (bank10:$070E); best LEmp 0.11 -- UW-specific, READ" }
+"0xA918" = { name = "nat_10_0918", comment = "native_call sub (bank10:$0918); best LEmp 0.14 -- UW-specific, READ" }
+"0xA9ED" = { name = "nat_10_09ed", comment = "native_call sub (bank10:$09ED); best LEmp 0.17 -- UW-specific, READ" }
+"0xAAC0" = { name = "nat_10_0ac0", comment = "native_call sub (bank10:$0AC0); best LEmp 0.16 -- UW-specific, READ" }
+"0xAC0B" = { name = "nat_10_0c0b", comment = "native_call sub (bank10:$0C0B); best LEmp 0.07 -- UW-specific, READ" }
+"0xAECB" = { name = "nat_10_0ecb", comment = "native_call sub (bank10:$0ECB); best LEmp 0.12 -- UW-specific, READ" }
+"0xB104" = { name = "nat_10_1104", comment = "native_call sub (bank10:$1104); best LEmp 0.17 -- UW-specific, READ" }
+
+[prg.bank13]  # PAGED native-call ($E299) subs; window base $A000
+"0xA003" = { name = "nat_13_0003", comment = "native_call sub (bank13:$0003); best LEmp 0.13 -- UW-specific, READ" }
+"0xA154" = { name = "nat_13_0154", comment = "native_call sub (bank13:$0154); best LEmp 0.11 -- UW-specific, READ" }
+"0xA3AE" = { name = "nat_13_03ae", comment = "native_call sub (bank13:$03AE); best LEmp 0.08 -- UW-specific, READ" }
+"0xA791" = { name = "nat_13_0791", comment = "native_call sub (bank13:$0791); best LEmp 0.11 -- UW-specific, READ" }
+"0xAB84" = { name = "nat_13_0b84", comment = "native_call sub (bank13:$0B84); best LEmp 0.12 -- UW-specific, READ" }
+"0xAD20" = { name = "nat_13_0d20", comment = "native_call sub (bank13:$0D20); best LEmp 0.12 -- UW-specific, READ" }
+"0xB373" = { name = "nat_13_1373", comment = "native_call sub (bank13:$1373); best LEmp 0.12 -- UW-specific, READ" }
+
+[prg.bank17]  # PAGED native-call ($E299) subs; window base $A000
+"0xA74E" = { name = "nat_17_074e", comment = "native_call sub (bank17:$074E); best LEmp 0.08 -- UW-specific, READ" }
+"0xA8E9" = { name = "nat_17_08e9", comment = "native_call sub (bank17:$08E9); best LEmp 0.08 -- UW-specific, READ" }
+"0xAB0A" = { name = "nat_17_0b0a", comment = "native_call sub (bank17:$0B0A); best LEmp 0.07 -- UW-specific, READ" }
+
+[prg.bank1]  # $A000 UNIVERSAL co-resident shared library (ch.8/9): windowing + UI primitives.
+"0xA003" = { name = "win_open", comment = "window open/setup: push window-stack $7286/$7288, draw frame (127 callers)" }
+"0xA07D" = { name = "win_close", comment = "window close: dec depth $7288, redraw via win_open (55 callers)" }
+"0xA08D" = { name = "draw_banked_menu", comment = "draw a grid of draw_string_banked items + menu_pick; return idx-1/255" }
+"0xA0EB" = { name = "draw_text_menu", comment = "draw a grid of menu strings (set_tile_cursor + draw_string per item) then menu_pick; return idx-1/255 (string analog of draw_tile_grid) (9 callers)" }
+"0xA156" = { name = "draw_tile_grid", comment = "draw arg6 tiles in an arg7-wide grid from table arg5 (C770 set-cursor + C003 draw-tile), then menu-select C824 (25 callers)" }
+"0xA1B1" = { name = "draw_text_menu_2", comment = "draw_string grid + menu_pick (mode 2) variant of draw_text_menu" }
+"0xA216" = { name = "menu_select", comment = "menu_pick($BA90,...) wrapper returning selection idx-1 (255=cancel) (9 callers)" }
+"0xA242" = { name = "draw_party_sprite", comment = "build+set_metasprite ($0501) for the party avatar from entity $6662 (facing +8, pos +2/+3)" }
+"0xA292" = { name = "animate_party_sprite", comment = "busy_wait + draw_party_sprite, loop redrawing when the facing field $6662+8 changes" }
+"0xA340" = { name = "draw_year", comment = "draw_field year = mem_6B8B + 1500 at (12,3); gated on mem_7068 (10 callers)" }
+"0xA36D" = { name = "draw_month", comment = "draw_field month name from table $BA96[mem_6B8A] at (4,3); gated on mem_7068 (10 callers)" }
+"0xA39D" = { name = "draw_day", comment = "draw_field day = mem_6B89 + 1 at (8,3), string $BAE1/$BAE6 by mem_7068 (10 callers)" }
+"0xA3D0" = { name = "draw_icon_2x2", comment = "blit a 2x2 tile (banked_blit_m3) from index tables $BAE9/$BAEB[arg3], sprite palette $E0 (14 callers)" }
+"0xA3F4" = { name = "draw_text", comment = "THE common text wrapper: draw_string(arg1,1) + scale_6b88(1) standard post-step (152 callers -- hottest bank1 sub)" }
+"0xA405" = { name = "blit_alloc_tiles", comment = "blit tile block (banked_ppu_blit id10) at x,y,w,h; advance VRAM cursor $7269 by w*h; arg5=single/double (32 callers)" }
+"0xA49B" = { name = "blit_free_tiles", comment = "reverse of blit_alloc_tiles: rewind cursor $7269, blit via banked_blit_m3 id09 (restore bg) (30 callers)" }
+"0xA502" = { name = "blit_block_save", comment = "blit_alloc_tiles + push this rect (x/y/w/h) onto save-stack idx $726B, arrays $726D/73/79/7F (15 callers)" }
+"0xA544" = { name = "blit_block_unwind", comment = "pop one saved rect off $726B stack, restore background via blit_free_tiles (17 callers)" }
+"0xA589" = { name = "reset_chr_alloc", comment = "flush CHR banks (set_chr_banks id12) then reset CHR alloc tracker $738E/8B/8A/8C (25 callers)" }
+"0xA5BB" = { name = "resolve_field_ptr", comment = "resolve a record field ptr by mode arg4 / index arg3 ($6542 stride-7 table -> fp-134/138); return 64 on bad input (42 callers)" }
+"0xA675" = { name = "upload_sprite_block", comment = "copy 32 bytes from bank15 (copy_from_bank_dc80) -> OAM sprite block (set_sprite_block id06) (16 callers)" }
+"0xA692" = { name = "draw_menu_frame", comment = "native menu-box draw: unpack_draw_args + build metasprite params ($56-$5C, $12=($0c<<3)+$40) (8 callers)" }
+"0xA73C" = { name = "native_draw_box", comment = "bank1 NATIVE tile-box draw (12-arg: x,y,w,h,attr...); called by the box primitives" }
+"0xA7B7" = { name = "set_sprite_rect", comment = "load metasprite rect params $52/$54/$56/$58/$5A/$5C from $10/$11/$0a/$0b" }
+"0xA813" = { name = "draw_sprite_a813", comment = "sprite param setup ($52/$54/$58/$5A) + do_ppu_transfer" }
+"0xA83B" = { name = "do_ppu_transfer", comment = "native syscall-8 wrapper (id=8 queue_ppu_transfer): sets $50=8, jmp ($ffde)" }
+"0xA83D" = { name = "native_syscall", comment = "generic native syscall gate: id in A -> $50, push return, jmp ($ffde)" }
+"0xA84D" = { name = "unpack_draw_args", comment = "read VM args ($02),y -> pointer $08/$09/$0a + zero the $52+ param block" }
+"0xA8B2" = { name = "fill_tile_buffer", comment = "write $0a cells into the $72B6 map-tile buffer via add_a_to_ptr (val $0e, then $0c)" }
+"0xA8E4" = { name = "connect_map_tile", comment = "map-buffer tile connect: 14x14 bounds, follow $ff-terminated link chain via ($16),y -> ($14)" }
+"0xA918" = { name = "connect_map_tile_b", comment = "variant of connect_map_tile (different match/link rule)" }
+"0xA961" = { name = "add_a_to_ptr", comment = "add A to the 16-bit zero-page pointer at $00,x (carry into $01,x)" }
+"0xA96B" = { name = "draw_map_frame", comment = "blit a map sprite from frame table $BC96 (ptr $1a/$1b) via native_syscall; uses $66" }
+"0xA9D2" = { name = "cmp_coords", comment = "16-bit compare of two map coords ($08:$10, $09:$11) -> branch" }
+"0xAA0B" = { name = "map_tile_lookup", comment = "set up tile-attr table ptr $BDB6 ($40/$41) + frame ptr from $1a/$1b, read tile via ($08),y" }
+"0xAA8E" = { name = "scroll_map_row", comment = "shift map-buffer rows: copy ($12)->($16), ($0e)->($18), advance ptrs (inc_ptr16)" }
+"0xAAF9" = { name = "fill_screen_buffer", comment = "fill screen_buffer $7062 (28 rows) with tile $3c via add_a_to_ptr" }
+"0xAB18" = { name = "inc_ptr16", comment = "increment the 16-bit zero-page pointer at $00,x (bank1 copy of inc_ptr_zpx)" }
+"0xAB1F" = { name = "do_set_prg_bank", comment = "native syscall-3 wrapper (set_prg_bank) with params $52/$54; lda #3 -> native_syscall" }
+"0xAB2C" = { name = "blit_screen_buffer_m3", comment = "banked_blit_m3 variant of blit_screen_buffer ($7062/$73AA full 30x28)" }
+"0xAB54" = { name = "write_screen_2x2", comment = "copy a 2x2 map tile (bank2 $AF92-$AF98) into screen_buffer $7062 at grid (arg1,arg2)" }
+"0xABB6" = { name = "calc_record_fields_abb6", comment = "calc_from_record_fields over record $70A9 fields (+2,+3,+18...) -> local accumulator" }
+"0xAC46" = { name = "calc_position_seasonal", comment = "calc_from_record_fields ($70A5/$70A7) + calc_record_fields_abb6($70A9), branch on game_month season (2..8)" }
+"0xACB7" = { name = "draw_map_object_2x2", comment = "write_screen_2x2 + blit a 2x2 sprite ($AF92/$AF96, palette $E0) at the map cell" }
+"0xACDD" = { name = "draw_map_sprite_anim", comment = "animated 2x2 map sprite: read_record_70a9 -> $BDB6 index -> sprite_anim_frame*72 frame tables $BC96/$BC98" }
+"0xAD41" = { name = "place_object_sprite", comment = "build+place a mode-gated metasprite (mem_6671 flags) from CHR table $BB02[737d<<4] via set_chr_bank_alt (15 callers)" }
+"0xAE0B" = { name = "draw_entity_sprite", comment = "draw entity arg3 sprite from $6662[arg3<<4] (facing %8); arg3==0 -> place_object_sprite else 2x2 blit from $BB32/$BB34" }
+"0xAE54" = { name = "step_entity", comment = "advance an entity one step via nat_1_1672 + dir-delta tables $7085/$7087; store facing to $666A" }
+"0xAEA5" = { name = "pick_random_step", comment = "pick a random valid move (load_operand16_14 RNG *13) until calc_pos_relative accepts it -- wander AI" }
+"0xAEEA" = { name = "move_entity_ai", comment = "update entity arg1: load pos $6662, step toward target (step_entity) or wander (pick_random_step); reset move timer" }
+"0xAF60" = { name = "load_map_sprite_data", comment = "copy_from_bank_dc80 map sprite/tile data -> buffers $72A0 (21b) + $72B6 (196b)" }
+"0xAF7F" = { name = "select_party_pose", comment = "derive a pose/state (0-7) from party record $6662+3 (used by redraw_screen_if_changed)" }
+"0xAFCD" = { name = "lookup_region_music", comment = "return $BB52[arg1] -- map region -> music/zone id (drives draw_map_view audio)" }
+"0xAFD9" = { name = "draw_map_view", comment = "render the overworld map at (arg1,arg2): load_map_sprite_data + tile loop; on region change ($BB55[y/6] vs mem_737C) trigger audio (83 ops)" }
+"0xB192" = { name = "upload_cursor_sprites", comment = "upload two 16-sprite blocks from $BBDC[mem_7262] + $F376 (mem_7262 = anim frame) (8 callers)" }
+"0xB1D9" = { name = "draw_message_frame", comment = "native_draw_box(7, row, 18, 8, 2, 0) -- the message/dialog box frame" }
+"0xB1F8" = { name = "draw_message_line", comment = "set_tile_cursor + draw_string $BC1C at line arg1 inside the message box" }
+"0xB223" = { name = "show_prompt_bc23", comment = "draw_message_frame + draw_string $BC23 prompt (4 callers)" }
+"0xB24B" = { name = "show_message", comment = "draw_message_frame + draw_message_line(1) (36 callers)" }
+"0xB259" = { name = "show_message_line2", comment = "draw_message_frame + draw_message_line(2)" }
+"0xB267" = { name = "show_prompt_bc27", comment = "mem_7380=2; blit value (banked_blit_m3) + resolve_field_ptr + draw_message_frame + draw_string $BC27 (6 callers)" }
+"0xB2B1" = { name = "show_prompt_bc2b", comment = "resolve_field_ptr + draw_message_frame + draw_string $BC2B (5 callers)" }
+"0xB2E8" = { name = "show_prompt_record", comment = "show_prompt_bc27(search_6a9a_ptr(), 0) -- prompt seeded from a $6A9A record (30 callers)" }
+"0xB2F7" = { name = "draw_object_count", comment = "blit a 2x2 sprite $BC2F[arg3] + a 1x1 digit $BC4F[arg4%10], palette $E0" }
+"0xB345" = { name = "draw_ship_status", comment = "blit 5x8 ship sprite ($AED6/$AEFE) + draw_object_count from mem_7080/7081/7084" }
+"0xB398" = { name = "sum_fleet_cargo", comment = "sum +16/+18 word fields over the fleet records ($6AA4 stride24 + $6C90 stride7) (45 ops)" }
+"0xB4BD" = { name = "draw_hud_panel", comment = "top status bar: reset_chr_alloc + draw_string $BC88 + draw_ship_status + draw_month/draw_year (dirty-gated)" }
+"0xB563" = { name = "refresh_hud", comment = "screen_dirty=0 + draw_hud_panel (force HUD redraw)" }
+"0xB570" = { name = "blit_screen_buffer", comment = "banked_ppu_blit full 30x28 playfield from $7062(tiles)/$73AA(attr) -> PPU (4 callers)" }
+"0xB598" = { name = "redraw_screen_if_changed", comment = "if vram cursor moved: full-screen blit_m3 $7062/$73AA + place_object_sprite; clears mem_7380 (8 callers)" }
+"0xB5E5" = { name = "redraw_dialog_region", comment = "if mem_7380 dirty: blit 30x8 region from $7062/$73AA; clears flag (6 callers)" }
+"0xB634" = { name = "party_in_rect", comment = "test whether party map pos (mem_6664/6665) lies inside rect (arg1,arg2,+arg3,+arg4); return 1 if inside" }
+"0xB7CE" = { name = "clear_two_ppu_regions", comment = "blank two fixed PPU regions (0,6,32,14)+(1,20,1,8) via queue_ppu_transfer id08 (33 callers)" }
+"0xB7EC" = { name = "clear_screen_top", comment = "clear top strip (0,0,32,6) + clear_two_ppu_regions (10 callers)" }
+"0xB801" = { name = "draw_box_frame", comment = "push dims (w=8,h=24,x=20) -> native_draw_box $A73C" }
+"0xB81B" = { name = "win_render_syscall", comment = "window render via syscall_entry_struct (14-arg PPU descriptor)" }
+"0xB83F" = { name = "draw_window", comment = "draw_box_frame + win_render_syscall(1) -- THE window primitive (291 calls/11 banks)" }
+"0xB84D" = { name = "draw_window_2", comment = "draw_box_frame + win_render_syscall(2) -- window render mode 2" }
+"0xB85B" = { name = "draw_window_3", comment = "draw_box_frame + win_render_syscall(3) -- window render mode 3" }
+"0xB869" = { name = "draw_box_variant", comment = "box draw via native_draw_box $A73C + extra arg (99 calls)" }
+"0xB889" = { name = "draw_box_from_native", comment = "call native $D791 -> draw_box_variant (69 calls)" }
+"0xB898" = { name = "modal_input_loop", comment = "metasprite + frame_sync input loop (helper_ce4d dispatch; switch on button) -- modal cursor handler (8 callers)" }
+"0xB9A0" = { name = "sum_matching_6aa4", comment = "sum a field over $6AA4 records (stride 24) whose key byte == arg1 (record aggregation; 15 callers)" }
+"0xBA11" = { name = "lookup_stat_ba11", comment = "record lookup via tables $B50A(stride5)/$67B2(stride14)/$B888(stride88), mem_7067 index -> computed stat (role: derived value; 25 ops)" }
+
+[ram]  # shared game-state / UI vars (ch.6 RAM map + ch.9 window stack).
+"0x6004" = { name = "npc_records", comment = "overworld NPC/rival ship records (SRAM, stride 51; +4=event type, +5=destination port key). A rival's fleet (up to 5 ships) is loaded into combat enemy slots $6C90[5-9] at battle start -- source of the princess-kidnapper finale fleet." }
+"0x6662" = { name = "entity_table", comment = "overworld entity table (party + NPCs), stride 16: +0/+1=x/y (live=Lisbon 32,8), +2/+3=port key f2/f3, +8=facing, +11=EQUIPMENT flags (bit0=Telescope wide-Look, bit1=Sextant position). ch.28 live" }
+"0x6664" = { name = "party_map_x", comment = "party position X on the overworld map (party_in_rect, redraw)" }
+"0x6665" = { name = "party_map_y", comment = "party position Y on the overworld map" }
+"0x666B" = { name = "gold", comment = "player gold/purse (word); capped $EA60=60000. Trade/quest credits, ship/goods debits go here (bank19)." }
+"0x6671" = { name = "sprite_mode_flags", comment = "sprite/metasprite mode flags (bit1/bit5 gate place_object_sprite draw paths)" }
+"0x67B2" = { name = "port_econ_records", comment = "port economy records, stride 14: +0 economic_worth, +4 industrial_worth, +2/+6 investments, +11 price% source (View->Town shows +11+50 %; live Lisbon 51->101%). ch.28; live EW/IW=800" }
+"0x6A9A" = { name = "mate_roster", comment = "active MATE roster: up to 10 slots, 255-terminated, each a byte index into officer records $6542. Fleet width = number of mates (each captains 1 ship). Recruited via event_recruit_sailor; NOT gated by rank/fame directly (gated by player stats*(1+rank/10) vs sailor stats + gold)." }
+"0x6B87" = { name = "os_mode_flags", comment = "OS mode-flags byte; mask &4 (bit2)=AUDIO-ENABLED, gates audio_param/reset/playing_gated ($E0C1/$E0D6/$E0EA); (ch.7; bit corrected ch.22)" }
+"0x6B89" = { name = "game_day", comment = "in-game day-of-month (draw_day renders mem_6B89+1)" }
+"0x6B8A" = { name = "game_month", comment = "in-game month index into name table $BA96 (draw_month)" }
+"0x6B8B" = { name = "game_year_off", comment = "in-game year offset; actual year = mem_6B8B + 1500 (draw_year; UW is set in the 1500s)" }
+"0x6BAE" = { name = "hero_record", comment = "player hero record (ch.28 live dump): name "Leon Franco" @+0, 5 char-create stats @+$11 (Charisma/Wisdom/Intelligence/Strength/Courage)" }
+"0x6BC1" = { name = "nav_skill", comment = "navigation skill (per-port accuracy); Sextant position error = rng if skill<rng(180) (helm_show_position)" }
+"0x6C90" = { name = "ship_records", comment = "ship stat records, stride 7: +0 durability,+1 handling,+2 power,+3 arms,+4 crew(word),+6 class/cargo. In COMBAT the array is two fleets: 0-4=yours, 5-9=enemy ($6CB3). Combat caps at 5 ships/side (combat_grid_index)." }
+"0x6F70" = { name = "savings", comment = "bank savings deposit (word); capped $2710=10000 (bank19 deposit/withdraw)." }
+"0x6F72" = { name = "fame", comment = "FAME / prestige stat (word, cap $C350=50000). NOT "port investment" -- that was my over-narrow mislabel (only saw accrue_port_investment write it). Written by MANY activities: discovery/"Land ho" (bank08 sail_event), trading (bank20), port investment scaled by rank (bank19), outfitting/events (bank21/24). Gain ~= rng(100)+(ship crew+durability)/2 per event. DISPLAYED on the status panel next to gold (bank30 $855B). READ by the court at every quest stage (bank25) = the King-summon/quest gate. Can decay/be spent (bank19 -=rng*5+50)." }
+"0x6F74" = { name = "rank_fame", comment = "NOBILITY RANK / title index 0-9 (Page..Duke, Count=7); ptr table bank58 $1C56. Raised ONLY by court-quest completion (bank25, +1/quest, cap 9). Drives ship-bargain discount (10-rank) + court-quest cash reward. Distinct from fame($6F72): fame gates quest AVAILABILITY, rank is the REWARD. Does NOT gate mate recruiting." }
+"0x6FBE" = { name = "good_price_drift", comment = "per-good price-drift array, stride 4 (calc_good_price; floored 100, grows with worth/trade -- NOT the shelf price, which is the goods-table base)" }
+"0x7050" = { name = "player_char_record", comment = "main player-character/quest working record $7050-$705F (hottest RAM; ch.6/14)" }
+"0x7052" = { name = "quest_target_port", comment = "quest destination port index (compared vs current_port for hook triggers)" }
+"0x705F" = { name = "quest_flags", comment = "main quest-progress flag byte (bits gate tavern/court hooks: &1/&2/&8)" }
+"0x7062" = { name = "screen_buffer", comment = "main 30x28 nametable tile buffer in RAM; blit_screen_buffer/redraw_* push it to PPU" }
+"0x7067" = { name = "current_port", comment = "current port index (indexes port records $67B2 stride14, $AFD8 70-port table stride19, $B50A stride5)" }
+"0x7085" = { name = "dir_delta_x_table", comment = "per-direction X step deltas (step_entity indexes by facing)" }
+"0x7087" = { name = "dir_delta_y_table", comment = "per-direction Y step deltas (step_entity indexes by facing)" }
+"0x7262" = { name = "sprite_anim_frame", comment = "cursor/sprite animation frame index (upload_cursor_sprites -> $BBDC[7262<<4])" }
+"0x7268" = { name = "active_entity_idx", comment = "index of the entity currently being processed (handle_active_entity)" }
+"0x7269" = { name = "vram_tile_cursor", comment = "running VRAM/CHR tile allocation cursor; blit_alloc_tiles advances, blit_free_tiles rewinds (overflow guard $8000)" }
+"0x726B" = { name = "blit_save_sp", comment = "save-stack index for blit_block_save/unwind; saved rects in x=$726D y=$7273 w=$7279 h=$727F arrays" }
+"0x7286" = { name = "window_stack_lo", comment = "UI window-nesting stack pointer (win_open/close $A003/$A07D; bank62 lib too)" }
+"0x7288" = { name = "window_stack_depth", comment = "UI window nesting depth/counter (dec on win_close)" }
+"0x7298" = { name = "ship_sail_state", comment = "sailing engine RT state cluster $7298-$729B (bank 8 native movement: position/heading/speed -- field map TBD via emulator, ch.15)" }
+"0x737A" = { name = "entity_x_work", comment = "working entity X for the movement engine (move_entity_ai/step_entity)" }
+"0x737B" = { name = "entity_y_work", comment = "working entity Y for the movement engine" }
+"0x737C" = { name = "current_region", comment = "current overworld map region / music zone (draw_map_view compares vs $BB55[y/6])" }
+"0x737D" = { name = "ui_shared_var_737d", comment = "hot shared UI var touched by ~15 bank-1 subs (cursor/handle? -- TBD)" }
+"0x7380" = { name = "screen_dirty", comment = "redraw/dirty flag; dialogs set=2, redraw_screen_if_changed/redraw_dialog_region clear it" }
+"0x738A" = { name = "blit_pos_x", comment = "sprite blit X (sprite renderers bank35/36, place_object_sprite)" }
+"0x738B" = { name = "blit_pos_y", comment = "sprite blit Y" }
+"0x738C" = { name = "blit_frame_state", comment = "packed sprite frame/state index (bank35/36 sprite renderers)" }
+"0x738E" = { name = "chr_alloc_count", comment = "CHR-bank allocation count; reset_chr_alloc flushes via set_chr_banks(count, 64-count)" }
+"0x73AA" = { name = "attr_buffer", comment = "attribute buffer paired with screen_buffer $7062 (2nd src of the screen blits)" }
+
+[prg.bank20]  # MARKET subsystem ($8000; ch.12): buy/sell/price-list screens.
+"0x8003" = { name = "sum_cargo_qty", comment = "sum a cargo field over $6AA4 ship records (stride 24)" }
+"0x802C" = { name = "calc_ship_total", comment = "sum_cargo_qty + hold-value fields +16/+18/+20 (/10)" }
+"0x8059" = { name = "market_draw_gold", comment = "draws "Total gold: %5d" + "%3d/%3d" qty (leaf; bank62 draw helpers)" }
+"0x8094" = { name = "market_draw_ship_load", comment = "draws "Ship  Load/Max" capacity row" }
+"0x8119" = { name = "market_draw_goods_list", comment = "renders the goods list (goods-string table $95xx; native helpers)" }
+"0x826F" = { name = "market_sell_screen", comment = "SELL screen: "No goods on that vessel", "Variety Amt Rate" (draw_window x6)" }
+"0x8485" = { name = "market_sell_pick_ship", comment = "SELL: "Which ships cargo is for sale?" ship picker" }
+"0x85C7" = { name = "sum_cargo_space", comment = "sum the $6AAA cargo-space field over ships" }
+"0x85F2" = { name = "get_port_goods_row", comment = "port goods row: $B864 + record_field_byte($B50A[mem_7067])*88" }
+"0x866D" = { name = "scan_ships_cargo", comment = "iterate $6AA4 ships accumulating a cargo field" }
+"0x872D" = { name = "find_ship_cargo_a", comment = "iterate $6AA4 ships (short scan a)" }
+"0x8759" = { name = "find_ship_cargo_b", comment = "iterate $6AA4 ships (short scan b)" }
+"0x8789" = { name = "market_draw_cargo", comment = "draws "cargo:%2d","Space left:%3d","Gold:" cargo/space panel" }
+"0x889F" = { name = "calc_port_prices", comment = "compute goods prices from port record $67B2[mem_7067] + goods table" }
+"0x8988" = { name = "market_draw_goods_table", comment = "render the market goods table (qty/price grid)" }
+"0x8A5A" = { name = "market_buy_confirm", comment = "BUY confirm: "will cost ye %d gold","We cant buy at those prices" (draw_window x7)" }
+"0x8CEC" = { name = "market_buy_menu", comment = "BUY menu: "What are ye looking for today?","Variety Amt Cost" (orchestrator: 7 subs)" }
+"0x8E27" = { name = "market_buy_pick_ship", comment = "BUY: "Which ship will carry the goods?" ship picker (top orchestrator)" }
+"0x8F90" = { name = "find_ship_with_good", comment = "find first ship whose good field == arg2" }
+"0x8FB7" = { name = "market_price_list", comment = "price-list screen: "Sell  Buy","Variety for for", per-good buy/sell prices" }
+"0x91C7" = { name = "market_pick_ship", comment = ""Which one?" ship picker" }
+"0x9231" = { name = "accrue_fame_from_investment", comment = "grow FAME (mem_6F72) via port investment, scaled by rank ((rank/2)*100+150), toward cap 50000 ($C350). ONE of several fame sources (see also bank08 discovery / bank20 trade / bank21 outfit). Formerly mislabeled accrue_port_investment." }
+"0x926E" = { name = "calc_good_price", comment = "port trade price for a good (port record + RNG load_operand16_14)" }
+"0x92AE" = { name = "market_invest_port", comment = "port investment txn: "We're out of gold!","can't invest in this port","can't accept any more"" }
+"0x947B" = { name = "market_help_menu", comment = ""How can I help ye?" market top menu" }
+
+[prg.bank22]  # SHIPYARD ($8000; ch.13): buy-used + build-new (hull/masts/sails/arms/crew).
+"0x8003" = { name = "shipyard_entry", comment = "entry/gate: "You cant buy another","no man to navigate","we dont build ships here"" }
+"0x812E" = { name = "load_shipyard_sprites", comment = "set_sprite_block $9116 (ship icon tiles)" }
+"0x813E" = { name = "draw_ship_icon", comment = "load_shipyard_sprites + position by arg1%3" }
+"0x817C" = { name = "shipyard_clear", comment = "mem_7064=-1 + clear_two_ppu_regions" }
+"0x819F" = { name = "get_ship_condition", comment = "extract packed condition bits (>>5&7, >>2&3, >>4&1) from ship record+20" }
+"0x81CE" = { name = "calc_used_ship_price", comment = "used-ship price from depreciation of condition bits (record+20)" }
+"0x822A" = { name = "calc_ship_price_capped", comment = "ship price formula, capped at 100" }
+"0x828A" = { name = "calc_ship_build_cost", comment = "build cost formula (base 300=$012C + condition adjustments -200)" }
+"0x82D1" = { name = "get_ship_word18", comment = "record_field_word(ship+18)" }
+"0x82E6" = { name = "get_ship_word15", comment = "record_field_word(ship+15)" }
+"0x82FA" = { name = "get_ship_byte17", comment = "record_field_byte(ship+17)" }
+"0x830F" = { name = "shipyard_draw_ship_stats", comment = "ship stat panel: Crew/Capacity/Cargo/Power/Handling/Durability/Arms" }
+"0x840B" = { name = "shipyard_buy_confirm_name", comment = "buy confirm + "Name yer ship"" }
+"0x85F4" = { name = "shipyard_buy_used_dialog", comment = "BUY-USED: " is a %s","I'll sell this vessel for %d gold","We cant afford it"" }
+"0x87B0" = { name = "shipyard_buy_used_select", comment = "BUY-USED ship picker: "Which ship will ye buy?","Just looking, eh?"" }
+"0x8854" = { name = "shipyard_buy_used", comment = "buy-used handler (shipyard_buy_used_select result)" }
+"0x8868" = { name = "call_ship_build", comment = "call_in_bank_dcd1 ship-build routine ($8068)" }
+"0x8880" = { name = "load_shipyard_sprites_b", comment = "set_sprite_block $9498 (2nd ship icon set)" }
+"0x8890" = { name = "shipyard_clear_b", comment = "mem_7064=-1 + load_shipyard_sprites_b" }
+"0x88DA" = { name = "calc_ship_value", comment = "ship value formula (typed-arg variant of calc_used_ship_price base)" }
+"0x88EE" = { name = "draw_stat_durability", comment = "stat row: "Durability: %3d"" }
+"0x8907" = { name = "calc_ship_price_new", comment = "new-ship price (depreciation formula, typed args)" }
+"0x8933" = { name = "draw_stat_handling", comment = "stat row: "Handling:   %3d"" }
+"0x894C" = { name = "calc_ship_price_new_capped", comment = "new-ship price capped at 100" }
+"0x897A" = { name = "draw_stat_power", comment = "stat row: "Power:      %3d"" }
+"0x8993" = { name = "calc_ship_build_cost_b", comment = "build cost (typed-arg variant of calc_ship_build_cost)" }
+"0x89BA" = { name = "draw_stat_capacity", comment = "stat row: "Capacity:  %4d"" }
+"0x89D4" = { name = "draw_stat_cargo", comment = "stat row: "Cargo:%3d"" }
+"0x89E8" = { name = "draw_stat_crew", comment = "stat row: "Crew: %3d"" }
+"0x89FC" = { name = "draw_stat_arms", comment = "stat row: "Arms: %3d"" }
+"0x8A11" = { name = "shipyard_confirm", comment = ""Is this OK" confirm box" }
+"0x8A2D" = { name = "shipyard_build_confirm_name", comment = "build confirm + "Name your ship"" }
+"0x8BCE" = { name = "shipyard_build_arms_crew", comment = "BUILD config: "how many gun placements","How many bunks for the crew"" }
+"0x8C83" = { name = "shipyard_build_hull_masts", comment = "BUILD config: "What kind of hull?"(Teak..),"How many masts?","3-point"" }
+"0x8F62" = { name = "shipyard_build_confirm", comment = ""Shall I build one for ye"" }
+"0x8FB7" = { name = "shipyard_build_entry", comment = "BUILD entry: "Ye want to build?","Choose yer hull","Cold feet, eh?"" }
+
+[prg.bank23]  # TAVERN ($8000; ch.13): recruit + rumor/info hub (trade/rival/quest intel).
+"0x8003" = { name = "call_court_menu", comment = "-> bank26 court_menu ($88C3)" }
+"0x8014" = { name = "tavern_recruit_sailor", comment = "-> event_recruit_sailor" }
+"0x8025" = { name = "call_quest_dialogue", comment = "-> bank24 quest dialogue ($8F9E)" }
+"0x8036" = { name = "tavern_waitress", comment = "-> event_waitress" }
+"0x8047" = { name = "tavern_quest_reward", comment = "-> event_quest_reward" }
+"0x8058" = { name = "tavern_entry_menu", comment = ""Make yerself at home","What shall we do, Captain?" + Crew" }
+"0x813F" = { name = "tavern_scan_state", comment = "tavern state scan (35 ops; local accumulation)" }
+"0x81CE" = { name = "tavern_scan_records", comment = "scan_records_6c90_flag record enumeration" }
+"0x8236" = { name = "tavern_resolve_field", comment = "compute_dad1 + resolve_field_ptr(2,21,..)" }
+"0x824B" = { name = "tavern_scan_ports", comment = "iterate $B50A port-index records" }
+"0x8275" = { name = "quest_flag_8", comment = "predicate: mem_705F & 8 (quest-state bit)" }
+"0x8280" = { name = "quest_flag_2", comment = "predicate: mem_705F & 2" }
+"0x828B" = { name = "quest_flag_1", comment = "predicate: mem_705F & 1" }
+"0x8296" = { name = "at_target_port", comment = "predicate: mem_7052 (quest target port) == mem_7067 (current port)" }
+"0x82A5" = { name = "tavern_calc_port", comment = "port record calc ($B50A[arg]*5, field*50)" }
+"0x833A" = { name = "tavern_recruit_greet", comment = "recruit NPC greet: "Are you the one they call"" }
+"0x8375" = { name = "tavern_recruit_stats", comment = "recruit stat line "%s %d? %s %d?"" }
+"0x83C9" = { name = "tavern_draw_port_name", comment = ""at <port>": draw_string_banked port name from $AFD8[arg*19]" }
+"0x83FA" = { name = "tavern_draw_name", comment = "draw_string_banked a $6542 record name" }
+"0x8439" = { name = "tavern_rumor_rival_loc", comment = "RUMOR: rival/pirate location "seeking out your ship!","sailing for"" }
+"0x84FA" = { name = "tavern_rumor_port_specialty", comment = "RUMOR: "specialty of this here port","it can be bought"" }
+"0x858F" = { name = "tavern_quest_hook", comment = ""The King of Portugal/head trader is looking for you"" }
+"0x8674" = { name = "tavern_rumor_intro", comment = ""The <x>"/"They say" rumor lead-in" }
+"0x86A8" = { name = "tavern_hook_search", comment = ""Someone's looking for ye in <port>","Are ye searching for a place" recruit/quest hook (210 ops)" }
+"0x8A63" = { name = "tavern_quest_hook_b", comment = ""The King/inn master is looking for you in <port>"" }
+"0x8B1A" = { name = "tavern_hook_king", comment = ""The King of Portugal is looking for","Are you the brave soul who's going"" }
+"0x8BB9" = { name = "tavern_hook_king_b", comment = ""The King of Portugal","I hear you're heading for <port>" hook variant" }
+"0x8C56" = { name = "tavern_dispatch_event", comment = "dispatch tavern event by mem_7054 (quest state)" }
+"0x8C95" = { name = "tavern_rumor_trade", comment = "TRADE RUMOR: "X will pay a fine price for","marketplace in Y doesnt have"" }
+"0x8E60" = { name = "tavern_stay_gather_info", comment = ""Let's stay a while and find out","order some[thing]"" }
+"0x8F14" = { name = "draw_tavern_box", comment = "draw_box_variant(8,1)" }
+"0x8F20" = { name = "tavern_crew_roster", comment = ""<Mates at a glance>" crew list" }
+"0x8FA6" = { name = "tavern_dismiss_confirm", comment = ""OK to part from <mate>" dismiss confirm" }
+"0x906D" = { name = "tavern_dismiss_crew", comment = ""mates to part from","cant spare a navigator","Who are ye parting from?"" }
+
+[prg.bank27]  # GAMBLING: POKER ($8000; ch.13).
+"0x8003" = { name = "poker_init", comment = "initialize a poker round" }
+"0x80B7" = { name = "poker_card_rank", comment = "extract card rank (card>>4 &15)" }
+"0x80F1" = { name = "poker_deal_card", comment = "deal a card (call_in_bank $8B39 blit)" }
+"0x8130" = { name = "poker_setup_hand", comment = "load/prepare a hand (copy_from_bank cards)" }
+"0x81BF" = { name = "poker_eval_card", comment = "evaluate a single card" }
+"0x8228" = { name = "poker_load_deck", comment = "copy_from_bank_dc80 the deck" }
+"0x8292" = { name = "poker_shuffle", comment = "RNG shuffle (load_operand16_14)" }
+"0x82B7" = { name = "poker_score_hand", comment = "score a hand via poker_read_hand ($96FE)" }
+"0x83C6" = { name = "poker_draw_area", comment = "blit_alloc_tiles the poker felt" }
+"0x8414" = { name = "poker_get_score", comment = "return poker_score_hand result" }
+"0x8426" = { name = "draw_card_sprite", comment = "blit a 2x2 card sprite ($B09E)" }
+"0x8445" = { name = "clear_card_sprite", comment = "clear a card cell" }
+"0x845D" = { name = "poker_play_round", comment = "poker round main loop (75 ops)" }
+"0x85DB" = { name = "poker_ai_decide", comment = "dealer AI decision ($9A9C table)" }
+"0x86C7" = { name = "poker_round_flow", comment = "round flow orchestration (87 ops)" }
+"0x88C2" = { name = "poker_deal_to_seat", comment = "deal card to a seat position ($9AC6 table)" }
+"0x891F" = { name = "poker_bet_screen", comment = ""Bet:%3d","Gold:%5d","Dlr","Continue" -- dealer poker table" }
+"0x936F" = { name = "poker_reset", comment = "reset_all_chr + reload" }
+"0x93F1" = { name = "poker_card_position", comment = "card screen position from $9F1B table" }
+"0x948B" = { name = "poker_loop_948b", comment = "iteration helper" }
+"0x953E" = { name = "poker_dispatch", comment = "dispatch by state (switch)" }
+"0x9675" = { name = "poker_draw_box", comment = "draw_box_variant + win_render" }
+"0x96A3" = { name = "poker_loop_96a3", comment = "iteration helper" }
+"0x96FE" = { name = "poker_read_hand", comment = "read a hand from cards (copy_from_bank_dc80)" }
+"0x977B" = { name = "poker_loop_977b", comment = "iteration helper" }
+"0x980E" = { name = "poker_load_hand", comment = "load a hand (copy_from_bank_dc80)" }
+"0x98E2" = { name = "poker_main", comment = "poker top orchestrator (99 ops)" }
+
+[prg.bank28]  # GAMBLING: BLACKJACK ($8000; ch.13).
+"0x8003" = { name = "bj_draw_table", comment = "blit the blackjack table ($B2DE) + dealer art ($A816)" }
+"0x806B" = { name = "bj_draw_card", comment = "blit a 2-tile card from $8B8E/$8BAE suit/rank tables" }
+"0x80F5" = { name = "bj_delay", comment = "scale_x6(3) short delay" }
+"0x8100" = { name = "bj_deal", comment = "deal cards" }
+"0x8168" = { name = "blackjack_hit", comment = ""Hit" (blackjack hit/stand)" }
+"0x81C8" = { name = "bj_draw_card_hi", comment = "bj_draw_card for the high nibble (card>>4)" }
+"0x81EE" = { name = "bj_card_value", comment = "card face value (card & 15)" }
+"0x8205" = { name = "bj_is_face_card", comment = "is card a face card (9<rank<13)?" }
+"0x8236" = { name = "bj_hand_value", comment = "total hand value (with ace handling)" }
+"0x8291" = { name = "bj_check_bust", comment = "check if hand busts (>21)" }
+"0x82C9" = { name = "bj_hit_loop", comment = "hit/draw loop" }
+"0x8366" = { name = "bj_deal_loop", comment = "deal loop" }
+"0x83B2" = { name = "bj_draw_hand", comment = "blit_block_save a hand" }
+"0x83F6" = { name = "bj_loop_83f6", comment = "iteration helper" }
+"0x843C" = { name = "bj_draw_prompt", comment = ""%s" prompt box (native_draw_box)" }
+"0x8463" = { name = "bj_clear_area", comment = "clear play area (queue_ppu_transfer)" }
+"0x8482" = { name = "blackjack_bet_screen", comment = ""Total gold:%5d","Bet: %d","Continue"" }
+"0x8AB0" = { name = "bj_reset", comment = "reset_all_chr + reload" }
+"0x8AF1" = { name = "bj_loop_8af1", comment = "iteration helper" }
+"0x8B39" = { name = "bj_blit_card_2x3", comment = "blit a 2x3 card sprite ($B072)" }
+"0x8B51" = { name = "bj_clear_card", comment = "clear a 2x4 card cell" }
+"0x8B62" = { name = "bj_loop_8b62", comment = "iteration helper" }
+
+[prg.bank24]  # QUEST/EVENT dialogue dispatcher ($8000; ch.14): hooks, trade intel, map clues, story, romance, recruit.
+"0x8003" = { name = "quest_scan_ports", comment = "iterate $B50A port-index records" }
+"0x802D" = { name = "quest_flag_8", comment = "predicate: mem_705F & 8" }
+"0x8038" = { name = "quest_flag_2", comment = "predicate: mem_705F & 2" }
+"0x8043" = { name = "quest_flag_1", comment = "predicate: mem_705F & 1" }
+"0x804E" = { name = "quest_at_target_port", comment = "predicate: quest_target_port == current_port" }
+"0x805D" = { name = "quest_calc_port", comment = "port record calc ($B50A[arg]*5, field*50)" }
+"0x80F2" = { name = "quest_draw_stats", comment = ""%s %d. %s %d." stat line" }
+"0x8146" = { name = "quest_draw_port_name", comment = ""at <port>" via $AFD8[arg*19]" }
+"0x8177" = { name = "event_hook_generic", comment = ""Someone's looking for you in <port>"" }
+"0x818D" = { name = "quest_draw_name", comment = "draw_string_banked a $6542 record name" }
+"0x81CC" = { name = "event_royal_summons", comment = ""I hear the King of Portugal wants to see you"" }
+"0x81DD" = { name = "event_track_npc", comment = ""He's on his way here","on the lookout for your ship" (find NPC/rival)" }
+"0x8281" = { name = "event_trade_intel", comment = ""sold at the market here","I hear they sell it in %s" (where to buy/sell)" }
+"0x82FA" = { name = "event_trader_hook", comment = ""The trader at the marketplace here is looking for you"" }
+"0x830B" = { name = "event_quest_objective", comment = ""a place to buy","Do your best to meet the King's demands"" }
+"0x83E3" = { name = "event_guild_hook", comment = ""The guild master is looking for you"" }
+"0x8414" = { name = "quest_has_item", comment = ""<x> has the %s" item-holder line" }
+"0x8438" = { name = "event_map_clue", comment = "TREASURE/MAP: "Looking for points on this map?","in search of the %s?"" }
+"0x8776" = { name = "event_quest_urgency", comment = ""The King is expecting you","Hurry up and sail"" }
+"0x87BE" = { name = "quest_cond", comment = "quest-flag predicate combo" }
+"0x8805" = { name = "event_hook_multi", comment = ""The King's looking for you, pet!","inn master's been looking for you"" }
+"0x88B3" = { name = "event_story_princess", comment = "MAIN STORY: "Something serious at the palace","save the princess?"" }
+"0x894C" = { name = "event_fetch_gift", comment = "ROMANCE/FETCH: "bring me back a little gift from <port>","visit me on your way back"" }
+"0x89D8" = { name = "quest_dispatch", comment = "dispatch quest event by mem_7054 (switch)" }
+"0x8A0D" = { name = "quest_decline", comment = ""Oh, that's not necessary. Thanks" decline box" }
+"0x8A23" = { name = "event_waitress", comment = ""no sign of a waitress","<X> would appreciate 10 gold pieces"" }
+"0x8BD3" = { name = "event_quest_reward", comment = ""I'm glad you came through for us!","deposit your reward at the palace"" }
+"0x8E31" = { name = "event_recruit_crew", comment = ""no room for more crew","Spend how much","Anyone want to join"" }
+"0x8F6A" = { name = "quest_clear_screen", comment = "mem_7063=240 + blit_alloc_tiles full clear" }
+"0x8F9E" = { name = "quest_pick", comment = ""Which one?" picker" }
+"0x8FEB" = { name = "event_recruit_sailor", comment = "MATE recruit ("find mates"), bank24. Candidate must be AT current port ($6A6F), available (flag $6548 bit0 set/bit1 clear); roster $6A9A caps at 10. JOIN ROLL: sailor_worth = sailor_best_stat*(sailor_stat2+3); player_worth = player_stat_at_sailor's_best_idx * (player_stat2+3) * (1 + rank/10); JOINS if sailor_worth <= rng(0..19) + player_worth. So high START STATS substitute for rank (rank is only a 1.0-1.9x multiplier) -- this is why the WR rolls 80s. Each ship needs a free mate to navigate." }
+
+[prg.bank25]  # ROYAL COURT ($A000; ch.14): quest turn-in, titles/rank, letters, rewards, port support, royal bank.
+"0xA003" = { name = "call_court_check_gold", comment = "-> bank26 court_check_gold_request ($80D0)" }
+"0xA014" = { name = "call_court_check_crew", comment = "-> bank26 court_check_crew_request ($8003)" }
+"0xA025" = { name = "call_court_eval", comment = "-> bank26 court_eval_state ($817A)" }
+"0xA036" = { name = "court_request_menu", comment = "draw_window + "What do you need?" ($907B) + draw_tile_grid select ($9068)" }
+"0xA06E" = { name = "court_announce", comment = ""Announcing Sir <name>" court presentation" }
+"0xA176" = { name = "court_cond_active", comment = "predicate: mem_705F&1 && mem_7052==mem_7067 && mem_7053" }
+"0xA19B" = { name = "court_cond_1", comment = "predicate on mem_705F &8/&2 + court_eval ($8176)" }
+"0xA1BC" = { name = "court_cond_2", comment = "predicate: mem_705F&8 set, &2 clear + court_eval" }
+"0xA1DD" = { name = "court_cond_3", comment = "predicate: mem_705F&8 set, &2 set + court_eval" }
+"0xA1FE" = { name = "draw_court_box", comment = "draw_box_variant(1,1)" }
+"0xA20A" = { name = "court_wait_loop", comment = "loop on mem_6F72 until court_eval done; set mem_7267=255" }
+"0xA278" = { name = "court_turnin_legendary", comment = "quest turn-in: "Ah, the legendary <item>!","Bestow this man with a new title"" }
+"0xA484" = { name = "draw_record_name", comment = "draw_string_banked for the $6542[(arg+20)*7] record name" }
+"0xA4CD" = { name = "court_story_peace", comment = "story milestone: "Well done! At last there will be peace" + new title" }
+"0xA626" = { name = "court_deliver_letter", comment = ""the famous <name>","I bring a letter from the King" (inter-kingdom diplomacy)" }
+"0xA69A" = { name = "court_reward_service", comment = ""done an excellent service","I hereby award you a new title","Your reward"" }
+"0xA814" = { name = "court_scan_records", comment = "scan_records_6c90_flag entry (record enumeration)" }
+"0xA8AA" = { name = "court_eval_quest", comment = ""I knew I could count on you","this isn't enough! Will you go" (quest eval)" }
+"0xABBB" = { name = "court_port_support", comment = ""Support | Port  Index" -- port investment/support system" }
+"0xABF1" = { name = "court_init_state", comment = "zero working locals, enter the court processing loop" }
+"0xACF1" = { name = "court_cond_savings", comment = "predicate: mem_6F74 + mem_705F&8 + mem_7054==1 (savings/reward gate)" }
+"0xAE19" = { name = "royal_bank_deposit_full", comment = ""You cannot deposit more"" }
+"0xAEF0" = { name = "royal_bank_no_more_gold", comment = ""We don't need more gold"" }
+"0xAFD9" = { name = "royal_bank_no_gold", comment = ""There's no gold in your name here"" }
+
+[prg.bank16]  # SAILING HELM ($8000; ch.15): at-sea command interface (steer/dock/debark/look/hail/battle).
+"0x8003" = { name = "call_fleet_menu", comment = "-> bank17 fleet menu ($8714)" }
+"0x8014" = { name = "call_fleet_cargo", comment = "-> bank17 fleet cargo ($96F6)" }
+"0x8025" = { name = "call_shipyard_from_helm", comment = "-> bank22 shipyard ($8ACE)" }
+"0x8036" = { name = "helm_draw_compass", comment = "draw the 8-dir compass sprite (232, positioned)" }
+"0x80A8" = { name = "helm_set_chr", comment = "set_chr_banks(1,4)" }
+"0x80B5" = { name = "helm_port_rumor", comment = ""Cap'n, a port is rumored to lie..." landfall hint" }
+"0x810C" = { name = "helm_set_sail", comment = ""Set the compass bearing","All hands aloft! Set to the %s" (steer, 8 compass dirs)" }
+"0x8165" = { name = "helm_anchor", comment = ""Heave to! Anchor down!","All hands up anchor! We're off"" }
+"0x81B0" = { name = "helm_yesno_menu", comment = "draw_text_menu($9632) 2-option confirm" }
+"0x81D4" = { name = "coord_out_of_bounds", comment = "arg1/arg2 outside 0..13 map grid" }
+"0x81F7" = { name = "check_move_target", comment = "coord_out_of_bounds guard + move validity" }
+"0x8249" = { name = "helm_move_loop", comment = "movement stepping loop" }
+"0x82B1" = { name = "helm_sailing_skill_up", comment = ""your sailing skill has improved"" }
+"0x841B" = { name = "helm_call_at_port", comment = "MOVE->dock: "There's no port here","OK to call at <port>" (enter port menu)" }
+"0x855E" = { name = "can_move_to", comment = "!out_of_bounds && calc_pos_relative passable" }
+"0x8597" = { name = "helm_dir_loop", comment = "direction scan loop" }
+"0x85C2" = { name = "helm_move_ship", comment = "move the ship entity $6662 on the sea grid" }
+"0x8705" = { name = "helm_debark", comment = "DEBARK: "Select a landing point","OK to go ashore" (land exploration)" }
+"0x87BA" = { name = "helm_anchor_fail", comment = ""We can't drop anchor here"" }
+"0x884D" = { name = "helm_compare_pos", comment = "compare two positions (arg1,arg2 ptrs)" }
+"0x88F9" = { name = "helm_fill_row", comment = "row fill helper" }
+"0x8936" = { name = "helm_look_fleets", comment = ""There are %d fleets there","Which one"" }
+"0x899A" = { name = "helm_show_position", comment = ""We don't have a sextant" / "Our present position is %s %d"" }
+"0x8A7C" = { name = "helm_col_facing", comment = "ship facing<7 ? 18 : 1 (column by heading)" }
+"0x8A90" = { name = "helm_row_origin", comment = "737d==1 ? 11 : 1" }
+"0x8AA3" = { name = "helm_draw_fleets", comment = "draw nearby fleet markers ("R","E>%s")" }
+"0x8C7B" = { name = "helm_scan_ports", comment = "iterate the $AFD8 70-port table" }
+"0x8CD9" = { name = "helm_iter_cd9", comment = "column iteration helper" }
+"0x8D3A" = { name = "helm_look_area", comment = "scan the area around party_map_x/y" }
+"0x8D7D" = { name = "helm_look_prompt", comment = "helm_look_area + show_prompt_record" }
+"0x8D89" = { name = "helm_look", comment = "LOOK: "No fleet within view","Look where?","that's the port"" }
+"0x8F26" = { name = "helm_scan_f26", comment = "record scan helper" }
+"0x8FB7" = { name = "helm_scan_records", comment = "scan_records_6c90_flag enumeration" }
+"0x902C" = { name = "helm_tables_902c", comment = "set up tables $6A6E/$6549" }
+"0x9068" = { name = "helm_loop_9068", comment = "record loop helper" }
+"0x908E" = { name = "helm_hail_fleet", comment = "ORDER/hail: talk to other ships ("best sold in","Good luck") -- trade intel" }
+"0x9182" = { name = "clear_npc_event", comment = "clear npc_records[arg-1]+4 event type = 0" }
+"0x91A1" = { name = "helm_hail_suspicious", comment = ""Hmm, they're a suspicious lot" (hail rebuff; mem_6B8C gate)" }
+"0x91D1" = { name = "helm_pick_fleet", comment = ""There's not a fleet near us","Which fleet?" fleet picker" }
+"0x9301" = { name = "helm_menu_9301", comment = "draw_text_menu($99D3) 3-option" }
+"0x9325" = { name = "helm_iter_9325", comment = "range iteration helper" }
+"0x9377" = { name = "helm_attack_fleet", comment = "BATTLE: "no fleet to attack","Which fleet?" -> naval combat" }
+
+[prg.bank8]  # SAILING ENGINE ($8000; ch.15): per-frame movement (native) + at-sea events (storm/land-ho/provisions).
+"0x98CB" = { name = "animate_sail_sprites", comment = "animate sprite blocks from $9D6A + wave anim (upload_cursor_sprites by mem_6B8C/5)" }
+"0x9904" = { name = "animate_sail_sprites_b", comment = "sprite anim from $9DAA (idx_valid_lt21 gated)" }
+"0x993E" = { name = "draw_ship_at_sea", comment = "draw the ship sprite from entity $6662 pos/facing while at sea" }
+"0x9A34" = { name = "load_ship_sprites", comment = "set_sprite_block from $9DCA" }
+"0x9A4B" = { name = "update_wave_anim", comment = "upload_cursor_sprites(mem_6B8C/5) wrapper" }
+"0x9A5B" = { name = "lookup_ship_record", comment = "record_base_6b1c($6C96[arg1*7] & 15) -- ship record by index" }
+"0x9A70" = { name = "sail_event_land_ho", comment = ""Land ho! There's a port in sight!"" }
+"0x9A8D" = { name = "sail_event_out_of_provisions", comment = ""The <ship> has run out of %s!" (food/water depletion)" }
+"0x9AC3" = { name = "accrue_capped_6f72", comment = "grow mem_6F72 by a record-derived amount, capped at 50000 ($C350)" }
+"0x9B00" = { name = "sum_ship_stat", comment = "sum a stat over ships ($B50A[arg1] + scan_records_6c90_flag)" }
+"0x9BC0" = { name = "dispatch_sail_event", comment = "blit_screen_buffer + prompt + dispatch $9E2B[ship_sail_state] handler + redraw_dialog_region" }
+"0x9E2B" = { name = "sail_event_handlers", comment = "jump table of sailing-event handlers (indexed by ship_sail_state)" }
+
+[prg.bank2]  # ENTRY controller ($8000; ch.16): title + character creation + intro story.
+"0x8003" = { name = "clear_ui_state", comment = "reset window origin + UI state" }
+"0x8030" = { name = "init_entry", comment = "os_mode_flags=255 + reset_all_chr (entry init)" }
+"0x8055" = { name = "char_create_helper_a", comment = "char-create helper" }
+"0x80B5" = { name = "char_create_init", comment = "clear_ui_state + char_create_helper_a" }
+"0x80D0" = { name = "load_char_portrait", comment = "copy_from_bank(2,250) char graphics" }
+"0x810A" = { name = "load_save_data", comment = "copy_from_bank(1,249) $8000 -> SRAM $6000 (size $1061) -- load saved game" }
+"0x8121" = { name = "title_menu", comment = ""New Adventure","Saved Game","Which one?" (new vs load)" }
+"0x819D" = { name = "draw_ok_prompt", comment = ""OK" prompt at (7,25)" }
+"0x81BD" = { name = "char_create", comment = "CHARACTER CREATION: 5 stats (Charisma/Wisdom/Intel/Courage/Strength) + bonus-point assign + "Enter name of hero"(Leon Franco) + flagship name" }
+"0x8702" = { name = "char_create_loop", comment = "character-creation main loop" }
+"0x8737" = { name = "char_create_helper_b", comment = "char-create helper" }
+"0x87C0" = { name = "char_create_stats", comment = "char_create_helper_b (stat assignment)" }
+"0x87CB" = { name = "entry_upload_sprites", comment = "upload_sprite_block for the entry scene" }
+"0x8807" = { name = "entry_start_audio", comment = "audio_param_gated title music" }
+"0x8844" = { name = "entry_countdown_a", comment = "decrement loop helper" }
+"0x886A" = { name = "entry_format_text", comment = "str_copy $9BFC formatter" }
+"0x8947" = { name = "entry_sprite_anim", comment = "upload_sprite_block + vram_row anim" }
+"0x89F9" = { name = "entry_countdown_b", comment = "decrement loop helper" }
+"0x8A21" = { name = "entry_anim_1", comment = "intro animation frame loop 1" }
+"0x8A74" = { name = "entry_anim_2", comment = "intro animation frame loop 2" }
+"0x8AC6" = { name = "entry_anim_3", comment = "intro animation frame loop 3" }
+"0x8B1A" = { name = "entry_anim_4", comment = "intro animation frame loop 4" }
+"0x8B6D" = { name = "entry_anim_5", comment = "intro animation frame loop 5" }
+"0x8BC2" = { name = "entry_anim_6", comment = "intro animation frame loop 6" }
+"0x8C19" = { name = "entry_anim_7", comment = "intro animation frame loop 7" }
+"0x8C70" = { name = "draw_title_logo", comment = "sprite $913E + blit title image $A074" }
+"0x8D61" = { name = "title_screen", comment = "sprite $912E + play_music(20) -- title screen" }
+"0x8EAE" = { name = "press_start", comment = ""Press start button" prompt" }
+"0x8F57" = { name = "entry_init_nametable", comment = "set_nt_exram_mode init" }
+"0x900C" = { name = "str_stat_charisma", comment = ""Charisma"" }
+"0x9015" = { name = "str_stat_wisdom", comment = ""Wisdom"" }
+"0x901C" = { name = "str_stat_intel", comment = ""Intel"" }
+"0x9022" = { name = "str_stat_courage", comment = ""Courage"" }
+"0x902A" = { name = "str_stat_strength", comment = ""Strength"" }
+"0x9033" = { name = "str_enter_hero_name", comment = ""Enter name of hero" (default Leon Franco)" }
+"0x9077" = { name = "str_bonus_points", comment = ""Bonus %3d","Please assign bonus points"" }
+"0x90C9" = { name = "str_enter_flagship", comment = ""Enter name of flagship"" }
+
+[prg.bank12]  # NAVAL COMBAT command ($8000; ch.17): Fire/Board/View + battle ship stats.
+"0x8003" = { name = "combat_clear_metasprite", comment = "set_metasprite($0500,0,..) clear" }
+"0x8015" = { name = "combat_grid_wrap", comment = "mem_74C4 % 15 grid wrap" }
+"0x80AB" = { name = "combat_draw_sprite", comment = "draw a combat sprite" }
+"0x81A6" = { name = "combat_tile_x", comment = "mem_74C0 -> pixel X" }
+"0x81E1" = { name = "combat_dir_81e1", comment = "direction helper (arg4<5)" }
+"0x8209" = { name = "combat_check_8209", comment = "arg3==0x3C0 check" }
+"0x82E4" = { name = "combat_move_82e4", comment = "movement helper (arg4<2)" }
+"0x83F7" = { name = "combat_grid_index", comment = "(arg<5?0:5)+(arg%5): partitions the combat ship array into two fleets of 5. Slots 0-4 = YOUR battle line, 5-9 = ENEMY. NAVAL COMBAT IS HARD-CAPPED AT 5 SHIPS PER SIDE -- you can never field more than 5 (flagship + up to 4 mates), so the finale needs <=5 warships, not a maxed 10-ship fleet." }
+"0x840E" = { name = "combat_get_ship_stat", comment = "ship record $6C90[arg1] field (stride 7). Combat array: idx 0-4=your ships, 5-9=enemy (enemy line base $6C90+35=$6CB3). Enemy fleet loaded from the rival npc_record ($6004) at battle start." }
+"0x8491" = { name = "combat_grid_side", comment = "arg3<5 ? 0 : 1 (which fleet side)" }
+"0x84C1" = { name = "combat_ship_84c1", comment = "ship record calc" }
+"0x852F" = { name = "combat_get_stat_0", comment = "combat_get_ship_stat(arg,0)" }
+"0x8549" = { name = "combat_get_stat_1", comment = "combat_get_ship_stat(arg,1)" }
+"0x8560" = { name = "combat_pos_8560", comment = "arg<5 ? arg : arg2 position select" }
+"0x85EC" = { name = "combat_85ec", comment = "helper" }
+"0x8683" = { name = "combat_get_ship_8683", comment = "ship record $6C90[arg2]" }
+"0x86E6" = { name = "combat_86e6", comment = "combat_pos_8560 wrapper" }
+"0x8704" = { name = "combat_action_8704", comment = "combat action (53 ops)" }
+"0x88DD" = { name = "combat_calc_power", comment = "max_s16 combat power from ship+2 stat" }
+"0x890F" = { name = "combat_890f", comment = "helper" }
+"0x8943" = { name = "combat_set_state", comment = "mem_75F8=13" }
+"0x895C" = { name = "combat_loop_895c", comment = "iteration helper" }
+"0x8978" = { name = "combat_scan_749e", comment = "$749E fleet scan" }
+"0x8A05" = { name = "combat_draw_a05", comment = "sprite draw (232)" }
+"0x8A69" = { name = "combat_a69", comment = "helper (46 ops)" }
+"0x8B20" = { name = "combat_b20", comment = "helper" }
+"0x8B68" = { name = "combat_grid_to_index", comment = "mem_74C2*15 + mem_74C0" }
+"0x8BB5" = { name = "combat_bb5", comment = "helper" }
+"0x8BF3" = { name = "combat_board", comment = ""Board which ship?" (boarding attack)" }
+"0x8C85" = { name = "combat_c85", comment = "ship-index helper" }
+"0x8D01" = { name = "combat_fire", comment = ""Fire on which ship?" (cannon attack)" }
+"0x8D91" = { name = "combat_board_check", comment = "sub_9CA7 gate -> combat_board" }
+"0x8DB2" = { name = "combat_db2", comment = "helper (arg1*8)" }
+"0x8E19" = { name = "combat_e19", comment = "mem_75FA state (51 ops)" }
+"0x8ED8" = { name = "combat_ed8", comment = "mem_75F8=13 (35 ops)" }
+"0x8FAE" = { name = "combat_draw_mobility", comment = "draws "Mobility:%2d"" }
+"0x9093" = { name = "combat_ret1", comment = "return 1" }
+"0x909A" = { name = "combat_9a", comment = "sprite helper (232)" }
+"0x90C3" = { name = "combat_clear_metasprite2", comment = "set_metasprite($0100,0,..) clear" }
+"0x90D5" = { name = "combat_wait_button", comment = "read_controller wait loop" }
+"0x913D" = { name = "combat_draw_ship_stats", comment = "battle ship panel: flagship/Crew/Arms(%d guns)/Mobility/Durability/Tacking power/Battle level" }
+"0x92A3" = { name = "combat_view_vessel", comment = ""View which vessel?" (inspect target)" }
+"0x931A" = { name = "combat_set_74e0", comment = "mem_74E0=3" }
+"0x9329" = { name = "combat_329", comment = "draw markers wrapper (42 ops)" }
+"0x93D2" = { name = "combat_load_d2", comment = "memcpy_ptr $9FBD (48 ops)" }
+"0x948F" = { name = "combat_wait_2", comment = "wait-while-2 loop" }
+"0x94B8" = { name = "combat_b8", comment = "sub_9B5F wrapper" }
+"0x9569" = { name = "combat_draw_markers", comment = "fleet markers ("R-","E>")" }
+"0x958B" = { name = "combat_reset_75f6", comment = "mem_75F6=0" }
+"0x95DC" = { name = "combat_side_parity", comment = "mem_74C0 % 2 ? 2 : 1" }
+"0x95EF" = { name = "combat_95ef", comment = "arg + mem_74C0" }
+"0x965C" = { name = "combat_5c", comment = "helper" }
+"0x9696" = { name = "combat_96", comment = "side-parity helper" }
+"0x96F7" = { name = "combat_f7", comment = "side-parity helper" }
+"0x9785" = { name = "combat_85", comment = "mem_74C0 helper" }
+"0x97AE" = { name = "combat_ae", comment = "mem_74C0 helper" }
+"0x97D5" = { name = "combat_d5", comment = "sub_9CA7 gate" }
+"0x9810" = { name = "combat_scan_74a3", comment = "$74A3 fleet scan" }
+"0x9900" = { name = "combat_00", comment = "helper" }
+"0x9962" = { name = "combat_get_ship_class", comment = "ship $6C96 >>4 &3 (ship class)" }
+"0x99FA" = { name = "combat_99fa", comment = "$74BB fleet array (43 ops)" }
+"0x9AF0" = { name = "combat_f0", comment = "combat_scan_74a3 wrapper" }
+"0x9B5F" = { name = "combat_calc_ship_stat", comment = "ship stat from record+20" }
+"0x9BB1" = { name = "combat_bb1", comment = "arg + mem_74C0" }
+"0x9C2D" = { name = "combat_get_ship_class_2d", comment = "ship $6C96 >>4 &3 (variant)" }
+"0x9CA7" = { name = "combat_can_board", comment = "boarding-range test (combat_side_parity)" }
+
+[prg.bank17]  # FLEET/crew/cargo management ($8000; ch.17): rations, loyalty, roles, cargo, dispose.
+"0x8003" = { name = "fleet_row_origin", comment = "737d==1 ? 11 : 7" }
+"0x8016" = { name = "fleet_col_by_facing", comment = "entity facing<7 ? 20 : 2" }
+"0x802E" = { name = "fleet_draw_grid", comment = "lay out the fleet grid (arg3 rows)" }
+"0x80E2" = { name = "fleet_select_mate", comment = "pick a mate from the roster $6A9A (max 10, 255-terminated) -> officer record $6542 stride 7. Each active mate captains one ship; shipyard blocks a buy/build with "no man to navigate" when no mate is idle." }
+"0x8155" = { name = "fleet_draw_row", comment = "blit_block_save a fleet row" }
+"0x81BA" = { name = "fleet_row_base", comment = "737d==1 ? 3 : 7" }
+"0x81CD" = { name = "fleet_list_loop", comment = "fleet list render loop" }
+"0x823D" = { name = "fleet_select_ship", comment = ""Which ship?"" }
+"0x82BF" = { name = "fleet_scroll_loop", comment = "fleet list scroll loop" }
+"0x82F5" = { name = "fleet_view_cargo", comment = ""cargo of the <ship>","No cargo on that ship"" }
+"0x83BE" = { name = "fleet_col_b", comment = "entity facing<7 ? 16 : 1" }
+"0x83D6" = { name = "fleet_show_prompt", comment = "show_prompt_record wrapper" }
+"0x8403" = { name = "fleet_scan_666d", comment = "iterate $666D records" }
+"0x843B" = { name = "fleet_row_c", comment = "737d==1 ? 11 : 1" }
+"0x844E" = { name = "fleet_col_by_pos", comment = "party_map_x>=7 ? 2 : 14" }
+"0x845F" = { name = "fleet_view_items", comment = ""We have these items","A-more B-end"" }
+"0x8562" = { name = "calc_sprite_pos", comment = "entity $6662 pos -> screen tile pos" }
+"0x85E1" = { name = "calc_sprite_pos_b", comment = "screen pos from mem_705B/C/D/E" }
+"0x864C" = { name = "draw_fleet_sprite", comment = "build+draw a fleet member sprite" }
+"0x8666" = { name = "fleet_look", comment = ""There's nothing unusual" look result" }
+"0x8693" = { name = "calc_map_pos", comment = "map cell from mem_705B/705C (/3)" }
+"0x86FD" = { name = "fleet_redraw", comment = "calc_map_pos + redraw_screen_if_changed" }
+"0x8714" = { name = "fleet_menu_loop", comment = "fleet management menu loop" }
+"0x8B0A" = { name = "fleet_leaf_8b0a", comment = "uncaught leaf helper (cross-bank CALL target)" }
+"0x8DC3" = { name = "fleet_set_rations", comment = ""Set rations to what (1-99)?"" }
+"0x8EA4" = { name = "fleet_thanks", comment = ""Thank you very much!" ($6BBF record reward)" }
+"0x8F7A" = { name = "fleet_col_d", comment = "entity facing<7 ? 16 : 2" }
+"0x8F92" = { name = "fleet_give_gold_loyalty", comment = "pay crew: "Give how much","Loyalty:%4d" (loyalty via gold)" }
+"0x9042" = { name = "fleet_gold_limit", comment = ""There's a limit to your gold!"" }
+"0x906F" = { name = "fleet_replace_mate", comment = ""Choose mate to replace"" }
+"0x9211" = { name = "fleet_draw_panel", comment = "queue_ppu_transfer fleet panel region" }
+"0x9252" = { name = "fleet_fill_loop", comment = "panel fill loop" }
+"0x928A" = { name = "fleet_draw_roster", comment = ""Ship"/"Navigator" roster headers + rows" }
+"0x9364" = { name = "fleet_iter_9364", comment = "range iteration helper" }
+"0x938A" = { name = "fleet_ship_cargo", comment = "ship record $6C90 -> cargo record $6AA4 link" }
+"0x93C0" = { name = "fleet_cargo_screen", comment = "cargo screen via record_scan_6c90_6aa4_b (64 ops)" }
+"0x957F" = { name = "fleet_replace_navigator", comment = ""Replace which navigator?","The flagship is the"" }
+"0x95FE" = { name = "fleet_scan_ships", comment = "iterate $6AA4 ship records" }
+"0x963D" = { name = "fleet_dispose_vessel", comment = ""Dispose of which vessel?"" }
+"0x96F6" = { name = "fleet_cargo_menu", comment = "draw_text_menu($9B68) cargo actions" }
+
+[prg.bank15]  # LAND EXPLORATION ($8000; ch.18): search (water/treasure-map dig) + ship repair + fleet orders.
+"0x8003" = { name = "land_row_origin", comment = "737d==1 ? 11 : 5" }
+"0x8016" = { name = "land_check_ships", comment = ""We only have one ship!" (need >=2 ships)" }
+"0x8082" = { name = "land_load_data", comment = "copy_from_bank + call_in_bank_dcd1 ($9814) load" }
+"0x80B3" = { name = "land_loop_80b3", comment = "record iteration helper" }
+"0x80E7" = { name = "land_scan_records", comment = "scan_records_6c90_flag enumeration" }
+"0x8126" = { name = "fleet_order_sail", comment = ""Sail","All hands on deck!","scant crew here"" }
+"0x8171" = { name = "fleet_order_wait", comment = ""OK to stand by until further orders"" }
+"0x8198" = { name = "land_redraw", comment = "blit_screen_buffer + refresh_hud" }
+"0x8202" = { name = "check_repair_hull", comment = "is hull ($6C90+0) below max (hull_max)?" }
+"0x824A" = { name = "repair_hull", comment = "add arg2*5 to hull ($6C90+0), clamp to hull_max" }
+"0x8281" = { name = "repair_mast", comment = "add arg2*5 to mast ($6C90+1), clamp to mast_max" }
+"0x82B8" = { name = "repair_rudder", comment = "add arg2*5 to rudder ($6C90+2), clamp to rudder_max" }
+"0x82EF" = { name = "repair_apply_loop", comment = "apply repairs across parts" }
+"0x8337" = { name = "get_hull", comment = "ship record $6C90+0 (hull durability)" }
+"0x8345" = { name = "get_mast", comment = "ship record $6C90+1 (mast)" }
+"0x8353" = { name = "get_rudder", comment = "ship record $6C90+2 (rudder)" }
+"0x8361" = { name = "get_hull_max", comment = "record_proc_6c96_1 (hull capacity)" }
+"0x836C" = { name = "get_mast_max", comment = "record_proc_6c96_2 (mast capacity)" }
+"0x8377" = { name = "get_rudder_max", comment = "record_proc_6c96_3 (rudder capacity)" }
+"0x8382" = { name = "land_draw_repair_panel", comment = "repair panel render (81 ops)" }
+"0x84DD" = { name = "land_confirm", comment = ""Is this OK" confirm" }
+"0x84F8" = { name = "draw_hull_gauge", comment = ""%3d/%3d -OK-" hull gauge" }
+"0x852D" = { name = "draw_mast_gauge", comment = ""%3d/%3d -OK-" mast gauge" }
+"0x8563" = { name = "draw_rudder_gauge", comment = ""%3d/%3d -OK-" rudder gauge" }
+"0x8599" = { name = "draw_repair_row", comment = "repair row (part gauge)" }
+"0x85B9" = { name = "draw_lumber_field", comment = ""%4d" lumber amount" }
+"0x85D0" = { name = "repair_draw_parts", comment = "repair panel: Ship/Hull/Mast/Rudder/bales" }
+"0x8657" = { name = "repair_choose", comment = ""Choose repairs","doesn't need repairs","Use how much lumber"" }
+"0x8791" = { name = "land_loop_8791", comment = "iteration helper" }
+"0x8800" = { name = "land_row_origin_b", comment = "737d==1 ? 11 : 3" }
+"0x8813" = { name = "repair_finish", comment = ""Repairs are cancelled/finished"" }
+"0x899E" = { name = "repair_no_lumber", comment = ""There's nothing to mend","no lumber for repairs"" }
+"0x89FE" = { name = "search_result", comment = ""Our search was unsuccessful" / "We found a clear spring!"" }
+"0x8A83" = { name = "search_water", comment = "SEARCH: "We found a clear spring!","not enough space to store" (find water on land)" }
+"0x8B57" = { name = "search_treasure", comment = "TREASURE HUNT: "Looks like the treasure's at %s","treasure map","further %s" (dig via map clue)" }
+"0x8BAF" = { name = "treasure_found", comment = ""Captain ... found the ..." treasure discovery (mem_705F&4 gate)" }
+"0x8D63" = { name = "land_loop_8d63", comment = "iteration helper" }
+
+[prg.bank9]  # OVERWORLD arrival/event dispatcher ($8000; ch.24): entity-at-port -> fire event handler.
+"0x8003" = { name = "handle_active_entity", comment = "dispatch the active entity (active_entity_idx $7268) via handle_entity_at_port" }
+"0x8012" = { name = "handle_entity_at_port", comment = "entity[$6662] pos vs its npc_record[$6004 stride51]: if at destination port (find_port_by_key match) call event handler $9E60[type-1](entity,port), else nat_9_0062" }
+"0x9E60" = { name = "entity_event_handlers", comment = "jump table of overworld entity event handlers, indexed by npc_record+4 event type" }
+
+[prg.bank35]  # 5x6 animated sprite renderer A ($8000; ch.24): tables $9994/$99F4.
+"0x8003" = { name = "compute_sprite_tiles", comment = "tile-address calc for a 5x6 sprite: (i>>2)<<8 + (i&3)<<6, walk arg5 cells" }
+"0x8049" = { name = "blit_sprite5x6", comment = "blit a 5x6 sprite from tables $9994/$99F4[blit_frame_state] at (738A,738B), palette 193" }
+"0x808F" = { name = "draw_sprite35_a", comment = "save pos + build+blit 5x6 sprite (chr_alloc_count < 64 path)" }
+"0x8167" = { name = "draw_sprite35_b", comment = "5x6 sprite variant (chr full path; mem_9994 direct)" }
+"0x828D" = { name = "draw_sprite35", comment = "dispatch draw_sprite35_a vs _b by chr_alloc_count" }
+
+[prg.bank36]  # 5x6 animated sprite renderer B ($8000; ch.24): table $8C56, packed state $738C.
+"0x8003" = { name = "decode_sprite_state", comment = "unpack blit_frame_state $738C into 5 sub-fields (bit pairs)" }
+"0x80DA" = { name = "compute_sprite_tiles_36", comment = "tile-address calc for a 5x6 sprite (as bank35 compute_sprite_tiles)" }
+"0x8120" = { name = "blit_sprite5x6_36", comment = "blit 5x6 sprite from table $8C56[arg2] at (738A,738B), palette 193" }
+"0x8159" = { name = "draw_sprite36_a", comment = "save state + build+blit 5x6 sprite" }
+"0x81EB" = { name = "draw_sprite36", comment = "decode_sprite_state + dispatch draw variant by chr_alloc_count" }
+
+[prg.bank37]  # GAME OVER screen ($8000; ch.24): "lost at sea" + Age-of-Exploration epilogue.
+"0x8003" = { name = "gameover_format_line", comment = "str_copy + control-char switch: format an epilogue text line" }
+"0x80AE" = { name = "gameover_setup_sprite", comment = "set_sprite_block ($84CA) + busy_wait (scene sprite setup)" }
+"0x8148" = { name = "gameover_draw_header", comment = "draw title "Uncharted Waters / Exploration..." ($84F7) + blit $B82A" }
+"0x8175" = { name = "gameover_draw_date", comment = "draw "On <month> <day>" date line (draw_month/draw_day + strings $8502/$8507)" }
+"0x81C2" = { name = "gameover_animation", comment = "blit image sequence ($A8A8/$A9D4 10x15) with busy_waits -- lost-at-sea animation" }
+"0x833D" = { name = "show_game_over", comment = "top orchestrator: enable audio (os_mode_flags|=$C), audio_reset, run the game-over sequence" }
+
+[prg.bank11]  # FLEET positioning / encounter grid ($8000; ch.24): two-fleet adjacency + metasprites.
+"0x8003" = { name = "clear_metasprite", comment = "set_metasprite($0500,0,0,0,0) -- clear the metasprite slot" }
+"0x8015" = { name = "draw_battle_digit", comment = "draw a number tile from $8372[arg4%10] when arg3==1 (count overlay)" }
+"0x80EC" = { name = "check_ship_active", comment = "is ship record $6C90[mem_74D2 stride7] valid/alive?" }
+"0x8129" = { name = "grid_cell_type", comment = "classify a grid cell: arg<16 and (arg-1)%5<=2 ? 2 : 1" }
+"0x8146" = { name = "scan_fleet_a", comment = "iterate fleet-A positions at $749E (count mem_74A8) applying check_ship_active" }
+"0x8238" = { name = "scan_fleet_b", comment = "iterate fleet positions at $749E (variant of scan_fleet_a)" }
+"0x82B8" = { name = "scan_both_fleets", comment = "scan_records_6c90_flag both fleets -> $749E (A, mem_74A8) / $74A3 (B, mem_74AA); dispatch scan_fleet_a/b" }
+"0x82DF" = { name = "check_collision", comment = "symmetric adjacency test scan_both_fleets(a,b) & (b,a); range 35-mem_6B8C*2" }
+"0x8320" = { name = "roll_evade", comment = "RNG gate: load_operand16_14(10) < 7" }
+"0x8346" = { name = "init_fleet_grid", comment = "call_in_bank_dcd1(bank14, $899D/$9583) fleet setup + roll_evade for active_entity_idx" }
+
+[prg.bank26]  # ROYAL COURT SUPPLY ($8000; ch.24): petition the King for crew/gold.
+"0x8003" = { name = "court_check_crew_request", comment = "crew-supply check (mem_6FCE, record_iter_6c90); gates "can supply %d men"" }
+"0x80D0" = { name = "court_check_gold_request", comment = "gold-supply check (mem_6FCC vs gold mem_666B); "We dont need any more gold"" }
+"0x8176" = { name = "court_leaf_8176", comment = "tiny court helper (LOADL+RETURN)" }
+"0x817A" = { name = "court_eval_state", comment = "evaluate court/quest state flags (mem_705F/7052/7053/7054/7067) (144 ops)" }
+"0x81BC" = { name = "court_leaf_81bc", comment = "court eval leaf helper" }
+"0x81DD" = { name = "court_leaf_81dd", comment = "court eval leaf helper (STORE_far + CALL)" }
+"0x81FE" = { name = "court_leaf_81fe", comment = "court leaf: calls draw_text" }
+"0x84C9" = { name = "court_pose_select", comment = "pick a portrait pose from mem_7067 / arg (bounds 11)" }
+"0x84F8" = { name = "court_draw_scene", comment = "draw court scene: clear region + blit backdrop $B452 + cursor; port table $AFD8[mem_7067*19]" }
+"0x853C" = { name = "lookup_title_8f04", comment = "if arg>=50: return $8F04[arg] (title/rank lookup)" }
+"0x8579" = { name = "draw_court_sprite", comment = "blit a 2x2 court sprite from tables $8FEA/$8FF6/$8F4A by (arg1,arg2)" }
+"0x85D1" = { name = "draw_court_portrait", comment = "draw court portrait: lookup_title_8f04 + draw_court_sprite (palette 224/225)" }
+"0x8626" = { name = "court_leaf_8626", comment = "court leaf helper" }
+"0x86A3" = { name = "count_record_fields", comment = "count consecutive non-zero record_field_byte from arg1" }
+"0x86D4" = { name = "court_setup_chr", comment = "set_chr_banks $8FFE + init court panel state (mem_7068/7069; $AFD8[mem_7067])" }
+"0x8742" = { name = "court_request_crew", comment = ""assign men to the crew" / "His Majesty can supply %d men" -- request crew from the King" }
+"0x8843" = { name = "court_request_gold", comment = "gold petition: "We dont need any more gold" / "manage on your own"" }
+"0x88C3" = { name = "court_menu", comment = "draw_string $9161 + draw_tile_grid $9148 selection (court action menu)" }
+
+[prg.bank5]  # port ECONOMY / trade-goods calc ($8000; ch.25): string-poor logic bank.
+"0x8003" = { name = "econ_get_6fbc", comment = "$6FBC[arg1*4] accessor" }
+"0x8028" = { name = "econ_get_entity", comment = "$6662[arg1<<4] entity accessor" }
+"0x8116" = { name = "econ_ship_rec35", comment = "$6C90 stride-35 record accessor" }
+"0x8229" = { name = "econ_calc_8229", comment = "$6FBC-based calc (39 ops)" }
+"0x82D1" = { name = "econ_ship_calc", comment = "$6C90 stride-35 record calc" }
+"0x8430" = { name = "econ_calc_8430", comment = "$6FBC-based calc (34 ops)" }
+"0x84E3" = { name = "econ_ship_calc_b", comment = "$6C90 stride-35 calc" }
+"0x861A" = { name = "econ_calc_861a", comment = "calc helper (34 ops)" }
+"0x86C6" = { name = "econ_calc_86c6", comment = "$6FBC calc (64 ops)" }
+"0x882B" = { name = "econ_check_882b", comment = "arg==3 branch check" }
+"0x884C" = { name = "econ_accrue_6fcc", comment = "grow mem_6FCC by RNG-scaled amount" }
+"0x88CF" = { name = "econ_get_port", comment = "port record $A005[arg1]*14 accessor" }
+"0x88FD" = { name = "econ_calc_88fd", comment = "$6B8D calc (66 ops)" }
+"0x8C1D" = { name = "econ_loop_8c1d", comment = "iteration helper" }
+"0x8C3A" = { name = "econ_loop_8c3a", comment = "iteration helper" }
+"0x8C63" = { name = "econ_call_nat5", comment = "-> nat_5_1186" }
+
+[prg.bank38]  # ENDING cutscene ($8000; ch.25): "Lisbon" ceremony/epilogue pages + music.
+"0x8003" = { name = "ending_init_a", comment = "ending init (branch on arg1)" }
+"0x809D" = { name = "ending_init_b", comment = "ending init variant" }
+"0x8141" = { name = "ending_show_page", comment = "display a cutscene text page (ptr arg1)" }
+"0x82CC" = { name = "ending_page_1", comment = "ending_show_page $92BE" }
+"0x82D9" = { name = "ending_page_2", comment = "ending_show_page $93F5" }
+"0x82E6" = { name = "ending_page_3", comment = "ending_show_page $94F1" }
+"0x82F3" = { name = "ending_page_4", comment = "ending_show_page $9588" }
+"0x8300" = { name = "ending_page_5", comment = "ending_show_page $96EB" }
+"0x830D" = { name = "ending_page_6", comment = "ending_show_page $970C" }
+"0x831A" = { name = "ending_page_7", comment = "ending_show_page $97EA" }
+"0x8327" = { name = "ending_text_main", comment = "main ending narration ("Lisbon"...) (202 ops)" }
+"0x8334" = { name = "ending_page_8", comment = "ending_show_page $9AB1" }
+"0x8341" = { name = "ending_scene_a", comment = "ending scene (play_music 18)" }
+"0x8407" = { name = "ending_sprite", comment = "set_sprite_block $8784" }
+"0x847A" = { name = "ending_loop", comment = "ending sequence loop" }
+"0x8538" = { name = "ending_anim", comment = "ending animation" }
+"0x862B" = { name = "ending_scene_b", comment = ""Lisbon" scene (sprite $8784)" }
+"0x868D" = { name = "ending_scene_c", comment = "ending scene (play_music 19)" }
+"0x8723" = { name = "ending_format_name", comment = "str_copy hero name -> $7390" }
+
+[prg.bank29]  # CARGO LOADING + destination select ($8000; ch.25).
+"0x8003" = { name = "cargo_load_sprites", comment = "set_sprite_block $88CE" }
+"0x8013" = { name = "draw_cargo_box", comment = "draw_box_variant(9,1)" }
+"0x801F" = { name = "cargo_ship_list", comment = ""Ship" cargo ship list" }
+"0x81AC" = { name = "cargo_no_move", comment = ""We won't get anywhere" (need cargo)" }
+"0x8262" = { name = "cargo_load_prompt", comment = ""You're free to load as..."" }
+"0x831D" = { name = "cargo_full", comment = ""This ship is packed full"" }
+"0x83D4" = { name = "cargo_price", comment = ""%s will cost ye %d gold"" }
+"0x84FF" = { name = "cargo_loop", comment = "cargo iteration loop" }
+"0x8527" = { name = "set_cargo_qty", comment = "write $6AB4 cargo qty field" }
+"0x853E" = { name = "cargo_ret_853e", comment = "small return helper" }
+"0x8544" = { name = "check_port_valid", comment = "mem_7067 (current_port) > 49 guard" }
+"0x857E" = { name = "cargo_ret_857e", comment = "small return helper" }
+"0x8584" = { name = "cargo_init", comment = "cargo state init" }
+"0x85B6" = { name = "set_cargo_field", comment = "write $6AB8 cargo field" }
+"0x85CA" = { name = "check_port_29b", comment = "current_port guard (variant)" }
+"0x8604" = { name = "cargo_all_full", comment = ""All ships are full!"" }
+"0x86BC" = { name = "cargo_clear", comment = "blit_alloc_tiles clear" }
+"0x872B" = { name = "cargo_menu", comment = ""What do ye want to do?"" }
+"0x876E" = { name = "cargo_reset", comment = "mem_7063=0" }
+"0x8790" = { name = "draw_captain_line", comment = ""Captain, %s"" }
+"0x879E" = { name = "destination_menu", comment = ""Where to, Captain?" destination select" }
+
+[prg.bank30]  # OPTIONS / SAVE-INFO config ($8000; ch.25): message speed, music, save date.
+"0x8003" = { name = "opt_check_port", comment = "mem_7067 (current_port) >= 50 guard" }
+"0x8068" = { name = "draw_ship_icon_30", comment = "blit a 7x4 ship icon" }
+"0x8139" = { name = "draw_ship_icon_class", comment = "draw_ship_icon_30 by ship class" }
+"0x8178" = { name = "get_ship_6aba", comment = "$6ABA[arg1*24] field" }
+"0x8187" = { name = "opt_passthru_8187", comment = "passthrough helper" }
+"0x81B3" = { name = "opt_ship_line", comment = ""Ship: " ($6AA4 record)" }
+"0x83E1" = { name = "opt_passthru_83e1", comment = "passthrough helper" }
+"0x840E" = { name = "opt_guard_840e", comment = "zero guard" }
+"0x844A" = { name = "opt_draw_name", comment = "$6542 record name" }
+"0x85FF" = { name = "opt_sprite", comment = "upload_sprite_block markers" }
+"0x8683" = { name = "opt_loop_8683", comment = "iteration loop" }
+"0x86C6" = { name = "opt_calc_div5", comment = "arg/5 calc" }
+"0x8712" = { name = "opt_scan_a", comment = "arg*5 scan" }
+"0x8778" = { name = "opt_scan_b", comment = "arg*5 scan (variant)" }
+"0x87DE" = { name = "opt_get_entity", comment = "$6662[arg1<<4] entity" }
+"0x8820" = { name = "opt_get_entity_b", comment = "$6662 entity accessor variant" }
+"0x88D4" = { name = "draw_coord_field", comment = ""%s %d, %d" coord ($8F92 table)" }
+"0x88F1" = { name = "opt_audio_off", comment = "audio_param_gated(0) mute" }
+"0x8942" = { name = "draw_last_save", comment = ""Last save was on <date>"" }
+"0x89F3" = { name = "opt_message_speed", comment = ""Message speed is %d" (mem_6B88)" }
+"0x8A1B" = { name = "opt_toggle_8a1b", comment = "option toggle (mem_7068)" }
+"0x8A5C" = { name = "opt_music_toggle", comment = ""Music is %s. Turn..." (os_mode_flags&4)" }
+"0x8ACE" = { name = "opt_pick", comment = ""Which one? (B-cancel)" option picker" }
+
+[prg.bank21]  # SHIP OUTFITTING ($8000; ch.25): guns/sails/repair/rename + stat panel.
+"0x8003" = { name = "outfit_sprites", comment = "set_sprite_block $9258" }
+"0x8013" = { name = "draw_ship_icon_21", comment = "ship icon by arg%3" }
+"0x806F" = { name = "outfit_clear", comment = "mem_7064=-1 + clear" }
+"0x809F" = { name = "draw_stat_durability_21", comment = ""Durability: %3d" at (3,12)" }
+"0x80C1" = { name = "draw_stat_handling_21", comment = ""Handling: %3d" at (3,14)" }
+"0x80E3" = { name = "draw_stat_power_21", comment = ""Power: %3d" at (3,13)" }
+"0x8105" = { name = "draw_stat_cargo_21", comment = ""Cargo load: %3d" at (3,15)" }
+"0x8135" = { name = "draw_stat_total_load", comment = ""Total load: %4d/" at (3,18)" }
+"0x8155" = { name = "draw_stat_crew_21", comment = ""Crewmen:" at (3,16)" }
+"0x8193" = { name = "outfit_ship_line", comment = ""Ship: %s" ($6AA4)" }
+"0x8296" = { name = "outfit_entry", comment = "-> shipyard_entry gate" }
+"0x82A7" = { name = "outfit_menu", comment = ""What brings you here?"" }
+"0x82EE" = { name = "outfit_no_gold", comment = ""We don't have enough gold"" }
+"0x8301" = { name = "outfit_cancel", comment = ""Changed yer mind, eh?"" }
+"0x8311" = { name = "outfit_rename", comment = ""Renaming a ship will cost..."" }
+"0x841E" = { name = "outfit_load_guns", comment = ""Load guns onto which ship" (101 ops)" }
+"0x86AF" = { name = "outfit_rig_sails", comment = ""Rig sails on which ship"" }
+"0x88FB" = { name = "outfit_hire_crew", comment = ""A good sailor always needs..." (hire crew)" }
+"0x8B42" = { name = "outfit_help", comment = ""What do you need?"" }
+"0x8BB9" = { name = "outfit_accrue", comment = "mem_6F72 accrual toward cap 50000" }
+"0x8BF6" = { name = "outfit_port_rec", comment = "port record $67B2[current_port]" }
+"0x8C36" = { name = "outfit_no_gold_b", comment = ""We don't have any gold"" }
+"0x8DE0" = { name = "outfit_no_repair", comment = ""There's nothing to fix"" }
+"0x8F71" = { name = "outfit_fix_which", comment = ""Fix which vessel?"" }
+"0x8FF8" = { name = "outfit_one_ship", comment = ""We've only one ship!"" }
+
+[prg.bank19]  # MERCHANT GUILD ($8000; ch.25): rare goods + information broker.
+"0x8003" = { name = "guild_scan_records", comment = "scan_records_6c90_flag enumeration" }
+"0x8085" = { name = "guild_decline", comment = ""Oh well, I'll ask ye no more"" }
+"0x809D" = { name = "guild_cant_carry", comment = ""Ye can't be carrying..."" }
+"0x80B1" = { name = "guild_quest_return", comment = ""Ye came back with the..." quest-item turn-in (236 ops)" }
+"0x8589" = { name = "guild_sprites", comment = "set_sprite_block $F36F" }
+"0x8599" = { name = "guild_clear_region", comment = "queue_ppu_transfer clear" }
+"0x85AC" = { name = "guild_show_worth", comment = ""Economic worth: %d"" }
+"0x8706" = { name = "guild_grid_calc", comment = "grid position calc" }
+"0x878F" = { name = "guild_no_crew", comment = ""There's no one but me here"" }
+"0x8808" = { name = "guild_view_whom", comment = ""View whom?"" }
+"0x88E5" = { name = "guild_which_ship", comment = ""Which ship?"" }
+"0x8969" = { name = "guild_clear_8969", comment = "clear helper" }
+"0x89D1" = { name = "guild_welcome", comment = ""Welcome. How may I help"" }
+"0x8A1E" = { name = "guild_tired", comment = ""You must be very tired"" }
+"0x8A87" = { name = "guild_as_you_wish", comment = ""As you wish"" }
+"0x8A97" = { name = "guild_show_revenue", comment = ""Revenue:%5d"" }
+"0x8C43" = { name = "guild_info_header", comment = ""Information on..."" }
+"0x8CE0" = { name = "guild_info_which", comment = ""Information on which?"" }
+"0x8D2B" = { name = "guild_draw_value", comment = ""%5d" value field" }
+"0x8DA5" = { name = "guild_have_one", comment = ""We already have one!"" }
+"0x8E47" = { name = "guild_interests", comment = ""What interests you?"" }
+"0x8EF1" = { name = "guild_loop_8ef1", comment = "iteration helper" }
+"0x8F28" = { name = "guild_loop_8f28", comment = "iteration helper" }
+"0x8F60" = { name = "guild_clear_top", comment = "clear_screen_top" }
+"0x8FA5" = { name = "guild_draw_8fa5", comment = "render helper" }
+"0x9020" = { name = "guild_dont_deal", comment = ""We don't deal in such"" }
+"0x90B1" = { name = "guild_nothing_sell", comment = ""We've nothing to sell"" }
+"0x91DA" = { name = "guild_which_one", comment = ""Which one?"" }
+"0x9232" = { name = "guild_quest_item", comment = ""Ahh, so this is the..." quest item (109 ops)" }
+
+[prg.bank18]  # PIRATE/PORT encounters ($8000; ch.25): bribe/escape/rumor events.
+"0x8003" = { name = "enc_check_port", comment = "current_port gate" }
+"0x8032" = { name = "enc_port_guard", comment = "port index >=50 guard" }
+"0x806F" = { name = "enc_side_806f", comment = "side/index calc" }
+"0x80C9" = { name = "enc_setup", comment = "encounter setup (mem_7396)" }
+"0x81E0" = { name = "enc_81e0", comment = "helper" }
+"0x8211" = { name = "enc_port_table", comment = "$AFD8[current_port*19] port table" }
+"0x827F" = { name = "enc_draw_region", comment = "blit_alloc_tiles region" }
+"0x835C" = { name = "enc_cursor_835c", comment = "vram cursor helper" }
+"0x8383" = { name = "enc_cursor_8383", comment = "vram cursor helper" }
+"0x83BB" = { name = "enc_83bb", comment = "helper (74 ops)" }
+"0x84AB" = { name = "enc_loop_84ab", comment = "iteration helper" }
+"0x8520" = { name = "enc_set_chr", comment = "set_chr_banks(22,4)" }
+"0x852E" = { name = "enc_dispatch", comment = "dispatch by arg4 (switch)" }
+"0x85B1" = { name = "enc_check_85b1", comment = "arg2==4 check" }
+"0x85E7" = { name = "enc_85e7", comment = "helper" }
+"0x8670" = { name = "enc_8670", comment = "helper (68 ops)" }
+"0x87B3" = { name = "enc_get_6f76", comment = "$6F76[current_port] flag byte" }
+"0x884F" = { name = "enc_884f", comment = "helper" }
+"0x8950" = { name = "enc_now_leaving", comment = ""Now leaving <port>"" }
+"0x89B8" = { name = "enc_draw_markers", comment = "fleet markers ("R(","E=") (108 ops)" }
+"0x8BA1" = { name = "get_6f76_bits", comment = "$6F76[arg] & 3" }
+"0x8BB1" = { name = "enc_get_6b99", comment = "mem_6B99 bit extract" }
+"0x8BDA" = { name = "enc_quest_cond", comment = "quest predicate (705F&8 && 705F&1 && 7054==..)" }
+"0x8C09" = { name = "enc_get_6b9b", comment = "mem_6B9B bit extract" }
+"0x8C2A" = { name = "enc_port_rec", comment = "$67BA[arg3*14] port record" }
+"0x8C96" = { name = "enc_port_rec_b", comment = "$67BA port record (variant)" }
+"0x8CEE" = { name = "enc_bribe_ok", comment = ""Hmm. I'll let you get..." (bribe accepted)" }
+"0x8D74" = { name = "enc_8d74", comment = "helper" }
+"0x8DED" = { name = "enc_proud", comment = ""All Portuguese are proud"" }
+"0x8E61" = { name = "enc_scan_ships", comment = "scan_records_6c90_flag" }
+"0x8EA2" = { name = "enc_youll_pay", comment = ""Confound it! You'll pay"" }
+"0x8EC8" = { name = "enc_got_away", comment = ""We got away!" (escape)" }
+"0x8F20" = { name = "enc_no_bribe_gold", comment = ""We've no gold for a bribe"" }
+"0x8FD7" = { name = "enc_honest", comment = ""Well, he's an honest sort"" }
+"0x901E" = { name = "enc_gruff_men", comment = ""Cap'n, some gruff looking men..."" }
+"0x90CC" = { name = "enc_rumor", comment = ""Cap'n, have ye heard of..." rumor" }
+"0x91DD" = { name = "enc_91dd", comment = "entity helper (42 ops)" }
+
+[prg.bank0]  # CARGO / HOLD management ($8000; ch.25): load/unload goods between ships.
+"0x8003" = { name = "cargo_main", comment = "cargo screen main (77 ops)" }
+"0x80B7" = { name = "cargo_calc_80b7", comment = "position/qty calc" }
+"0x80FC" = { name = "cargo_draw_char", comment = ""%c" char draw" }
+"0x8142" = { name = "cargo_check_8142", comment = "bounds check" }
+"0x8158" = { name = "cargo_confirm", comment = ""Is this OK" confirm" }
+"0x8191" = { name = "cargo_8191", comment = "helper (37 ops)" }
+"0x81F3" = { name = "cargo_screen", comment = "cargo transfer screen (121 ops)" }
+"0x83A6" = { name = "cargo_load_data", comment = "copy_from_bank_dc80 load" }
+"0x83F2" = { name = "cargo_entity_a", comment = "$6662 entity accessor" }
+"0x840D" = { name = "cargo_entity_b", comment = "$6662 entity accessor" }
+"0x842C" = { name = "cargo_entity_c", comment = "$6662 entity accessor" }
+"0x8447" = { name = "get_cargo_6ab6", comment = "$6AB6[ship*24] / 10" }
+"0x8458" = { name = "get_cargo_6ab8", comment = "$6AB8[ship*24]" }
+"0x8467" = { name = "get_cargo_6ab4", comment = "$6AB4[ship*24] / 10" }
+"0x8478" = { name = "cargo_draw_ship", comment = "draw a ship cargo row (41 ops)" }
+"0x85F6" = { name = "cargo_85f6", comment = "render helper" }
+"0x8698" = { name = "cargo_cannot_load", comment = ""Cannot load more"" }
+"0x86FC" = { name = "cargo_which_ship", comment = ""Which ship? (B-end)"" }
+"0x875B" = { name = "get_ship_word15_0", comment = "record_field_word(ship+15)" }
+"0x876C" = { name = "draw_hold_gauge", comment = ""%3d/%3d" hold gauge ($6C94)" }
+"0x8788" = { name = "cargo_left", comment = ""%4d left" cargo remaining (97 ops)" }
+"0x88D3" = { name = "cargo_left_b", comment = ""%4d left" variant" }
+"0x8971" = { name = "cargo_pick_ship", comment = ""Which ship?" picker" }
+"0x8AE1" = { name = "cargo_loop_8ae1", comment = "iteration helper" }
+"0x8B0C" = { name = "cargo_transfer_col", comment = "queue_ppu_transfer column" }
+"0x8B28" = { name = "cargo_choose_vessel", comment = ""Choose a vessel"" }
+"0x8BDD" = { name = "cargo_ship_rec", comment = "$6AA4[ship*24] record" }
+"0x8C83" = { name = "cargo_barrels_free", comment = ""%4d barrels free"" }
+"0x8C9B" = { name = "cargo_draw_qty", comment = ""%3d" qty (62 ops)" }
+"0x8D8C" = { name = "cargo_ship_rec_b", comment = "$6AA4 record (variant)" }
+"0x8E07" = { name = "cargo_8e07", comment = "helper" }
+"0x8E7B" = { name = "cargo_8e7b", comment = "helper" }
+"0x8EF2" = { name = "cargo_draw_field", comment = ""%4d" field" }
+"0x8F6C" = { name = "cargo_8f6c", comment = "helper" }
+"0x9008" = { name = "cargo_field_9008", comment = ""%4d" field" }
+"0x9041" = { name = "cargo_main_screen", comment = "cargo main screen ("%4d") (313 ops)" }
+"0x9777" = { name = "cargo_load_9777", comment = "copy_from_bank_dc80 load" }
+"0x97D4" = { name = "cargo_header", comment = ""Cargo" header" }
+"0x9814" = { name = "cargo_sprites", comment = "upload_sprite_block" }
+
+[prg.bank14]  # NAVAL COMBAT / DUEL dialogue + outcome ($8000; ch.25).
+"0x8003" = { name = "duel_8003", comment = "combat-dialogue entry (arg3 branch)" }
+"0x80DA" = { name = "duel_grid_check", comment = "arg1 < 16 grid-cell guard" }
+"0x80F7" = { name = "duel_80f7", comment = "helper" }
+"0x81AD" = { name = "duel_table_7417", comment = "$7417 table setup" }
+"0x81DA" = { name = "duel_81da", comment = "helper" }
+"0x824B" = { name = "duel_name_7390", comment = "$7390 name buffer setup" }
+"0x8282" = { name = "duel_season", comment = "game_month season branch" }
+"0x833D" = { name = "duel_fleet_749e", comment = "$749E fleet-A scan" }
+"0x83B5" = { name = "duel_load_name", comment = "copy_from_bank_dc80 -> $7390" }
+"0x8429" = { name = "duel_fleet_74a3", comment = "$74A3 fleet-B scan" }
+"0x84B0" = { name = "duel_84b0", comment = "helper" }
+"0x84E0" = { name = "duel_84e0", comment = "helper" }
+"0x8504" = { name = "duel_8504", comment = "helper" }
+"0x8527" = { name = "duel_grid_8527", comment = "grid index calc" }
+"0x8554" = { name = "duel_speak", comment = ""I'm <name>" combatant line (90 ops)" }
+"0x8749" = { name = "duel_scan_ff", comment = "scan until $ff terminator" }
+"0x877F" = { name = "duel_draw_markers", comment = "fleet markers ("R-","E>")" }
+"0x87CA" = { name = "duel_87ca", comment = "arg4<5 guard" }
+"0x87F8" = { name = "duel_87f8", comment = "range helper" }
+"0x8854" = { name = "duel_8854", comment = "draw markers wrapper" }
+"0x88B2" = { name = "duel_get_74dc", comment = "mem_74DC accessor" }
+"0x8906" = { name = "duel_draw_8906", comment = "marker draw ("R","E>[")" }
+"0x899D" = { name = "duel_load_899d", comment = "copy_from_bank_dc80 load" }
+"0x8A56" = { name = "duel_sprites", comment = "upload_sprite_block" }
+"0x8A7C" = { name = "duel_resolve_target", comment = "resolve_field_ptr for a $6A9A record" }
+"0x8AB0" = { name = "duel_ab0", comment = "helper (49 ops)" }
+"0x8BF0" = { name = "duel_will_hear", comment = ""The %s will hear about this"" }
+"0x8C64" = { name = "duel_check_705a", comment = "mem_7054==3 && mem_705A==arg1" }
+"0x8C7D" = { name = "duel_death", comment = ""This is the end for <name>" (73 ops)" }
+"0x8E53" = { name = "duel_date", comment = ""On <date>"" }
+"0x8E9D" = { name = "duel_lost_life", comment = ""lost his life in a storm"" }
+"0x8EBA" = { name = "duel_load_eba", comment = "copy_from_bank_dc80 $75FC" }
+"0x90BB" = { name = "duel_90bb", comment = "helper" }
+"0x9118" = { name = "duel_scan_666d", comment = "$666D scan" }
+"0x916C" = { name = "duel_loop_916c", comment = "iteration helper" }
+"0x9195" = { name = "duel_9195", comment = "marker draw + resolve (74 ops)" }
+"0x92C4" = { name = "duel_92c4", comment = "render helper (81 ops)" }
+"0x94EC" = { name = "duel_94ec", comment = "helper" }
+"0x9583" = { name = "duel_9583", comment = "marker draw ("R","E?")" }
+

@@ -304,7 +304,7 @@ NesPrgRom:7C41D:invoke_syscall_a_dc6e:~ LEmp invoke_syscall_a_dc6e ($DC0D) score
 NesPrgRom:7C42F:store_advance_ptrs:== LEmp store_advance_ptrs ($DC1F) score 1.00 relocated-identical; 2 callers
 NesPrgRom:7C444:calc_record_ptrs2:== LEmp calc_record_ptrs2 ($DC34) score 1.00 relocated-identical; 3 callers
 NesPrgRom:7C47B:wait_input:poll read_controller(0)/(1) in a loop until a button edge (JUMPT/JUMPF back)
-NesPrgRom:7C4A9:frame_sync:mul_wide + CFC0 + %2 parity: frame sync used by the wait loops
+NesPrgRom:7C4A9:frame_sync:advances the RNG every frame: local10=rng_next()+1 -> rng_store_seed($9472), then %2 parity wait. THIS is why idle/menu/step timing changes random outcomes -- the PRNG state churns forward continuously (timing-manipulable RNG).
 NesPrgRom:7C4DC:loop_init_c4dc:set local11=0, enter loop @ $C4F1 (loop-init entry)
 NesPrgRom:7C4FE:incr_deref_field:32-bit: DEREF ptr, INC, POPSTORE (increment a value in place)
 NesPrgRom:7C554:format_field:set up field-format context: work buffer @ fp-179, value arg1 -> formats a display field (tail @ L_C56F)
@@ -333,13 +333,13 @@ NesPrgRom:7CE4D:helper_ce4d:shared-tail fragment (JUMP $CE66); role TBD (obscure
 NesPrgRom:7CE6E:scale_helper_ce6e:shared-tail scaler (JUMP $CE85); base of the CE8D/CE9B chain (obscured; A3F4 post-draw step)
 NesPrgRom:7CE8D:scale_x6:scale_helper_ce6e(arg*6)
 NesPrgRom:7CE9B:scale_6b88:scale_x6(mem_6B88*arg*3) = CE6E(mem_6B88*arg*18); A3F4 calls scale_6b88(1) after draw_string
-NesPrgRom:7CEAD:mul_wide:== LEmp mul_wide ($D69D) score 0.97 relocated-identical; 1 callers
+NesPrgRom:7CEAD:rng_next:PRNG core: reads the 4-byte state at $9472, churns it through the multi-round scrambler ($CF9E/$CF89/$CFA9), returns a raw 16-bit value. MISLABELED "mul_wide" by LEmp (0.97 borrow) -- it is NOT a multiply. Every random event routes through here.
 NesPrgRom:7CF89:add32:== LEmp add32 ($D779) score 1.00 relocated-identical; 14 callers
 NesPrgRom:7CF9E:shl32:== LEmp shl32 ($D78E) score 1.00 relocated-identical; 9 callers
 NesPrgRom:7CFA9:shl32_b1:== LEmp shl32_b1 ($D799) score 1.00 relocated-identical; 8 callers
 NesPrgRom:7CFB4:shl32_b2:== LEmp shl32_b2 ($D7A4) score 1.00 relocated-identical; 7 callers
 NesPrgRom:7CFC0:write_struct_9472:set up a descriptor at $9472 from VM args (called by frame_sync)
-NesPrgRom:7CFE1:load_operand16_14:== LEmp load_operand16_14 ($D7D1) score 1.00 relocated-identical; 0 callers
+NesPrgRom:7CFE1:rng_below:bounded RNG: returns rng_next() mod N where N=VM arg (via udiv16 $E1EB); N==0 returns 0. MISLABELED "load_operand16_14" by LEmp (1.00 borrow). Callers: calc_good_price, pick_random_step, poker_shuffle, roll_evade, accrue_port_investment, ...
 NesPrgRom:7D003:calc_axis_diff_fold:absolute difference of two args, folded to 0..4 (coordinate/direction calc)
 NesPrgRom:7D026:scan_records_6c90_flag:scan the SRAM record array at $6C90 (stride ~7) for flag bit $40, collect indices
 NesPrgRom:7D08C:calc_from_record_fields:combine record fields +1/+2/+3 via shl/shr into a derived value
@@ -393,8 +393,8 @@ NesPrgRom:7DC96:draw_icon_df4e:2x2 tile from $DF4E[idx*24+], palette $E0
 NesPrgRom:7DCC8:draw_icon_dfae:2x2 tile from $DFAE/$DFAC tables, palette $E0
 NesPrgRom:7DCEC:copy_from_bank:== LEmp copy_from_bank ($F3A3) score 1.00 relocated-identical; 0 callers
 NesPrgRom:7DD5A:invoke_syscall_a_dc6e_dd5a:~ LEmp invoke_syscall_a_dc6e ($DC0D) score 0.82 diverged (reloc); same function -- verify; 3 callers
-NesPrgRom:7DD6C:max_s16:== LEmp max_s16 ($DCD6) score 1.00 relocated-identical; 0 callers
-NesPrgRom:7DD8C:min_s16:copy 5 args + signed compare $0b:$09 -> select (companion to max_s16 $DD6C)
+NesPrgRom:7DD6C:min_s16:returns the SMALLER of two s16 (was mis-borrowed as max_s16 from L'Emp; traced MIN)
+NesPrgRom:7DD8C:max_s16:returns the LARGER of two s16 (was labeled min_s16; traced MAX)
 NesPrgRom:7DDB5:memset_ptr:fill $0a bytes at dest ($0e/$0f) with byte $0c
 NesPrgRom:7DDE0:memcpy_ptr:== LEmp memcpy_ptr ($DD1F) score 1.00 relocated-identical; 0 callers
 NesPrgRom:7DE0C:jmp_indirect_ptr0c:== LEmp jmp_indirect_ptr0c ($DD4B) score 1.00 relocated-identical; 1 callers
@@ -601,15 +601,25 @@ NesPrgRom:3889:draw_box_from_native:call native $D791 -> draw_box_variant (69 ca
 NesPrgRom:3898:modal_input_loop:metasprite + frame_sync input loop (helper_ce4d dispatch; switch on button) -- modal cursor handler (8 callers)
 NesPrgRom:39A0:sum_matching_6aa4:sum a field over $6AA4 records (stride 24) whose key byte == arg1 (record aggregation; 15 callers)
 NesPrgRom:3A11:lookup_stat_ba11:record lookup via tables $B50A(stride5)/$67B2(stride14)/$B888(stride88), mem_7067 index -> computed stat (role: derived value; 25 ops)
-NesSaveRam:4:npc_records:overworld NPC/rival ship records (SRAM, stride 51; +4=event type, +5=destination port key)
-NesSaveRam:662:entity_table:overworld entity table (party + NPCs), stride 16: +0/+1=x/y, +2/+3=target x/y, +8=facing/frame
-NesSaveRam:664:party_map_x:party position X on the overworld map (party_in_rect, redraw)
-NesSaveRam:665:party_map_y:party position Y on the overworld map
-NesSaveRam:671:sprite_mode_flags:sprite/metasprite mode flags (bit1/bit5 gate place_object_sprite draw paths)
-NesSaveRam:B87:os_mode_flags:OS mode-flags byte; mask &4 (bit2)=AUDIO-ENABLED, gates audio_param/reset/playing_gated ($E0C1/$E0D6/$E0EA); (ch.7; bit corrected ch.22)
-NesSaveRam:B89:game_day:in-game day-of-month (draw_day renders mem_6B89+1)
-NesSaveRam:B8A:game_month:in-game month index into name table $BA96 (draw_month)
-NesSaveRam:B8B:game_year_off:in-game year offset; actual year = mem_6B8B + 1500 (draw_year; UW is set in the 1500s)
+NesSaveRam:0004:npc_records:overworld NPC/rival ship records (SRAM, stride 51; +4=event type, +5=destination port key). A rival's fleet (up to 5 ships) is loaded into combat enemy slots $6C90[5-9] at battle start -- source of the princess-kidnapper finale fleet.
+NesSaveRam:0662:entity_table:overworld entity table (party + NPCs), stride 16: +0/+1=x/y (live=Lisbon 32,8), +2/+3=port key f2/f3, +8=facing, +11=EQUIPMENT flags (bit0=Telescope wide-Look, bit1=Sextant position). ch.28 live
+NesSaveRam:0664:party_map_x:party position X on the overworld map (party_in_rect, redraw)
+NesSaveRam:0665:party_map_y:party position Y on the overworld map
+NesSaveRam:066B:gold:player gold/purse (word); capped $EA60=60000. Trade/quest credits, ship/goods debits go here (bank19).
+NesSaveRam:0671:sprite_mode_flags:sprite/metasprite mode flags (bit1/bit5 gate place_object_sprite draw paths)
+NesSaveRam:07B2:port_econ_records:port economy records, stride 14: +0 economic_worth, +4 industrial_worth, +2/+6 investments, +11 price% source (View->Town shows +11+50 %; live Lisbon 51->101%). ch.28; live EW/IW=800
+NesSaveRam:0A9A:mate_roster:active MATE roster: up to 10 slots, 255-terminated, each a byte index into officer records $6542. Fleet width = number of mates (each captains 1 ship). Recruited via event_recruit_sailor; NOT gated by rank/fame directly (gated by player stats*(1+rank/10) vs sailor stats + gold).
+NesSaveRam:0B87:os_mode_flags:OS mode-flags byte; mask &4 (bit2)=AUDIO-ENABLED, gates audio_param/reset/playing_gated ($E0C1/$E0D6/$E0EA); (ch.7; bit corrected ch.22)
+NesSaveRam:0B89:game_day:in-game day-of-month (draw_day renders mem_6B89+1)
+NesSaveRam:0B8A:game_month:in-game month index into name table $BA96 (draw_month)
+NesSaveRam:0B8B:game_year_off:in-game year offset; actual year = mem_6B8B + 1500 (draw_year; UW is set in the 1500s)
+NesSaveRam:0BAE:hero_record:player hero record (ch.28 live dump): name "Leon Franco" @+0, 5 char-create stats @+$11 (Charisma/Wisdom/Intelligence/Strength/Courage)
+NesSaveRam:0BC1:nav_skill:navigation skill (per-port accuracy); Sextant position error = rng if skill<rng(180) (helm_show_position)
+NesSaveRam:0C90:ship_records:ship stat records, stride 7: +0 durability,+1 handling,+2 power,+3 arms,+4 crew(word),+6 class/cargo. In COMBAT the array is two fleets: 0-4=yours, 5-9=enemy ($6CB3). Combat caps at 5 ships/side (combat_grid_index).
+NesSaveRam:0F70:savings:bank savings deposit (word); capped $2710=10000 (bank19 deposit/withdraw).
+NesSaveRam:0F72:fame:FAME / prestige stat (word, cap $C350=50000). NOT "port investment" -- that was my over-narrow mislabel (only saw accrue_port_investment write it). Written by MANY activities: discovery/"Land ho" (bank08 sail_event), trading (bank20), port investment scaled by rank (bank19), outfitting/events (bank21/24). Gain ~= rng(100)+(ship crew+durability)/2 per event. DISPLAYED on the status panel next to gold (bank30 $855B). READ by the court at every quest stage (bank25) = the King-summon/quest gate. Can decay/be spent (bank19 -=rng*5+50).
+NesSaveRam:0F74:rank_fame:NOBILITY RANK / title index 0-9 (Page..Duke, Count=7); ptr table bank58 $1C56. Raised ONLY by court-quest completion (bank25, +1/quest, cap 9). Drives ship-bargain discount (10-rank) + court-quest cash reward. Distinct from fame($6F72): fame gates quest AVAILABILITY, rank is the REWARD. Does NOT gate mate recruiting.
+NesSaveRam:0FBE:good_price_drift:per-good price-drift array, stride 4 (calc_good_price; floored 100, grows with worth/trade -- NOT the shelf price, which is the goods-table base)
 NesSaveRam:1050:player_char_record:main player-character/quest working record $7050-$705F (hottest RAM; ch.6/14)
 NesSaveRam:1052:quest_target_port:quest destination port index (compared vs current_port for hook triggers)
 NesSaveRam:105F:quest_flags:main quest-progress flag byte (bits gate tavern/court hooks: &1/&2/&8)
@@ -655,7 +665,7 @@ NesPrgRom:28E27:market_buy_pick_ship:BUY: "Which ship will carry the goods?" shi
 NesPrgRom:28F90:find_ship_with_good:find first ship whose good field == arg2
 NesPrgRom:28FB7:market_price_list:price-list screen: "Sell  Buy","Variety for for", per-good buy/sell prices
 NesPrgRom:291C7:market_pick_ship:"Which one?" ship picker
-NesPrgRom:29231:accrue_port_investment:grow mem_6F72 port-investment toward cap 50000 ($C350)
+NesPrgRom:29231:accrue_fame_from_investment:grow FAME (mem_6F72) via port investment, scaled by rank ((rank/2)*100+150), toward cap 50000 ($C350). ONE of several fame sources (see also bank08 discovery / bank20 trade / bank21 outfit). Formerly mislabeled accrue_port_investment.
 NesPrgRom:2926E:calc_good_price:port trade price for a good (port record + RNG load_operand16_14)
 NesPrgRom:292AE:market_invest_port:port investment txn: "We're out of gold!","can't invest in this port","can't accept any more"
 NesPrgRom:2947B:market_help_menu:"How can I help ye?" market top menu
@@ -808,7 +818,7 @@ NesPrgRom:30BD3:event_quest_reward:"I'm glad you came through for us!","deposit 
 NesPrgRom:30E31:event_recruit_crew:"no room for more crew","Spend how much","Anyone want to join"
 NesPrgRom:30F6A:quest_clear_screen:mem_7063=240 + blit_alloc_tiles full clear
 NesPrgRom:30F9E:quest_pick:"Which one?" picker
-NesPrgRom:30FEB:event_recruit_sailor:"I don't see any sailors here","Approach whom?","How'd you like to join"
+NesPrgRom:30FEB:event_recruit_sailor:MATE recruit ("find mates"), bank24. Candidate must be AT current port ($6A6F), available (flag $6548 bit0 set/bit1 clear); roster $6A9A caps at 10. JOIN ROLL: sailor_worth = sailor_best_stat*(sailor_stat2+3); player_worth = player_stat_at_sailor's_best_idx * (player_stat2+3) * (1 + rank/10); JOINS if sailor_worth <= rng(0..19) + player_worth. So high START STATS substitute for rank (rank is only a 1.0-1.9x multiplier) -- this is why the WR rolls 80s. Each ship needs a free mate to navigate.
 NesPrgRom:32003:call_court_check_gold:-> bank26 court_check_gold_request ($80D0)
 NesPrgRom:32014:call_court_check_crew:-> bank26 court_check_crew_request ($8003)
 NesPrgRom:32025:call_court_eval:-> bank26 court_eval_state ($817A)
@@ -931,8 +941,8 @@ NesPrgRom:181A6:combat_tile_x:mem_74C0 -> pixel X
 NesPrgRom:181E1:combat_dir_81e1:direction helper (arg4<5)
 NesPrgRom:18209:combat_check_8209:arg3==0x3C0 check
 NesPrgRom:182E4:combat_move_82e4:movement helper (arg4<2)
-NesPrgRom:183F7:combat_grid_index:arg<5?0:5 + arg%5 grid index
-NesPrgRom:1840E:combat_get_ship_stat:ship record $6C90[arg1] field
+NesPrgRom:183F7:combat_grid_index:(arg<5?0:5)+(arg%5): partitions the combat ship array into two fleets of 5. Slots 0-4 = YOUR battle line, 5-9 = ENEMY. NAVAL COMBAT IS HARD-CAPPED AT 5 SHIPS PER SIDE -- you can never field more than 5 (flagship + up to 4 mates), so the finale needs <=5 warships, not a maxed 10-ship fleet.
+NesPrgRom:1840E:combat_get_ship_stat:ship record $6C90[arg1] field (stride 7). Combat array: idx 0-4=your ships, 5-9=enemy (enemy line base $6C90+35=$6CB3). Enemy fleet loaded from the rival npc_record ($6004) at battle start.
 NesPrgRom:18491:combat_grid_side:arg3<5 ? 0 : 1 (which fleet side)
 NesPrgRom:184C1:combat_ship_84c1:ship record calc
 NesPrgRom:1852F:combat_get_stat_0:combat_get_ship_stat(arg,0)
@@ -993,7 +1003,7 @@ NesPrgRom:19CA7:combat_can_board:boarding-range test (combat_side_parity)
 NesPrgRom:22003:fleet_row_origin:737d==1 ? 11 : 7
 NesPrgRom:22016:fleet_col_by_facing:entity facing<7 ? 20 : 2
 NesPrgRom:2202E:fleet_draw_grid:lay out the fleet grid (arg3 rows)
-NesPrgRom:220E2:fleet_select_mate:"Which mate?","Yourself","Mate"
+NesPrgRom:220E2:fleet_select_mate:pick a mate from the roster $6A9A (max 10, 255-terminated) -> officer record $6542 stride 7. Each active mate captains one ship; shipyard blocks a buy/build with "no man to navigate" when no mate is idle.
 NesPrgRom:22155:fleet_draw_row:blit_block_save a fleet row
 NesPrgRom:221BA:fleet_row_base:737d==1 ? 3 : 7
 NesPrgRom:221CD:fleet_list_loop:fleet list render loop
@@ -1013,7 +1023,6 @@ NesPrgRom:22666:fleet_look:"There's nothing unusual" look result
 NesPrgRom:22693:calc_map_pos:map cell from mem_705B/705C (/3)
 NesPrgRom:226FD:fleet_redraw:calc_map_pos + redraw_screen_if_changed
 NesPrgRom:22714:fleet_menu_loop:fleet management menu loop
-NesPrgRom:22B0A:fleet_leaf_8b0a:uncaught leaf helper (cross-bank CALL target)
 NesPrgRom:22DC3:fleet_set_rations:"Set rations to what (1-99)?"
 NesPrgRom:22EA4:fleet_thanks:"Thank you very much!" ($6BBF record reward)
 NesPrgRom:22F7A:fleet_col_d:entity facing<7 ? 16 : 2
@@ -1284,40 +1293,40 @@ NesPrgRom:24FD7:enc_honest:"Well, he's an honest sort"
 NesPrgRom:2501E:enc_gruff_men:"Cap'n, some gruff looking men..."
 NesPrgRom:250CC:enc_rumor:"Cap'n, have ye heard of..." rumor
 NesPrgRom:251DD:enc_91dd:entity helper (42 ops)
-NesPrgRom:3:cargo_main:cargo screen main (77 ops)
-NesPrgRom:B7:cargo_calc_80b7:position/qty calc
-NesPrgRom:FC:cargo_draw_char:"%c" char draw
-NesPrgRom:142:cargo_check_8142:bounds check
-NesPrgRom:158:cargo_confirm:"Is this OK" confirm
-NesPrgRom:191:cargo_8191:helper (37 ops)
-NesPrgRom:1F3:cargo_screen:cargo transfer screen (121 ops)
-NesPrgRom:3A6:cargo_load_data:copy_from_bank_dc80 load
-NesPrgRom:3F2:cargo_entity_a:$6662 entity accessor
-NesPrgRom:40D:cargo_entity_b:$6662 entity accessor
-NesPrgRom:42C:cargo_entity_c:$6662 entity accessor
-NesPrgRom:447:get_cargo_6ab6:$6AB6[ship*24] / 10
-NesPrgRom:458:get_cargo_6ab8:$6AB8[ship*24]
-NesPrgRom:467:get_cargo_6ab4:$6AB4[ship*24] / 10
-NesPrgRom:478:cargo_draw_ship:draw a ship cargo row (41 ops)
-NesPrgRom:5F6:cargo_85f6:render helper
-NesPrgRom:698:cargo_cannot_load:"Cannot load more"
-NesPrgRom:6FC:cargo_which_ship:"Which ship? (B-end)"
-NesPrgRom:75B:get_ship_word15_0:record_field_word(ship+15)
-NesPrgRom:76C:draw_hold_gauge:"%3d/%3d" hold gauge ($6C94)
-NesPrgRom:788:cargo_left:"%4d left" cargo remaining (97 ops)
-NesPrgRom:8D3:cargo_left_b:"%4d left" variant
-NesPrgRom:971:cargo_pick_ship:"Which ship?" picker
-NesPrgRom:AE1:cargo_loop_8ae1:iteration helper
-NesPrgRom:B0C:cargo_transfer_col:queue_ppu_transfer column
-NesPrgRom:B28:cargo_choose_vessel:"Choose a vessel"
-NesPrgRom:BDD:cargo_ship_rec:$6AA4[ship*24] record
-NesPrgRom:C83:cargo_barrels_free:"%4d barrels free"
-NesPrgRom:C9B:cargo_draw_qty:"%3d" qty (62 ops)
-NesPrgRom:D8C:cargo_ship_rec_b:$6AA4 record (variant)
-NesPrgRom:E07:cargo_8e07:helper
-NesPrgRom:E7B:cargo_8e7b:helper
-NesPrgRom:EF2:cargo_draw_field:"%4d" field
-NesPrgRom:F6C:cargo_8f6c:helper
+NesPrgRom:0003:cargo_main:cargo screen main (77 ops)
+NesPrgRom:00B7:cargo_calc_80b7:position/qty calc
+NesPrgRom:00FC:cargo_draw_char:"%c" char draw
+NesPrgRom:0142:cargo_check_8142:bounds check
+NesPrgRom:0158:cargo_confirm:"Is this OK" confirm
+NesPrgRom:0191:cargo_8191:helper (37 ops)
+NesPrgRom:01F3:cargo_screen:cargo transfer screen (121 ops)
+NesPrgRom:03A6:cargo_load_data:copy_from_bank_dc80 load
+NesPrgRom:03F2:cargo_entity_a:$6662 entity accessor
+NesPrgRom:040D:cargo_entity_b:$6662 entity accessor
+NesPrgRom:042C:cargo_entity_c:$6662 entity accessor
+NesPrgRom:0447:get_cargo_6ab6:$6AB6[ship*24] / 10
+NesPrgRom:0458:get_cargo_6ab8:$6AB8[ship*24]
+NesPrgRom:0467:get_cargo_6ab4:$6AB4[ship*24] / 10
+NesPrgRom:0478:cargo_draw_ship:draw a ship cargo row (41 ops)
+NesPrgRom:05F6:cargo_85f6:render helper
+NesPrgRom:0698:cargo_cannot_load:"Cannot load more"
+NesPrgRom:06FC:cargo_which_ship:"Which ship? (B-end)"
+NesPrgRom:075B:get_ship_word15_0:record_field_word(ship+15)
+NesPrgRom:076C:draw_hold_gauge:"%3d/%3d" hold gauge ($6C94)
+NesPrgRom:0788:cargo_left:"%4d left" cargo remaining (97 ops)
+NesPrgRom:08D3:cargo_left_b:"%4d left" variant
+NesPrgRom:0971:cargo_pick_ship:"Which ship?" picker
+NesPrgRom:0AE1:cargo_loop_8ae1:iteration helper
+NesPrgRom:0B0C:cargo_transfer_col:queue_ppu_transfer column
+NesPrgRom:0B28:cargo_choose_vessel:"Choose a vessel"
+NesPrgRom:0BDD:cargo_ship_rec:$6AA4[ship*24] record
+NesPrgRom:0C83:cargo_barrels_free:"%4d barrels free"
+NesPrgRom:0C9B:cargo_draw_qty:"%3d" qty (62 ops)
+NesPrgRom:0D8C:cargo_ship_rec_b:$6AA4 record (variant)
+NesPrgRom:0E07:cargo_8e07:helper
+NesPrgRom:0E7B:cargo_8e7b:helper
+NesPrgRom:0EF2:cargo_draw_field:"%4d" field
+NesPrgRom:0F6C:cargo_8f6c:helper
 NesPrgRom:1008:cargo_field_9008:"%4d" field
 NesPrgRom:1041:cargo_main_screen:cargo main screen ("%4d") (313 ops)
 NesPrgRom:1777:cargo_load_9777:copy_from_bank_dc80 load

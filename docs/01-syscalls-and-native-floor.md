@@ -95,7 +95,7 @@ home for per-frame ship movement, wind/current, and naval-combat resolution. **N
 
 - `mesen-labels.toml` — 317 labels, sectioned `[prg.bank63]` / `[prg.bank62]`; applied by
   `koei_vm.py` (native calls now resolve inline, e.g. `$DDE0 (memcpy_ptr)`).
-- `tools/native_floor.py` — the UW floor walker (regenerate labels: `py -3 native_floor.py --toml`).
+- the UW floor walker is now koei-nes `tools/native_floor.py` (profile `[uw.native_floor]`; regenerate labels: `py -3.14 ../koei-nes/tools/native_floor.py uw --toml`). This repo's own copy was retired 2026-10-22 (emu-harness MIGRATION.md row D).
 - `koei-nes/tools/games.toml [uw]` — engine constants (banking-verified `banks_at_c000=[62]`).
 
 ## Open

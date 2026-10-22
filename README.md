@@ -120,7 +120,7 @@ UW registered in `koei-nes/tools/games.toml` as `[uw]`.
   ocean ratio)**, bank 47 = a bitmap overlay. Not per-entity stats. Every non-code bank now has an
   identity. (Port `field2/3` = region/culture ids, not goods-specialty; tile legend = an emulator task.)
 
-Tools: `native_floor.py`, `native_banks.py`, `disasm_native.py`, `dump_strings.py`, `dump_records.py`, `disasm_fixed_bytecode.py`, `call_graph.py`, `trace_boot.py`, `walk_bank.py`, `gen_labels.py`.
+Tools (native floor: koei-nes `tools/native_floor.py uw`): `native_banks.py`, `disasm_native.py`, `dump_strings.py`, `dump_records.py`, `disasm_fixed_bytecode.py`, `call_graph.py`, `trace_boot.py`, `walk_bank.py`, `gen_labels.py`.
 
 | | value | note |
 |---|---|---|

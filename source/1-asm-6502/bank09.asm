@@ -461,7 +461,7 @@ nat_9_01e7: jsr $E299                    ; 9:81E7  native-call prologue
   $83AA: b1 06       lda ($06),y    ; PRG $123AA
   $83AC: 65 09       adc $09    ; PRG $123AC
   $83AE: 91 06       sta ($06),y    ; PRG $123AE
-  $83B0: 4c 01 83    jmp $8301    ; PRG $123B0
+  $83B0: 4c 01 83    jmp $8301   ; outfit_cancel    ; PRG $123B0
   $83B3: a9 64       lda #$64    ; PRG $123B3
   $83B5: 85 18       sta $18    ; PRG $123B5
   $83B7: 86 19       stx $19    ; PRG $123B7
@@ -507,7 +507,7 @@ nat_9_01e7: jsr $E299                    ; 9:81E7  native-call prologue
   $8401: a0 0c       ldy #$0c    ; PRG $12401
   $8403: a2 14       ldx #$14    ; PRG $12403
   $8405: a9 10       lda #$10    ; PRG $12405
-  $8407: 20 81 ef    jsr $ef81   ; native_ef81    ; PRG $12407
+  $8407: 20 81 ef    jsr $ef81    ; PRG $12407
   $840A: a0 10       ldy #$10    ; PRG $1240A
   $840C: a2 18       ldx #$18    ; PRG $1240C
   $840E: a9 14       lda #$14    ; PRG $1240E

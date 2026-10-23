@@ -140,14 +140,14 @@ nat_1_1672: jsr $E299                    ; 1:B672  native-call prologue
   $B769: 88          dey    ; PRG $03769
   $B76A: b1 06       lda ($06),y    ; PRG $0376A
   $B76C: 48          pha    ; PRG $0376C
-  $B76D: ad 7b 73    lda $737b    ; PRG $0376D
+  $B76D: ad 7b 73    lda $737b   ; entity_y_work    ; PRG $0376D
   $B770: 85 18       sta $18    ; PRG $03770
   $B772: 86 19       stx $19    ; PRG $03772
   $B774: a5 19       lda $19    ; PRG $03774
   $B776: 48          pha    ; PRG $03776
   $B777: a5 18       lda $18    ; PRG $03777
   $B779: 48          pha    ; PRG $03779
-  $B77A: ad 7a 73    lda $737a    ; PRG $0377A
+  $B77A: ad 7a 73    lda $737a   ; entity_x_work    ; PRG $0377A
   $B77D: 85 18       sta $18    ; PRG $0377D
   $B77F: 86 19       stx $19    ; PRG $0377F
   $B781: a5 19       lda $19    ; PRG $03781

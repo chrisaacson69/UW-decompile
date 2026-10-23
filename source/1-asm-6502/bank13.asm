@@ -276,7 +276,7 @@ nat_13_0154: jsr $E299                    ; 13:A154  native-call prologue
   $A1F6: a9 02       lda #$02    ; PRG $1A1F6
   $A1F8: 85 14       sta $14    ; PRG $1A1F8
   $A1FA: 86 15       stx $15    ; PRG $1A1FA
-  $A1FC: 4c 05 82    jmp $8205    ; PRG $1A1FC
+  $A1FC: 4c 05 82    jmp $8205   ; bj_is_face_card    ; PRG $1A1FC
 
 ; ---- sub_13_01ff  [recovered]  <- (uncalled?)
   $A1FF: a9 01       lda #$01    ; PRG $1A1FF
@@ -355,7 +355,7 @@ nat_13_0154: jsr $E299                    ; 13:A154  native-call prologue
   $A28D: 91 04       sta ($04),y    ; PRG $1A28D
   $A28F: b1 04       lda ($04),y    ; PRG $1A28F
   $A291: 10 03       bpl $a296    ; PRG $1A291
-  $A293: 4c c9 82    jmp $82c9    ; PRG $1A293
+  $A293: 4c c9 82    jmp $82c9   ; bj_hit_loop    ; PRG $1A293
   $A296: 88          dey    ; PRG $1A296
   $A297: b1 04       lda ($04),y    ; PRG $1A297
   $A299: c9 0f       cmp #$0f    ; PRG $1A299
@@ -366,11 +366,11 @@ nat_13_0154: jsr $E299                    ; 13:A154  native-call prologue
   $A2A2: 30 07       bmi $a2ab    ; PRG $1A2A2
   $A2A4: 10 02       bpl $a2a8    ; PRG $1A2A4
   $A2A6: 10 03       bpl $a2ab    ; PRG $1A2A6
-  $A2A8: 4c c9 82    jmp $82c9    ; PRG $1A2A8
+  $A2A8: 4c c9 82    jmp $82c9   ; bj_hit_loop    ; PRG $1A2A8
   $A2AB: a0 0e       ldy #$0e    ; PRG $1A2AB
   $A2AD: b1 04       lda ($04),y    ; PRG $1A2AD
   $A2AF: 10 03       bpl $a2b4    ; PRG $1A2AF
-  $A2B1: 4c c9 82    jmp $82c9    ; PRG $1A2B1
+  $A2B1: 4c c9 82    jmp $82c9   ; bj_hit_loop    ; PRG $1A2B1
   $A2B4: 88          dey    ; PRG $1A2B4
   $A2B5: b1 04       lda ($04),y    ; PRG $1A2B5
   $A2B7: c9 09       cmp #$09    ; PRG $1A2B7
@@ -527,7 +527,7 @@ nat_13_03ae: jsr $E299                    ; 13:A3AE  native-call prologue
   $A3DA: 6d ab 74    adc $74ab    ; PRG $1A3DA
   $A3DD: c8          iny    ; PRG $1A3DD
   $A3DE: 91 06       sta ($06),y    ; PRG $1A3DE
-  $A3E0: 4c f2 83    jmp $83f2    ; PRG $1A3E0
+  $A3E0: 4c f2 83    jmp $83f2   ; cargo_entity_a    ; PRG $1A3E0
 
 ; ---- sub_13_03e3  [recovered]  <- (uncalled?)
   $A3E3: 18          clc    ; PRG $1A3E3
@@ -754,7 +754,7 @@ nat_13_03ae: jsr $E299                    ; 13:A3AE  native-call prologue
   $A587: a5 0c       lda $0c    ; PRG $1A587
   $A589: 05 0d       ora $0d    ; PRG $1A589
   $A58B: d0 03       bne $a590    ; PRG $1A58B
-  $A58D: 4c 99 85    jmp $8599    ; PRG $1A58D
+  $A58D: 4c 99 85    jmp $8599   ; guild_clear_region    ; PRG $1A58D
   $A590: a9 02       lda #$02    ; PRG $1A590
   $A592: 85 14       sta $14    ; PRG $1A592
   $A594: 86 15       stx $15    ; PRG $1A594
@@ -875,7 +875,7 @@ nat_13_03ae: jsr $E299                    ; 13:A3AE  native-call prologue
   $A66F: 4c 0b 85    jmp $850b    ; PRG $1A66F
 
 ; ---- sub_13_0672  [recovered]  <- (uncalled?)
-  $A672: 4c e3 83    jmp $83e3    ; PRG $1A672
+  $A672: 4c e3 83    jmp $83e3   ; event_guild_hook    ; PRG $1A672
 
 ; ---- sub_13_0675  [recovered]  <- (uncalled?)
   $A675: a9 9e       lda #$9e    ; PRG $1A675
@@ -914,7 +914,7 @@ nat_13_03ae: jsr $E299                    ; 13:A3AE  native-call prologue
   $A6B0: a0 fd       ldy #$fd    ; PRG $1A6B0
   $A6B2: f1 06       sbc ($06),y    ; PRG $1A6B2
   $A6B4: 90 03       bcc $a6b9    ; PRG $1A6B4
-  $A6B6: 4c 90 87    jmp $8790    ; PRG $1A6B6
+  $A6B6: 4c 90 87    jmp $8790   ; draw_captain_line    ; PRG $1A6B6
   $A6B9: a9 07       lda #$07    ; PRG $1A6B9
   $A6BB: 85 18       sta $18    ; PRG $1A6BB
   $A6BD: 86 19       stx $19    ; PRG $1A6BD
@@ -1517,7 +1517,7 @@ nat_13_0791: jsr $E299                    ; 13:A791  native-call prologue
   $AB25: c8          iny    ; PRG $1AB25
   $AB26: 71 06       adc ($06),y    ; PRG $1AB26
   $AB28: 91 06       sta ($06),y    ; PRG $1AB28
-  $AB2A: 4c 83 8a    jmp $8a83    ; PRG $1AB2A
+  $AB2A: 4c 83 8a    jmp $8a83   ; search_water    ; PRG $1AB2A
 
 ; ---- sub_13_0b2d  [recovered]  <- (uncalled?)
   $AB2D: 18          clc    ; PRG $1AB2D
@@ -2040,7 +2040,7 @@ nat_13_0d20: jsr $E299                    ; 13:AD20  native-call prologue
   $AF02: 91 06       sta ($06),y    ; PRG $1AF02
   $AF04: c8          iny    ; PRG $1AF04
   $AF05: 91 06       sta ($06),y    ; PRG $1AF05
-  $AF07: 4c 14 8f    jmp $8f14    ; PRG $1AF07
+  $AF07: 4c 14 8f    jmp $8f14   ; draw_tavern_box    ; PRG $1AF07
 
 ; ---- sub_13_0f0a  [recovered]  <- (uncalled?)
   $AF0A: a9 0e       lda #$0e    ; PRG $1AF0A

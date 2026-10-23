@@ -1,7 +1,7 @@
 ; ============================================================================
 ; Uncharted Waters - bank 4 NATIVE disassembly (window base $8000)
 ; 24 native subs: 23 $E299-stubbed (VM-frame entries) + 0 plain + 1 jumptable/CALL-recovered
-; coverage: 6413B code+inline (78%) + 1285B $FF-pad + 494B data
+; coverage: 6411B code+inline (78%) + 1285B $FF-pad + 496B data
 ; control-flow-followed, inline bridges ($E299/$E338) skipped; calls resolved vs mesen-labels.toml.
 ; ============================================================================
 .base $8000
@@ -103,7 +103,7 @@ nat_4_0074: jsr $E299                    ; 4:8074  native-call prologue
   $80AA: c8          iny    ; PRG $080AA
   $80AB: f1 06       sbc ($06),y    ; PRG $080AB
   $80AD: 90 03       bcc $80b2    ; PRG $080AD
-  $80AF: 4c c1 80    jmp $80c1    ; PRG $080AF
+  $80AF: 4c c1 80    jmp $80c1   ; draw_stat_handling_21    ; PRG $080AF
   $80B2: 88          dey    ; PRG $080B2
   $80B3: b1 06       lda ($06),y    ; PRG $080B3
   $80B5: c9 11       cmp #$11    ; PRG $080B5
@@ -147,7 +147,7 @@ nat_4_0074: jsr $E299                    ; 4:8074  native-call prologue
   $80FD: a9 01       lda #$01    ; PRG $080FD
   $80FF: 85 08       sta $08    ; PRG $080FF
   $8101: 86 09       stx $09    ; PRG $08101
-  $8103: 4c 0a 81    jmp $810a    ; PRG $08103
+  $8103: 4c 0a 81    jmp $810a   ; load_save_data    ; PRG $08103
   $8106: 86 08       stx $08    ; PRG $08106
   $8108: 86 09       stx $09    ; PRG $08108
   $810A: 60          rts    ; PRG $0810A
@@ -176,7 +176,7 @@ nat_4_010b: jsr $E299                    ; 4:810B  native-call prologue
   $8131: b1 06       lda ($06),y    ; PRG $08131
   $8133: e9 00       sbc #$00    ; PRG $08133
   $8135: 90 03       bcc $813a    ; PRG $08135
-  $8137: 4c 98 81    jmp $8198    ; PRG $08137
+  $8137: 4c 98 81    jmp $8198   ; land_redraw    ; PRG $08137
   $813A: 8a          txa    ; PRG $0813A
   $813B: c8          iny    ; PRG $0813B
   $813C: 91 06       sta ($06),y    ; PRG $0813C
@@ -240,7 +240,7 @@ nat_4_019d: jsr $E299                    ; 4:819D  native-call prologue
   $81A5: 91 06       sta ($06),y    ; PRG $081A5
   $81A7: c8          iny    ; PRG $081A7
   $81A8: 91 06       sta ($06),y    ; PRG $081A8
-  $81AA: 4c bc 81    jmp $81bc    ; PRG $081AA
+  $81AA: 4c bc 81    jmp $81bc   ; court_leaf_81bc    ; PRG $081AA
   $81AD: 18          clc    ; PRG $081AD
   $81AE: a9 01       lda #$01    ; PRG $081AE
   $81B0: a0 fe       ldy #$fe    ; PRG $081B0
@@ -272,7 +272,7 @@ nat_4_019d: jsr $E299                    ; 4:819D  native-call prologue
   $81E2: 86 08       stx $08    ; PRG $081E2
   $81E4: 86 09       stx $09    ; PRG $081E4
   $81E6: 60          rts    ; PRG $081E6
-  $81E7: 4c ad 81    jmp $81ad    ; PRG $081E7
+  $81E7: 4c ad 81    jmp $81ad   ; duel_table_7417    ; PRG $081E7
   $81EA: a9 01       lda #$01    ; PRG $081EA
   $81EC: 85 08       sta $08    ; PRG $081EC
   $81EE: 86 09       stx $09    ; PRG $081EE
@@ -420,7 +420,7 @@ nat_4_02a9: jsr $E299                    ; 4:82A9  native-call prologue
   $82FE: a9 03       lda #$03    ; PRG $082FE
   $8300: 85 18       sta $18    ; PRG $08300
   $8302: 86 19       stx $19    ; PRG $08302
-  $8304: ad 74 6f    lda $6f74    ; PRG $08304
+  $8304: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $08304
   $8307: 85 14       sta $14    ; PRG $08307
   $8309: 86 15       stx $15    ; PRG $08309
   $830B: a0 14       ldy #$14    ; PRG $0830B
@@ -1068,7 +1068,7 @@ nat_4_074d: jsr $E299                    ; 4:874D  native-call prologue
 nat_4_0797: jsr $E299                    ; 4:8797  native-call prologue
             .db $00 $fe $ff            ; inline: argcount $00, frame $fffe
   $879D: 8e 54 70    stx $7054    ; PRG $0879D
-  $87A0: ad 74 6f    lda $6f74    ; PRG $087A0
+  $87A0: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $087A0
   $87A3: 85 18       sta $18    ; PRG $087A3
   $87A5: 86 19       stx $19    ; PRG $087A5
   $87A7: a2 18       ldx #$18    ; PRG $087A7
@@ -1101,7 +1101,7 @@ nat_4_0797: jsr $E299                    ; 4:8797  native-call prologue
   $87DA: a1 18       lda ($18,x)    ; PRG $087DA
   $87DC: 8d 55 70    sta $7055    ; PRG $087DC
   $87DF: a9 01       lda #$01    ; PRG $087DF
-  $87E1: 8d 5f 70    sta $705f    ; PRG $087E1
+  $87E1: 8d 5f 70    sta $705f   ; quest_flags    ; PRG $087E1
   $87E4: 60          rts    ; PRG $087E4
 
 ; ---- sub_4_07eb  [stub]  <- (entry: bytecode/OS via $E299)
@@ -1126,7 +1126,7 @@ nat_4_07e5: jsr $E299                    ; 4:87E5  native-call prologue
   $8809: b1 06       lda ($06),y    ; PRG $08809
   $880B: 8d 55 70    sta $7055    ; PRG $0880B
   $880E: a9 01       lda #$01    ; PRG $0880E
-  $8810: 8d 5f 70    sta $705f    ; PRG $08810
+  $8810: 8d 5f 70    sta $705f   ; quest_flags    ; PRG $08810
   $8813: 60          rts    ; PRG $08813
 
 ; ---- sub_4_081a  [stub]  <- (entry: bytecode/OS via $E299)
@@ -1134,7 +1134,7 @@ nat_4_0814: jsr $E299                    ; 4:8814  native-call prologue
             .db $00 $ec $ff            ; inline: argcount $00, frame $ffec
   $881A: a9 02       lda #$02    ; PRG $0881A
   $881C: 8d 54 70    sta $7054    ; PRG $0881C
-  $881F: ad 52 70    lda $7052    ; PRG $0881F
+  $881F: ad 52 70    lda $7052   ; quest_target_port    ; PRG $0881F
   $8822: 85 18       sta $18    ; PRG $08822
   $8824: 86 19       stx $19    ; PRG $08824
   $8826: 18          clc    ; PRG $08826
@@ -1528,7 +1528,7 @@ nat_4_0814: jsr $E299                    ; 4:8814  native-call prologue
   $8AF3: 71 06       adc ($06),y    ; PRG $08AF3
   $8AF5: a0 ed       ldy #$ed    ; PRG $08AF5
   $8AF7: 91 06       sta ($06),y    ; PRG $08AF7
-  $8AF9: 4c 1a 8b    jmp $8b1a    ; PRG $08AF9
+  $8AF9: 4c 1a 8b    jmp $8b1a   ; entry_anim_4    ; PRG $08AF9
   $8AFC: 18          clc    ; PRG $08AFC
   $8AFD: a9 01       lda #$01    ; PRG $08AFD
   $8AFF: a0 f2       ldy #$f2    ; PRG $08AFF
@@ -1597,7 +1597,7 @@ nat_4_0814: jsr $E299                    ; 4:8814  native-call prologue
   $8B76: b1 06       lda ($06),y    ; PRG $08B76
   $8B78: 8d 55 70    sta $7055    ; PRG $08B78
   $8B7B: a9 01       lda #$01    ; PRG $08B7B
-  $8B7D: 8d 5f 70    sta $705f    ; PRG $08B7D
+  $8B7D: 8d 5f 70    sta $705f   ; quest_flags    ; PRG $08B7D
   $8B80: 60          rts    ; PRG $08B80
 
 ; ---- sub_4_0b87  [stub]  <- (entry: bytecode/OS via $E299)
@@ -2079,7 +2079,7 @@ nat_4_0e0c: jsr $E299                    ; 4:8E0C  native-call prologue
   $8F06: 8a          txa    ; PRG $08F06
   $8F07: c8          iny    ; PRG $08F07
   $8F08: 91 06       sta ($06),y    ; PRG $08F08
-  $8F0A: 4c ba 8e    jmp $8eba    ; PRG $08F0A
+  $8F0A: 4c ba 8e    jmp $8eba   ; duel_load_eba    ; PRG $08F0A
   $8F0D: 4c 1a 8f    jmp $8f1a    ; PRG $08F0D
   $8F10: a9 01       lda #$01    ; PRG $08F10
   $8F12: a0 ea       ldy #$ea    ; PRG $08F12
@@ -2293,7 +2293,7 @@ nat_4_104f: jsr $E299                    ; 4:904F  native-call prologue
   $9097: a9 03       lda #$03    ; PRG $09097
   $9099: 85 18       sta $18    ; PRG $09099
   $909B: 86 19       stx $19    ; PRG $0909B
-  $909D: ad 74 6f    lda $6f74    ; PRG $0909D
+  $909D: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $0909D
   $90A0: 85 14       sta $14    ; PRG $090A0
   $90A2: 86 15       stx $15    ; PRG $090A2
   $90A4: a0 14       ldy #$14    ; PRG $090A4
@@ -2547,7 +2547,7 @@ nat_4_104f: jsr $E299                    ; 4:904F  native-call prologue
   $9273: a9 09       lda #$09    ; PRG $09273
   $9275: 81 18       sta ($18,x)    ; PRG $09275
   $9277: a9 01       lda #$01    ; PRG $09277
-  $9279: 8d 5f 70    sta $705f    ; PRG $09279
+  $9279: 8d 5f 70    sta $705f   ; quest_flags    ; PRG $09279
   $927C: 20 38 e3    jsr $e338   ; call_vm_from_native    ; PRG $0927C
   $927F: e8 83 02    .db $e8 $83 $02  -> vm $83E8 argc 2    ; PRG $0927F
   $9282: 60          rts    ; PRG $09282
@@ -2936,7 +2936,7 @@ nat_4_1283: jsr $E299                    ; 4:9283  native-call prologue
   $9545: b1 06       lda ($06),y    ; PRG $09545
   $9547: 8d 55 70    sta $7055    ; PRG $09547
   $954A: a9 01       lda #$01    ; PRG $0954A
-  $954C: 8d 5f 70    sta $705f    ; PRG $0954C
+  $954C: 8d 5f 70    sta $705f   ; quest_flags    ; PRG $0954C
   $954F: 60          rts    ; PRG $0954F
 
 ; ---- sub_4_1556  [stub]  <- (entry: bytecode/OS via $E299)
@@ -3084,7 +3084,7 @@ nat_4_1602: jsr $E299                    ; 4:9602  native-call prologue
 ; ---- sub_4_1652  [stub]  <- (entry: bytecode/OS via $E299)
 nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
             .db $00 $f8 $ff            ; inline: argcount $00, frame $fff8
-  $9652: ad 5f 70    lda $705f    ; PRG $09652
+  $9652: ad 5f 70    lda $705f   ; quest_flags    ; PRG $09652
   $9655: 85 18       sta $18    ; PRG $09655
   $9657: 86 19       stx $19    ; PRG $09657
   $9659: a5 18       lda $18    ; PRG $09659
@@ -3183,7 +3183,7 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $9714: 91 18       sta ($18),y    ; PRG $09714
   $9716: 4c e0 96    jmp $96e0    ; PRG $09716
   $9719: a9 d0       lda #$d0    ; PRG $09719
-  $971B: 8d 50 70    sta $7050    ; PRG $0971B
+  $971B: 8d 50 70    sta $7050   ; player_char_record    ; PRG $0971B
   $971E: a9 6f       lda #$6f    ; PRG $0971E
   $9720: 8d 51 70    sta $7051    ; PRG $09720
   $9723: a0 0b       ldy #$0b    ; PRG $09723
@@ -3192,30 +3192,30 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $9729: c8          iny    ; PRG $09729
   $972A: b1 04       lda ($04),y    ; PRG $0972A
   $972C: 85 09       sta $09    ; PRG $0972C
-  $972E: 4c cb 98    jmp $98cb    ; PRG $0972E
+  $972E: 4c cb 98    jmp $98cb   ; animate_sail_sprites    ; PRG $0972E
 
 ; ---- sub_4_1731  [recovered]  <- (uncalled?)
-  $9731: ad 50 70    lda $7050    ; PRG $09731
+  $9731: ad 50 70    lda $7050   ; player_char_record    ; PRG $09731
   $9734: 85 18       sta $18    ; PRG $09734
   $9736: ad 51 70    lda $7051    ; PRG $09736
   $9739: 85 19       sta $19    ; PRG $09739
   $973B: 8a          txa    ; PRG $0973B
   $973C: 81 18       sta ($18,x)    ; PRG $0973C
-  $973E: ee 50 70    inc $7050    ; PRG $0973E
+  $973E: ee 50 70    inc $7050   ; player_char_record    ; PRG $0973E
   $9741: d0 03       bne $9746    ; PRG $09741
   $9743: ee 51 70    inc $7051    ; PRG $09743
-  $9746: ad 50 70    lda $7050    ; PRG $09746
+  $9746: ad 50 70    lda $7050   ; player_char_record    ; PRG $09746
   $9749: 85 18       sta $18    ; PRG $09749
   $974B: ad 51 70    lda $7051    ; PRG $0974B
   $974E: 85 19       sta $19    ; PRG $0974E
   $9750: 8a          txa    ; PRG $09750
   $9751: 81 18       sta ($18,x)    ; PRG $09751
-  $9753: ee 50 70    inc $7050    ; PRG $09753
+  $9753: ee 50 70    inc $7050   ; player_char_record    ; PRG $09753
   $9756: d0 03       bne $975b    ; PRG $09756
   $9758: ee 51 70    inc $7051    ; PRG $09758
-  $975B: 8e 52 70    stx $7052    ; PRG $0975B
+  $975B: 8e 52 70    stx $7052   ; quest_target_port    ; PRG $0975B
   $975E: 8e 53 70    stx $7053    ; PRG $0975E
-  $9761: ad 74 6f    lda $6f74    ; PRG $09761
+  $9761: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $09761
   $9764: d0 03       bne $9769    ; PRG $09764
   $9766: 4c b0 97    jmp $97b0    ; PRG $09766
   $9769: 8a          txa    ; PRG $09769
@@ -3226,7 +3226,7 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $9771: e1 cf 04    .db $e1 $cf $04  -> vm $CFE1 argc 4    ; PRG $09771
   $9774: 84 18       sty $18    ; PRG $09774
   $9776: 86 19       stx $19    ; PRG $09776
-  $9778: ad 74 6f    lda $6f74    ; PRG $09778
+  $9778: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $09778
   $977B: 85 14       sta $14    ; PRG $0977B
   $977D: 86 15       stx $15    ; PRG $0977D
   $977F: 18          clc    ; PRG $0977F
@@ -3259,7 +3259,7 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $97B3: 91 06       sta ($06),y    ; PRG $097B3
   $97B5: c8          iny    ; PRG $097B5
   $97B6: 91 06       sta ($06),y    ; PRG $097B6
-  $97B8: ad 74 6f    lda $6f74    ; PRG $097B8
+  $97B8: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $097B8
   $97BB: 85 18       sta $18    ; PRG $097BB
   $97BD: 86 19       stx $19    ; PRG $097BD
   $97BF: a5 18       lda $18    ; PRG $097BF
@@ -3299,13 +3299,11 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $9801: 85 08       sta $08    ; PRG $09801
   $9803: b1 18       lda ($18),y    ; PRG $09803
   $9805: 85 09       sta $09    ; PRG $09805
-  $9807: 20 85 e4    jsr $e485   ; native_e485    ; PRG $09807
-  $980A: 02          .db $02    ; PRG $0980A
-  $98CB: 20 45 e4    jsr $e445   ; native_e445    ; PRG $098CB
+  $9807: 20 85 e4    jsr $e485   ; vm_drop_args_inline    ; PRG $09807
+  $98CB: 20 45 e4    jsr $e445   ; inline_add_word    ; PRG $098CB
   $98CE: 00          brk    ; PRG $098CE
   $98CF: 00          brk    ; PRG $098CF
-  $98D0: 04          .db $04    ; PRG $098D0
-  $98ED: ad 5f 70    lda $705f    ; PRG $098ED
+  $98ED: ad 5f 70    lda $705f   ; quest_flags    ; PRG $098ED
   $98F0: 85 18       sta $18    ; PRG $098F0
   $98F2: 86 19       stx $19    ; PRG $098F2
   $98F4: a5 18       lda $18    ; PRG $098F4
@@ -3326,7 +3324,7 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $9915: 85 18       sta $18    ; PRG $09915
   $9917: a9 01       lda #$01    ; PRG $09917
   $9919: 85 19       sta $19    ; PRG $09919
-  $991B: ad 74 6f    lda $6f74    ; PRG $0991B
+  $991B: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $0991B
   $991E: 85 14       sta $14    ; PRG $0991E
   $9920: 86 15       stx $15    ; PRG $09920
   $9922: 18          clc    ; PRG $09922
@@ -3336,7 +3334,7 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $9929: 8a          txa    ; PRG $09929
   $992A: 65 15       adc $15    ; PRG $0992A
   $992C: 85 11       sta $11    ; PRG $0992C
-  $992E: ad 74 6f    lda $6f74    ; PRG $0992E
+  $992E: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $0992E
   $9931: 85 14       sta $14    ; PRG $09931
   $9933: 86 15       stx $15    ; PRG $09933
   $9935: 18          clc    ; PRG $09935
@@ -3355,7 +3353,7 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
   $994E: a9 10       lda #$10    ; PRG $0994E
   $9950: 20 77 e1    jsr $e177   ; alu_mul16    ; PRG $09950
   $9953: a5 10       lda $10    ; PRG $09953
-  $9955: cd 72 6f    cmp $6f72    ; PRG $09955
+  $9955: cd 72 6f    cmp $6f72   ; fame    ; PRG $09955
   $9958: a5 11       lda $11    ; PRG $09958
   $995A: ed 73 6f    sbc $6f73    ; PRG $0995A
   $995D: 90 03       bcc $9962    ; PRG $0995D
@@ -3434,7 +3432,7 @@ nat_4_164c: jsr $E299                    ; 4:964C  native-call prologue
 ; ---- sub_4_18ed  [stub]  <- (entry: bytecode/OS via $E299)
 nat_4_18e7: jsr $E299                    ; 4:98E7  native-call prologue
             .db $00 $fe $ff            ; inline: argcount $00, frame $fffe
-  $98ED: ad 5f 70    lda $705f    ; PRG $098ED
+  $98ED: ad 5f 70    lda $705f   ; quest_flags    ; PRG $098ED
   $98F0: 85 18       sta $18    ; PRG $098F0
   $98F2: 86 19       stx $19    ; PRG $098F2
   $98F4: a5 18       lda $18    ; PRG $098F4
@@ -3455,7 +3453,7 @@ nat_4_18e7: jsr $E299                    ; 4:98E7  native-call prologue
   $9915: 85 18       sta $18    ; PRG $09915
   $9917: a9 01       lda #$01    ; PRG $09917
   $9919: 85 19       sta $19    ; PRG $09919
-  $991B: ad 74 6f    lda $6f74    ; PRG $0991B
+  $991B: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $0991B
   $991E: 85 14       sta $14    ; PRG $0991E
   $9920: 86 15       stx $15    ; PRG $09920
   $9922: 18          clc    ; PRG $09922
@@ -3465,7 +3463,7 @@ nat_4_18e7: jsr $E299                    ; 4:98E7  native-call prologue
   $9929: 8a          txa    ; PRG $09929
   $992A: 65 15       adc $15    ; PRG $0992A
   $992C: 85 11       sta $11    ; PRG $0992C
-  $992E: ad 74 6f    lda $6f74    ; PRG $0992E
+  $992E: ad 74 6f    lda $6f74   ; rank_fame    ; PRG $0992E
   $9931: 85 14       sta $14    ; PRG $09931
   $9933: 86 15       stx $15    ; PRG $09933
   $9935: 18          clc    ; PRG $09935
@@ -3484,7 +3482,7 @@ nat_4_18e7: jsr $E299                    ; 4:98E7  native-call prologue
   $994E: a9 10       lda #$10    ; PRG $0994E
   $9950: 20 77 e1    jsr $e177   ; alu_mul16    ; PRG $09950
   $9953: a5 10       lda $10    ; PRG $09953
-  $9955: cd 72 6f    cmp $6f72    ; PRG $09955
+  $9955: cd 72 6f    cmp $6f72   ; fame    ; PRG $09955
   $9958: a5 11       lda $11    ; PRG $09958
   $995A: ed 73 6f    sbc $6f73    ; PRG $0995A
   $995D: 90 03       bcc $9962    ; PRG $0995D

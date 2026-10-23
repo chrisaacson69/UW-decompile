@@ -14,7 +14,7 @@ nat_5_0c75: jsr $E299                    ; 5:8C75  native-call prologue
   $8C7F: c8          iny    ; PRG $0AC7F
   $8C80: 11 04       ora ($04),y    ; PRG $0AC80
   $8C82: d0 03       bne $8c87    ; PRG $0AC82
-  $8C84: 4c 96 8c    jmp $8c96    ; PRG $0AC84
+  $8C84: 4c 96 8c    jmp $8c96   ; enc_port_rec_b    ; PRG $0AC84
   $8C87: 18          clc    ; PRG $0AC87
   $8C88: a9 ff       lda #$ff    ; PRG $0AC88
   $8C8A: 88          dey    ; PRG $0AC8A
@@ -314,7 +314,7 @@ nat_5_0e63: jsr $E299                    ; 5:8E63  native-call prologue
   $8EB1: 91 06       sta ($06),y    ; PRG $0AEB1
   $8EB3: c8          iny    ; PRG $0AEB3
   $8EB4: 91 06       sta ($06),y    ; PRG $0AEB4
-  $8EB6: 4c c8 8e    jmp $8ec8    ; PRG $0AEB6
+  $8EB6: 4c c8 8e    jmp $8ec8   ; enc_got_away    ; PRG $0AEB6
   $8EB9: 18          clc    ; PRG $0AEB9
   $8EBA: a9 01       lda #$01    ; PRG $0AEBA
   $8EBC: a0 f7       ldy #$f7    ; PRG $0AEBC
@@ -1376,7 +1376,7 @@ nat_5_1186: jsr $E299                    ; 5:9186  native-call prologue
   $967D: b1 14       lda ($14),y    ; PRG $0B67D
   $967F: 71 18       adc ($18),y    ; PRG $0B67F
   $9681: 91 14       sta ($14),y    ; PRG $0B681
-  $9683: 4c 83 95    jmp $9583    ; PRG $0B683
+  $9683: 4c 83 95    jmp $9583   ; duel_9583    ; PRG $0B683
   $9686: a9 05       lda #$05    ; PRG $0B686
   $9688: a0 f8       ldy #$f8    ; PRG $0B688
   $968A: 91 06       sta ($06),y    ; PRG $0B68A
@@ -1649,7 +1649,7 @@ nat_5_1186: jsr $E299                    ; 5:9186  native-call prologue
   $9886: 81 18       sta ($18,x)    ; PRG $0B886
   $9888: a5 09       lda $09    ; PRG $0B888
   $988A: 91 18       sta ($18),y    ; PRG $0B88A
-  $988C: 4c d5 97    jmp $97d5    ; PRG $0B88C
+  $988C: 4c d5 97    jmp $97d5   ; combat_d5    ; PRG $0B88C
   $988F: 60          rts    ; PRG $0B88F
 
 ; ---- sub_5_1896  [stub]  <- (entry: bytecode/OS via $E299)
@@ -1759,7 +1759,7 @@ nat_5_1890: jsr $E299                    ; 5:9890  native-call prologue
   $9952: 30 07       bmi $995b    ; PRG $0B952
   $9954: 10 02       bpl $9958    ; PRG $0B954
   $9956: 10 03       bpl $995b    ; PRG $0B956
-  $9958: 4c 62 99    jmp $9962    ; PRG $0B958
+  $9958: 4c 62 99    jmp $9962   ; combat_get_ship_class    ; PRG $0B958
   $995B: 86 18       stx $18    ; PRG $0B95B
   $995D: 86 19       stx $19    ; PRG $0B95D
   $995F: 4c 6d 99    jmp $996d    ; PRG $0B95F

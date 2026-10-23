@@ -73,7 +73,14 @@ trade / naval logic.
 | **total** | **555** |
 
 Per-bank disassembly: `source/1-asm-6502/bankNN.asm` (12 files). Regenerate any bank:
-`py -3 tools/disasm_native.py <bank> source/1-asm-6502/bankNN.asm`.
+`py -3.14 tools/disasm_native.py <bank> source/1-asm-6502/bankNN.asm`, then
+`py -3.14 tools/stamp_prg.py <bank> source/1-asm-6502/bankNN.asm` for the PRG offsets.
+
+The walk itself is emu-harness's shared descent (`emu_harness.cpu.m6502.descent`, MIGRATION.md
+row B, 2026-10-23); this tool keeps UW's stub convention, bank windows and listing. Moving onto it
+fixed two bugs of the old walker: an undocumented opcode it ran into was listed as an instruction
+(`.db` lines in banks 4 and 10), and subs first reached from a recovered sub were listed but never
+walked (bank 6's `$9985`, a 16-bit increment, now disassembled).
 
 ## Open
 

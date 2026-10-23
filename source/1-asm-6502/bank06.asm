@@ -1,7 +1,7 @@
 ; ============================================================================
 ; Uncharted Waters - bank 6 NATIVE disassembly (window base $8000)
 ; 10 native subs: 8 $E299-stubbed (VM-frame entries) + 1 plain + 1 jumptable/CALL-recovered
-; coverage: 6514B code+inline (79%) + 1598B $FF-pad + 80B data
+; coverage: 6521B code+inline (79%) + 1598B $FF-pad + 73B data
 ; control-flow-followed, inline bridges ($E299/$E338) skipped; calls resolved vs mesen-labels.toml.
 ; ============================================================================
 .base $8000
@@ -9,10 +9,10 @@
 ; ---- sub_6_0009  [stub]  <- (entry: bytecode/OS via $E299)
 nat_6_0003: jsr $E299                    ; 6:8003  native-call prologue
             .db $00 $00 $00            ; inline: argcount $00, frame $0000
-  $8009: ad 68 72    lda $7268    ; PRG $0C009
+  $8009: ad 68 72    lda $7268   ; active_entity_idx    ; PRG $0C009
   $800C: d0 03       bne $8011    ; PRG $0C00C
   $800E: 4c 27 80    jmp $8027    ; PRG $0C00E
-  $8011: ad 68 72    lda $7268    ; PRG $0C011
+  $8011: ad 68 72    lda $7268   ; active_entity_idx    ; PRG $0C011
   $8014: 85 18       sta $18    ; PRG $0C014
   $8016: 86 19       stx $19    ; PRG $0C016
   $8018: a5 19       lda $19    ; PRG $0C018
@@ -703,7 +703,7 @@ nat_6_0300: jsr $E299                    ; 6:8300  native-call prologue
   $8511: a5 15       lda $15    ; PRG $0C511
   $8513: c9 00       cmp #$00    ; PRG $0C513
   $8515: d0 03       bne $851a    ; PRG $0C515
-  $8517: 4c 3c 85    jmp $853c    ; PRG $0C517
+  $8517: 4c 3c 85    jmp $853c   ; lookup_title_8f04    ; PRG $0C517
   $851A: a0 ee       ldy #$ee    ; PRG $0C51A
   $851C: b1 06       lda ($06),y    ; PRG $0C51C
   $851E: 85 18       sta $18    ; PRG $0C51E
@@ -968,7 +968,7 @@ nat_6_0300: jsr $E299                    ; 6:8300  native-call prologue
   $870A: 85 19       sta $19    ; PRG $0C70A
   $870C: a1 18       lda ($18,x)    ; PRG $0C70C
   $870E: d0 03       bne $8713    ; PRG $0C70E
-  $8710: 4c 2b 87    jmp $872b    ; PRG $0C710
+  $8710: 4c 2b 87    jmp $872b   ; cargo_menu    ; PRG $0C710
   $8713: 88          dey    ; PRG $0C713
   $8714: b1 06       lda ($06),y    ; PRG $0C714
   $8716: 85 18       sta $18    ; PRG $0C716
@@ -1027,7 +1027,7 @@ nat_6_0300: jsr $E299                    ; 6:8300  native-call prologue
   $877B: 81 18       sta ($18,x)    ; PRG $0C77B
   $877D: 8a          txa    ; PRG $0C77D
   $877E: 69 00       adc #$00    ; PRG $0C77E
-  $8780: 4c 91 87    jmp $8791    ; PRG $0C780
+  $8780: 4c 91 87    jmp $8791   ; land_loop_8791    ; PRG $0C780
   $8783: a0 ee       ldy #$ee    ; PRG $0C783
   $8785: b1 06       lda ($06),y    ; PRG $0C785
   $8787: 85 18       sta $18    ; PRG $0C787
@@ -2130,7 +2130,7 @@ nat_6_0aa5: jsr $E299                    ; 6:8AA5  native-call prologue
   $8FBA: a5 18       lda $18    ; PRG $0CFBA
   $8FBC: a0 06       ldy #$06    ; PRG $0CFBC
   $8FBE: 91 14       sta ($14),y    ; PRG $0CFBE
-  $8FC0: 4c 18 91    jmp $9118    ; PRG $0CFC0
+  $8FC0: 4c 18 91    jmp $9118   ; duel_scan_666d    ; PRG $0CFC0
   $8FC3: a9 04       lda #$04    ; PRG $0CFC3
   $8FC5: 85 18       sta $18    ; PRG $0CFC5
   $8FC7: 86 19       stx $19    ; PRG $0CFC7
@@ -2181,7 +2181,7 @@ nat_6_0aa5: jsr $E299                    ; 6:8AA5  native-call prologue
   $901C: a5 11       lda $11    ; PRG $0D01C
   $901E: c5 15       cmp $15    ; PRG $0D01E
   $9020: f0 03       beq $9025    ; PRG $0D020
-  $9022: 4c 18 91    jmp $9118    ; PRG $0D022
+  $9022: 4c 18 91    jmp $9118   ; duel_scan_666d    ; PRG $0D022
   $9025: a0 fa       ldy #$fa    ; PRG $0D025
   $9027: b1 06       lda ($06),y    ; PRG $0D027
   $9029: 85 18       sta $18    ; PRG $0D029
@@ -2208,7 +2208,7 @@ nat_6_0aa5: jsr $E299                    ; 6:8AA5  native-call prologue
   $9051: a5 11       lda $11    ; PRG $0D051
   $9053: c5 15       cmp $15    ; PRG $0D053
   $9055: f0 03       beq $905a    ; PRG $0D055
-  $9057: 4c 18 91    jmp $9118    ; PRG $0D057
+  $9057: 4c 18 91    jmp $9118   ; duel_scan_666d    ; PRG $0D057
   $905A: a0 fa       ldy #$fa    ; PRG $0D05A
   $905C: b1 06       lda ($06),y    ; PRG $0D05C
   $905E: 85 18       sta $18    ; PRG $0D05E
@@ -2235,7 +2235,7 @@ nat_6_0aa5: jsr $E299                    ; 6:8AA5  native-call prologue
   $9086: a5 11       lda $11    ; PRG $0D086
   $9088: c5 15       cmp $15    ; PRG $0D088
   $908A: f0 03       beq $908f    ; PRG $0D08A
-  $908C: 4c 18 91    jmp $9118    ; PRG $0D08C
+  $908C: 4c 18 91    jmp $9118   ; duel_scan_666d    ; PRG $0D08C
   $908F: a0 fa       ldy #$fa    ; PRG $0D08F
   $9091: b1 06       lda ($06),y    ; PRG $0D091
   $9093: 85 18       sta $18    ; PRG $0D093
@@ -2262,7 +2262,7 @@ nat_6_0aa5: jsr $E299                    ; 6:8AA5  native-call prologue
   $90BB: a5 11       lda $11    ; PRG $0D0BB
   $90BD: c5 15       cmp $15    ; PRG $0D0BD
   $90BF: f0 03       beq $90c4    ; PRG $0D0BF
-  $90C1: 4c 18 91    jmp $9118    ; PRG $0D0C1
+  $90C1: 4c 18 91    jmp $9118   ; duel_scan_666d    ; PRG $0D0C1
   $90C4: a0 fa       ldy #$fa    ; PRG $0D0C4
   $90C6: b1 06       lda ($06),y    ; PRG $0D0C6
   $90C8: 85 18       sta $18    ; PRG $0D0C8
@@ -2276,7 +2276,7 @@ nat_6_0aa5: jsr $E299                    ; 6:8AA5  native-call prologue
   $90D7: a5 14       lda $14    ; PRG $0D0D7
   $90D9: 29 22       and #$22    ; PRG $0D0D9
   $90DB: f0 03       beq $90e0    ; PRG $0D0DB
-  $90DD: 4c 18 91    jmp $9118    ; PRG $0D0DD
+  $90DD: 4c 18 91    jmp $9118   ; duel_scan_666d    ; PRG $0D0DD
   $90E0: ad 8c 6b    lda $6b8c    ; PRG $0D0E0
   $90E3: 85 18       sta $18    ; PRG $0D0E3
   $90E5: 86 19       stx $19    ; PRG $0D0E5
@@ -2285,7 +2285,7 @@ nat_6_0aa5: jsr $E299                    ; 6:8AA5  native-call prologue
   $90EB: a5 19       lda $19    ; PRG $0D0EB
   $90ED: e9 00       sbc #$00    ; PRG $0D0ED
   $90EF: 90 03       bcc $90f4    ; PRG $0D0EF
-  $90F1: 4c 18 91    jmp $9118    ; PRG $0D0F1
+  $90F1: 4c 18 91    jmp $9118   ; duel_scan_666d    ; PRG $0D0F1
   $90F4: a0 fe       ldy #$fe    ; PRG $0D0F4
   $90F6: b1 06       lda ($06),y    ; PRG $0D0F6
   $90F8: 85 18       sta $18    ; PRG $0D0F8
@@ -2946,7 +2946,7 @@ nat_6_1561: jsr $E299                    ; 6:9561  native-call prologue
   $95E7: 91 06       sta ($06),y    ; PRG $0D5E7
   $95E9: c8          iny    ; PRG $0D5E9
   $95EA: 91 06       sta ($06),y    ; PRG $0D5EA
-  $95EC: 4c fe 95    jmp $95fe    ; PRG $0D5EC
+  $95EC: 4c fe 95    jmp $95fe   ; fleet_scan_ships    ; PRG $0D5EC
   $95EF: 18          clc    ; PRG $0D5EF
   $95F0: a9 01       lda #$01    ; PRG $0D5F0
   $95F2: a0 f8       ldy #$f8    ; PRG $0D5F2
@@ -3083,7 +3083,7 @@ nat_6_1561: jsr $E299                    ; 6:9561  native-call prologue
   $96E8: b1 06       lda ($06),y    ; PRG $0D6E8
   $96EA: a0 f5       ldy #$f5    ; PRG $0D6EA
   $96EC: 91 06       sta ($06),y    ; PRG $0D6EC
-  $96EE: 4c ef 95    jmp $95ef    ; PRG $0D6EE
+  $96EE: 4c ef 95    jmp $95ef   ; combat_95ef    ; PRG $0D6EE
   $96F1: 18          clc    ; PRG $0D6F1
   $96F2: a0 13       ldy #$13    ; PRG $0D6F2
   $96F4: b1 04       lda ($04),y    ; PRG $0D6F4
@@ -3358,7 +3358,7 @@ nat_6_1778: jsr $E299                    ; 6:9778  native-call prologue
 
 ; ---- sub_6_18e4  [recovered]  <- (uncalled?)
   $98E4: a0 07       ldy #$07    ; PRG $0D8E4
-  $98E6: 20 00 e1    jsr $e100   ; native_e100    ; PRG $0D8E6
+  $98E6: 20 00 e1    jsr $e100   ; load_vm_args    ; PRG $0D8E6
   $98E9: a0 01       ldy #$01    ; PRG $0D8E9
   $98EB: b1 0a       lda ($0a),y    ; PRG $0D8EB
   $98ED: 85 15       sta $15    ; PRG $0D8ED
@@ -3426,3 +3426,7 @@ nat_6_1778: jsr $E299                    ; 6:9778  native-call prologue
   $9972: 4c 5e e1    jmp $e15e    ; PRG $0D972
 
 ; ---- sub_6_1985  [plain]  <- callers: $98E4
+  $9985: f6 00       inc $00,x    ; PRG $0D985
+  $9987: d0 02       bne $998b    ; PRG $0D987
+  $9989: f6 01       inc $01,x    ; PRG $0D989
+  $998B: 60          rts    ; PRG $0D98B

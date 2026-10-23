@@ -1,7 +1,7 @@
 ; ============================================================================
 ; Uncharted Waters - bank 10 NATIVE disassembly (window base $A000)
 ; 49 native subs: 12 $E299-stubbed (VM-frame entries) + 0 plain + 37 jumptable/CALL-recovered
-; coverage: 4504B code+inline (54%) + 3678B $FF-pad + 10B data
+; coverage: 4503B code+inline (54%) + 3678B $FF-pad + 11B data
 ; control-flow-followed, inline bridges ($E299/$E338) skipped; calls resolved vs mesen-labels.toml.
 ; ============================================================================
 .base $A000
@@ -408,7 +408,7 @@ nat_10_0234: jsr $E299                    ; 10:A234  native-call prologue
   $A2DB: a0 f9       ldy #$f9    ; PRG $142DB
   $A2DD: f1 06       sbc ($06),y    ; PRG $142DD
   $A2DF: 90 03       bcc $a2e4    ; PRG $142DF
-  $A2E1: 4c 27 83    jmp $8327    ; PRG $142E1
+  $A2E1: 4c 27 83    jmp $8327   ; ending_text_main    ; PRG $142E1
   $A2E4: c8          iny    ; PRG $142E4
   $A2E5: b1 06       lda ($06),y    ; PRG $142E5
   $A2E7: 85 18       sta $18    ; PRG $142E7
@@ -685,7 +685,7 @@ nat_10_0380: jsr $E299                    ; 10:A380  native-call prologue
   $A4D5: 4c ed 84    jmp $84ed    ; PRG $144D5
 
 ; ---- sub_10_04d8  [recovered]  <- (uncalled?)
-  $A4D8: 20 45 e4    jsr $e445   ; native_e445    ; PRG $144D8
+  $A4D8: 20 45 e4    jsr $e445   ; inline_add_word    ; PRG $144D8
   $A4DB: 00          brk    ; PRG $144DB
   $A4DC: 00          brk    ; PRG $144DC
   $A4DD: 06 00       asl $00    ; PRG $144DD
@@ -1033,7 +1033,7 @@ nat_10_060d: jsr $E299                    ; 10:A60D  native-call prologue
   $A6AC: a0 f9       ldy #$f9    ; PRG $146AC
   $A6AE: f1 06       sbc ($06),y    ; PRG $146AE
   $A6B0: 90 03       bcc $a6b5    ; PRG $146B0
-  $A6B2: 4c 02 87    jmp $8702   ; nat_4_0702    ; PRG $146B2
+  $A6B2: 4c 02 87    jmp $8702   ; char_create_loop    ; PRG $146B2
   $A6B5: c8          iny    ; PRG $146B5
   $A6B6: b1 06       lda ($06),y    ; PRG $146B6
   $A6B8: 85 18       sta $18    ; PRG $146B8
@@ -1540,7 +1540,7 @@ nat_10_09ed: jsr $E299                    ; 10:A9ED  native-call prologue
   $AA48: c8          iny    ; PRG $14A48
   $AA49: 11 06       ora ($06),y    ; PRG $14A49
   $AA4B: d0 03       bne $aa50    ; PRG $14A4B
-  $AA4D: 4c b0 8a    jmp $8ab0    ; PRG $14A4D
+  $AA4D: 4c b0 8a    jmp $8ab0   ; duel_ab0    ; PRG $14A4D
   $AA50: a0 f7       ldy #$f7    ; PRG $14A50
   $AA52: b1 06       lda ($06),y    ; PRG $14A52
   $AA54: 85 18       sta $18    ; PRG $14A54
@@ -1776,14 +1776,13 @@ nat_10_0ac0: jsr $E299                    ; 10:AAC0  native-call prologue
   $ABF2: 4c 0a 8c    jmp $8c0a    ; PRG $14BF2
 
 ; ---- sub_10_0bf5  [recovered]  <- (uncalled?)
-  $ABF5: 20 45 e4    jsr $e445   ; native_e445    ; PRG $14BF5
+  $ABF5: 20 45 e4    jsr $e445   ; inline_add_word    ; PRG $14BF5
   $ABF8: 00          brk    ; PRG $14BF8
   $ABF9: 00          brk    ; PRG $14BF9
   $ABFA: 06 00       asl $00    ; PRG $14BFA
   $ABFC: 0a          asl a    ; PRG $14BFC
-  $ABFD: 8c 6d 8b    sty $8b6d    ; PRG $14BFD
+  $ABFD: 8c 6d 8b    sty $8b6d   ; entry_anim_5    ; PRG $14BFD
   $AC00: 6d 8b 6d    adc $6d8b    ; PRG $14C00
-  $AC03: 8b          .db $8b    ; PRG $14C03
   $AC11: a9 33       lda #$33    ; PRG $14C11
   $AC13: 85 18       sta $18    ; PRG $14C13
   $AC15: 86 19       stx $19    ; PRG $14C15
@@ -2635,7 +2634,7 @@ nat_10_1104: jsr $E299                    ; 10:B104  native-call prologue
   $B14F: 48          pha    ; PRG $1514F
   $B150: 20 38 e3    jsr $e338   ; call_vm_from_native    ; PRG $15150
   $B153: 80 83 04    .db $80 $83 $04  -> vm $8380 argc 4    ; PRG $15153
-  $B156: 4c a1 91    jmp $91a1    ; PRG $15156
+  $B156: 4c a1 91    jmp $91a1   ; helm_hail_suspicious    ; PRG $15156
 
 ; ---- sub_10_1159  [recovered]  <- (uncalled?)
   $B159: a9 05       lda #$05    ; PRG $15159
@@ -2665,7 +2664,7 @@ nat_10_1104: jsr $E299                    ; 10:B104  native-call prologue
   $B188: 48          pha    ; PRG $15188
   $B189: 20 38 e3    jsr $e338   ; call_vm_from_native    ; PRG $15189
   $B18C: cb 8e 04    .db $cb $8e $04  -> vm $8ECB argc 4    ; PRG $1518C
-  $B18F: 4c a1 91    jmp $91a1    ; PRG $1518F
+  $B18F: 4c a1 91    jmp $91a1   ; helm_hail_suspicious    ; PRG $1518F
 
 ; ---- sub_10_1192  [recovered]  <- (uncalled?)
   $B192: a0 0c       ldy #$0c    ; PRG $15192

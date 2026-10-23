@@ -55,7 +55,7 @@ nat_8_0103: jsr $E299                    ; 8:A103  native-call prologue
   $A131: 69 70       adc #$70    ; PRG $10131
   $A133: c8          iny    ; PRG $10133
   $A134: 91 06       sta ($06),y    ; PRG $10134
-  $A136: 4c 48 81    jmp $8148    ; PRG $10136
+  $A136: 4c 48 81    jmp $8148   ; gameover_draw_header    ; PRG $10136
 
 ; ---- sub_8_01be  [stub]  <- (entry: bytecode/OS via $E299)
 nat_8_01b8: jsr $E299                    ; 8:A1B8  native-call prologue
@@ -295,7 +295,7 @@ nat_8_07e7: jsr $E299                    ; 8:A7E7  native-call prologue
   $A8D1: b1 04       lda ($04),y    ; PRG $108D1
   $A8D3: e9 00       sbc #$00    ; PRG $108D3
   $A8D5: b0 03       bcs $a8da    ; PRG $108D5
-  $A8D7: 4c 47 89    jmp $8947    ; PRG $108D7
+  $A8D7: 4c 47 89    jmp $8947   ; entry_sprite_anim    ; PRG $108D7
   $A8DA: a0 fc       ldy #$fc    ; PRG $108DA
   $A8DC: b1 06       lda ($06),y    ; PRG $108DC
   $A8DE: 85 18       sta $18    ; PRG $108DE
@@ -470,7 +470,7 @@ nat_8_0f79: jsr $E299                    ; 8:AF79  native-call prologue
   $AFE5: 71 06       adc ($06),y    ; PRG $10FE5
   $AFE7: a0 fd       ldy #$fd    ; PRG $10FE7
   $AFE9: 91 06       sta ($06),y    ; PRG $10FE9
-  $AFEB: 4c 0c 90    jmp $900c    ; PRG $10FEB
+  $AFEB: 4c 0c 90    jmp $900c   ; str_stat_charisma    ; PRG $10FEB
 
 ; ---- sub_8_1115  [stub]  <- (entry: bytecode/OS via $E299)
 nat_8_110f: jsr $E299                    ; 8:B10F  native-call prologue
@@ -1064,7 +1064,7 @@ nat_8_1652: jsr $E299                    ; 8:B652  native-call prologue
   $B665: a5 19       lda $19    ; PRG $11665
   $B667: c9 00       cmp #$00    ; PRG $11667
   $B669: f0 03       beq $b66e    ; PRG $11669
-  $B66B: 4c 96 96    jmp $9696    ; PRG $1166B
+  $B66B: 4c 96 96    jmp $9696   ; combat_96    ; PRG $1166B
   $B66E: a9 0a       lda #$0a    ; PRG $1166E
   $B670: 85 18       sta $18    ; PRG $11670
   $B672: 86 19       stx $19    ; PRG $11672

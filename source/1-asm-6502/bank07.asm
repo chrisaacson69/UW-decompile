@@ -113,7 +113,7 @@ nat_7_0003: jsr $E299                    ; 7:A003  native-call prologue
   $A0C5: 91 06       sta ($06),y    ; PRG $0E0C5
   $A0C7: c8          iny    ; PRG $0E0C7
   $A0C8: 91 06       sta ($06),y    ; PRG $0E0C8
-  $A0CA: 4c f5 80    jmp $80f5    ; PRG $0E0CA
+  $A0CA: 4c f5 80    jmp $80f5   ; bj_delay    ; PRG $0E0CA
 
 ; ---- sub_7_00cd  [recovered]  <- (uncalled?)
   $A0CD: a0 f8       ldy #$f8    ; PRG $0E0CD
@@ -121,7 +121,7 @@ nat_7_0003: jsr $E299                    ; 7:A003  native-call prologue
   $A0D1: c8          iny    ; PRG $0E0D1
   $A0D2: 11 06       ora ($06),y    ; PRG $0E0D2
   $A0D4: f0 03       beq $a0d9    ; PRG $0E0D4
-  $A0D6: 4c f5 80    jmp $80f5    ; PRG $0E0D6
+  $A0D6: 4c f5 80    jmp $80f5   ; bj_delay    ; PRG $0E0D6
   $A0D9: a0 fc       ldy #$fc    ; PRG $0E0D9
   $A0DB: b1 06       lda ($06),y    ; PRG $0E0DB
   $A0DD: c9 47       cmp #$47    ; PRG $0E0DD
@@ -130,7 +130,7 @@ nat_7_0003: jsr $E299                    ; 7:A003  native-call prologue
   $A0E2: b1 06       lda ($06),y    ; PRG $0E0E2
   $A0E4: c9 00       cmp #$00    ; PRG $0E0E4
   $A0E6: f0 03       beq $a0eb    ; PRG $0E0E6
-  $A0E8: 4c f5 80    jmp $80f5    ; PRG $0E0E8
+  $A0E8: 4c f5 80    jmp $80f5   ; bj_delay    ; PRG $0E0E8
   $A0EB: a9 48       lda #$48    ; PRG $0E0EB
   $A0ED: a0 f8       ldy #$f8    ; PRG $0E0ED
   $A0EF: 91 06       sta ($06),y    ; PRG $0E0EF
@@ -1128,7 +1128,7 @@ nat_7_0527: jsr $E299                    ; 7:A527  native-call prologue
   $A819: 4c 85 87    jmp $8785    ; PRG $0E819
 
 ; ---- sub_7_081c  [recovered]  <- (uncalled?)
-  $A81C: 4c 5b 87    jmp $875b    ; PRG $0E81C
+  $A81C: 4c 5b 87    jmp $875b   ; get_ship_word15_0    ; PRG $0E81C
 
 ; ---- sub_7_081f  [recovered]  <- (uncalled?)
   $A81F: a0 e8       ldy #$e8    ; PRG $0E81F
@@ -1280,7 +1280,7 @@ nat_7_0527: jsr $E299                    ; 7:A527  native-call prologue
   $A92F: a5 15       lda $15    ; PRG $0E92F
   $A931: c8          iny    ; PRG $0E931
   $A932: 91 06       sta ($06),y    ; PRG $0E932
-  $A934: 4c 71 89    jmp $8971    ; PRG $0E934
+  $A934: 4c 71 89    jmp $8971   ; cargo_pick_ship    ; PRG $0E934
 
 ; ---- sub_7_0937  [recovered]  <- (uncalled?)
   $A937: a0 e8       ldy #$e8    ; PRG $0E937
@@ -1619,7 +1619,7 @@ nat_7_0aaa: jsr $E299                    ; 7:AAAA  native-call prologue
   $AC3E: b1 06       lda ($06),y    ; PRG $0EC3E
   $AC40: a0 f7       ldy #$f7    ; PRG $0EC40
   $AC42: 91 06       sta ($06),y    ; PRG $0EC42
-  $AC44: 4c 57 8b    jmp $8b57    ; PRG $0EC44
+  $AC44: 4c 57 8b    jmp $8b57   ; search_treasure    ; PRG $0EC44
 
 ; ---- sub_7_0c47  [recovered]  <- (uncalled?)
   $AC47: 38          sec    ; PRG $0EC47
@@ -2023,7 +2023,7 @@ nat_7_0ed1: jsr $E299                    ; 7:AED1  native-call prologue
   $AF24: 48          pha    ; PRG $0EF24
   $AF25: 20 38 e3    jsr $e338   ; call_vm_from_native    ; PRG $0EF25
   $AF28: 3a de 08    .db $3a $de $08  -> vm $DE3A argc 8    ; PRG $0EF28
-  $AF2B: ad 98 72    lda $7298    ; PRG $0EF2B
+  $AF2B: ad 98 72    lda $7298   ; ship_sail_state    ; PRG $0EF2B
   $AF2E: d0 03       bne $af33    ; PRG $0EF2E
   $AF30: 4c 49 8f    jmp $8f49    ; PRG $0EF30
   $AF33: a9 9b       lda #$9b    ; PRG $0EF33
@@ -3468,7 +3468,7 @@ nat_7_0ed1: jsr $E299                    ; 7:AED1  native-call prologue
   $B98F: 90 03       bcc $b994    ; PRG $0F98F
   $B991: 4c b9 99    jmp $99b9    ; PRG $0F991
   $B994: a9 01       lda #$01    ; PRG $0F994
-  $B996: 8d 7d 73    sta $737d    ; PRG $0F996
+  $B996: 8d 7d 73    sta $737d   ; ui_shared_var_737d    ; PRG $0F996
   $B999: 8a          txa    ; PRG $0F999
   $B99A: 48          pha    ; PRG $0F99A
   $B99B: a9 07       lda #$07    ; PRG $0F99B
@@ -3517,7 +3517,7 @@ nat_7_0ed1: jsr $E299                    ; 7:AED1  native-call prologue
   $B9E7: 90 03       bcc $b9ec    ; PRG $0F9E7
   $B9E9: 4c 11 9a    jmp $9a11    ; PRG $0F9E9
   $B9EC: a9 02       lda #$02    ; PRG $0F9EC
-  $B9EE: 8d 7d 73    sta $737d    ; PRG $0F9EE
+  $B9EE: 8d 7d 73    sta $737d   ; ui_shared_var_737d    ; PRG $0F9EE
   $B9F1: 8a          txa    ; PRG $0F9F1
   $B9F2: 48          pha    ; PRG $0F9F2
   $B9F3: a9 e7       lda #$e7    ; PRG $0F9F3

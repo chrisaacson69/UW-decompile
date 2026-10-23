@@ -29,7 +29,7 @@ nat_17_074e: jsr $E299                    ; 17:A74E  native-call prologue
   $A777: a9 02       lda #$02    ; PRG $22777
   $A779: 85 18       sta $18    ; PRG $22779
   $A77B: 86 19       stx $19    ; PRG $2277B
-  $A77D: 4c 88 87    jmp $8788    ; PRG $2277D
+  $A77D: 4c 88 87    jmp $8788   ; cargo_left    ; PRG $2277D
 
 ; ---- sub_17_08ef  [stub]  <- (entry: bytecode/OS via $E299)
 nat_17_08e9: jsr $E299                    ; 17:A8E9  native-call prologue
